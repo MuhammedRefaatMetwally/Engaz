@@ -1,0 +1,16 @@
+package com.example.engaz.features.home.view.viewmodels.main
+
+import com.example.engaz.features.home.view.utils.BottomNavPage
+
+data class MainState(
+    var index: Int = 0,
+
+    val pages: List<BottomNavPage> = listOf(
+        BottomNavPage.HomeNavPage,
+        BottomNavPage.OrderNavPage,
+        BottomNavPage.NotificationNavPage,
+        BottomNavPage.WalletNavPage,
+        BottomNavPage.ProfileNavPage,
+    )
+
+)

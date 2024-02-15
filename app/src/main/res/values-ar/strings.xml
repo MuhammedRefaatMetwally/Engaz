@@ -1,0 +1,154 @@
+<resources>
+    <string name="app_name">Market app</string>
+
+    <string name="login">تسجيل الدخول</string>
+    <string name="login_sub_text">من فضلك قم بتسجيل الدخول لتستمتع بخدماتنا المميزه</string>
+
+
+    <string name="username">اسم المستخدم</string>
+    <string name="username_hint">من فضلك ادخل اسم المستخدم</string>
+
+    <string name="password">الرقم السري</string>
+    <string name="password_hint">من فضلك ادخل الرقم السري</string>
+
+    <string name="remember_me">تذكرني</string>
+    <string name="forgot_password">نسيت كلمه المرور</string>
+
+    <string name="dont_have_account">ليس لديك حساب؟</string>
+    <string name="register">تسجل حساب</string>
+
+    <string name="or_login_with">او قم بالتسجيل عبر</string>
+    <string name="google">جوجل</string>
+
+    <string name="on_boarding_title_1">اكتب طلباتك</string>
+    <string name="on_boarding_sub_text_1">اكتب كل طلباتك التي تحتاج اليها ومن ثم قم بالتاكيد</string>
+
+    <string name="on_boarding_title_2">طريقة الدفع</string>
+    <string name="on_boarding_sub_text_2">طريقة الدفع سهلة وبسيطة وبها اكثر من خيار متاح</string>
+
+    <string name="on_boarding_title_3">عملية التوصيل</string>
+    <string name="on_boarding_sub_text_3">طلبك هيوصل في اسرع وقت ممكن وفي المكان المحدد</string>
+    <string name="skip">تخطي</string>
+    <string name="next">التالي</string>
+    <string name="welocme">مرحبا</string>
+    <string name="welocme_sub_text">من فضلك اختر الطريقه اللتي تود الدخول بيها الى التطبيق</string>
+    <string name="reset_password">اعاده تعيين كلمه المرور</string>
+    <string name="reset_password_sub_text">من فضلك قم بختيار الطريقه المفضله لاعاده تعيين كلمه المرور</string>
+    <string name="reset_password_by_email">اعاده تعيين كلمه المرور عن طريق الايميل</string>
+    <string name="reset_password_by_phone">اعاده تعيين كلمه المرور عن طريق رقم الهاتف</string>
+    <string name="reset_password_by_email_sub_text">من فضلك ادخل الايميل المربوط بحسابك</string>
+    <string name="email">الايميل</string>
+    <string name="email_hint">من فضل ادخل الايميل الخاص بك</string>
+    <string name="reset_password_by_phone_sub_text">من فضل ادخل رقم الهاتف المتصل بالحساب الخاص بك</string>
+    <string name="phone">رقم الهاتف</string>
+    <string name="phone_hint">من فضل ادخل رقم الهاتفك</string>
+    <string name="verify_pin_code">تحقق من الكود</string>
+    <string name="verify_pin_code_sub_text">ادخل الكود اللذي تم ارساله اليك للمتابعه</string>
+    <string name="didnt_recive_code">لم يصلك الكود؟</string>
+    <string name="resend_new_code">ارسل كود جديد</string>
+    <string name="validate">تحقق</string>
+    <string name="register_sub_text">من فضلك، قم بالتسجيل وابدأ رحلة التعلم الناجحة</string>
+    <string name="already_have_account">هل لديك حساب بالفعل؟</string>
+    <string name="renter_password">أعد إدخال كلمة المرور</string>
+    <string name="renter_password_hint">من فضلك، أعد إدخال كلمة المرور</string>
+    <string name="internet_connection">يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى</string>
+    <string name="server_is_down">الخادم غير متاح حاليًا، يُرجى المحاولة مرة أخرى لاحقًا</string>
+    <string name="the_server_returned_null">الخادم أرجع قيمة فارغة</string>
+    <string name="string_is_blank">لا يمكن ترك حقل البريد الإلكتروني فارغًا</string>
+    <string name="string_is_not_email">من فضلك، أدخل بريد إلكتروني صالح</string>
+    <string name="password_is_not_eight">كلمة المرور يجب أن تتكون على الأقل من 8 أحرف</string>
+    <string name="string_is_not_phone">من فضلك، أدخل رقم هاتف صحيح</string>
+    <string name="username_contain_special_char">اسم المستخدم لا يجب أن يحتوي على أحرف خاصة</string>
+    <string name="username_contain_white_space">اسم المستخدم لا يجب أن يحتوي على مسافات فارغة</string>
+    <string name="password_must_match">يجب أن تتطابق كلمات المرور</string>
+    <string name="done">تم</string>
+    <string name="all_done">تم الانتهاء</string>
+    <string name="new_password">كلمة السر الجديدة</string>
+    <string name="new_password_sub_text">"أنشئ كلمة مرور جديدة، يجب أن تتكون الكلمة من 8 أحرف."</string>
+    <string name="new_password_hint">الرجاء إدخال كلمة مرور جديدة</string>
+    <string name="all_done_sub_text">"كل شيء تمامًا، الرجاء النقر على تم للمتابعة."</string>
+    <string name="gcp_id">1088814076574-jhr0evbjd2ord9o8eulqiatfek9lnbri.apps.googleusercontent.com</string>
+    <string name="google_sign_in_faild">فشل تسجيل الدخول باستخدام جوجل</string>
+    <string name="google_sign_in_client_id">1088814076574-pat2suurlgjppijiuq4okci640unjqj8.apps.googleusercontent.com</string>
+    <string name="home">مرحبًا 👋</string>
+    <string name="home_sub_text">"استمتع بتجربة محسنة للتعلم الإلكتروني"</string>
+    <string name="exam">اختبارات</string>
+    <string name="books">الكتب</string>
+    <string name="test">اختبارات</string>
+    <string name="open_book">فتح الكتب</string>
+    <string name="resume">السيرة الذاتية</string>
+    <string name="personal_information">المعلومات الشخصية</string>
+    <string name="read">قراءة</string>
+    <string name="study">دراسة</string>
+    <string name="home_work">الواجب المنزلي</string>
+    <string name="propose">اقتراح</string>
+    <string name="language_arts">فنون اللغة</string>
+    <string name="exam_sub_text">اكتشف قوة المعرفة من خلال تجارب التعلم الشاملة.</string>
+    <string name="books_sub_text">اكتشف قوة المعرفة من خلال تجارب التعلم الشاملة.</string>
+    <string name="test_sub_text">تحدى فهمك وقيس تقدمك من خلال اختبارات تفاعلية واختبارات.</string>
+    <string name="open_book_sub_text">استكشف مكتبة من الموارد التعليمية المفتوحة لتوسيع آفاقك.</string>
+    <string name="resume_sub_text">قم بإعداد سيرة ذاتية متميزة تسلط الضوء على إنجازاتك وآمالك المهنية.</string>
+    <string name="personal_information_sub_text">حماية معلوماتك الشخصية وخصوصيتك عبر منصتنا الآمنة.</string>
+    <string name="read_sub_text">انغمس في فرحة القراءة مع مجموعة واسعة من الكنوز الأدبية.</string>
+    <string name="study_sub_text">ابدأ رحلة المعرفة والاكتشاف من خلال جلسات الدراسة المخصصة.</string>
+    <string name="home_work_sub_text">أدر وأكمل واجبات البيت بسهولة.</string>
+    <string name="propose_sub_text">إعداد اقتراحات وعروض تقديمية جذابة تترك انطباعًا دائمًا.</string>
+    <string name="language_arts_sub_text">استيقن فن اللغة والأدب والاتصال من خلال مواد فنون اللغة لدينا.</string>
+    <string name="welcome">مرحبًا </string>
+    <string name="oawen">أوين</string>
+    <string name="to_deliver_order">لتسليم الطلبات</string>
+    <string name="facebook">فيسبوك</string>
+    <string name="fullName">الاسم الكامل</string>
+    <string name="fullName_hint">الرجاء إدخال اسمك الكامل</string>
+    <string name="password_contain_special_char">يجب أن تحتوي كلمة المرور على حرف خاص</string>
+    <string name="password_contain_lower_and_upper_case">يجب أن تحتوي كلمة المرور على حروف صغيرة وكبيرة</string>
+    <string name="unknown_error">حدث خطأ غير معروف</string>
+    <string name="accept_terms">قبول الشروط والأحكام</string>
+    <string name="total_balance">الرصيد الإجمالي</string>
+    <string name="today_assistant_is">مساعد اليوم هو</string>
+    <string name="start_your_order_now">ابدأ طلبك الآن</string>
+    <string name="contact_him">التواصل معه</string>
+    <string name="make_order">أطلب طلبك</string>
+    <string name="or">أو</string>
+    <string name="send_attachments">إرسال المرفقات</string>
+    <string name="please_enter_order_description">الرجاء إدخال وصف طلب محدد</string>
+    <string name="attachments_to_send">المرفقات للإرسال</string>
+    <string name="select_location">حدد موقع التسليم</string>
+    <string name="from">من</string>
+    <string name="to">إلى</string>
+    <string name="empty_search">لم يمكن العثور على ما تبحث عنه</string>
+    <string name="destance">المسافة</string>
+    <string name="km">كم</string>
+    <string name="profile">Profile</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="notification">Notification</string>
+    <string name="language">Language</string>
+    <string name="get_all_notifications">Get all notification</string>
+    <string name="do_not_disturb_mode">Do not disturb mode</string>
+    <string name="silent_mode">silent_mode</string>
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="save">Save</string>
+    <string name="wallet">Wallet</string>
+    <string name="current_balance">Current balance</string>
+    <string name="charge_balance">Charge balance</string>
+    <string name="upload_receipt">Please upload the receipt to confirm your account balance recharge</string>
+    <string name="upload">Upload</string>
+    <string name="orders">Orders</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="view_order_details">View order details</string>
+    <string name="no_orders">There are no orders now</string>
+    <string name="try_again">Try again</string>
+    <string name="no_notification">There are no notifications now</string>
+    <string name="select_image">"Please select a receipt first "</string>
+    <string name="account_will_recharge">"Your account will be recharged soon "</string>
+    <string name="you_must_write_description">You must write description or at least select an image or a file</string>
+    <string name="select_from_to_distenations">Please select from and to distenations to place your order</string>
+    <string name="onboarding_subtext1">يقدم تطبيق إنجاز تجربة سهلة وبسيطة لنقل ملكية السيارة بكل بساطة مما يوفر الوقت والجهد لدى المستخدمين.</string>
+    <string name="onboarding_subtext2">"   يتمتع التطبيق بمستويات عالية من الأمان والسرية في معالجة المعلومات ، مما يجعل نقل الملكية عبر الإنترنت خيارًا آمنًا وموثوقًا."</string>
+    <string name="onboarding_subtext3">يتيح التطبيق للمستخدمين دفع الرسوم المتعلقة بنقل الملكية بسهولة عبر وسائل دفع آمنة ومتنوعة، مما يقلل من التعقيدات المالية ويسهم في تسريع العمليات.</string>
+    <string name="onboarding_next_ar">التالي</string>
+    <string name="start_ar">البدء</string>
+
+</resources>
