@@ -157,5 +157,12 @@
     <string name="app_name">Engaz</string>
     <string name="login">login</string>
     <string name="register">register</string>
+    <string name="engaz_text_ar">انجاز</string>
+    <string name="login_ar">تسجيل الدخول</string>
+        <string name="please_enter_email_passcode">من فضلك أدخل الايمل أو الرفم القومي</string>
+        <string name="please_enter_password">من فضلك أدخل كلمة المرور</string>
+    <string name="login_with_fingeprint">تسجيل الدخول بالبصمة</string>
+    <string name="new_user_text_ar">مستخدم جديد؟</string>
+        <string name="new_password_text">كلمة مرور جديدة؟</string>
 
 </resources>

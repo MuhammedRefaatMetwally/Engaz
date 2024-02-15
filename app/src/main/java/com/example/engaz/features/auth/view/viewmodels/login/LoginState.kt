@@ -8,8 +8,8 @@ data class LoginState(
 
     var countryCode: String = "",
 
-    var phone: String = "",
-    var phoneError : String? = null,
+    var emailOrPassCode: String = "",
+    var emailOrPassCodeError : String? = null,
 
     var password: String = "",
     val passwordError : String? = null

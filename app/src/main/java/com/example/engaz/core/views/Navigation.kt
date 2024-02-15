@@ -27,7 +27,6 @@ import com.example.engaz.core.views.screens.OnBoardingScreen
 import com.example.engaz.core.views.screens.SplashScreen
 import com.example.engaz.destinations.*
 import com.example.engaz.features.auth.view.screens.login.LoginScreen
-import com.example.engaz.features.auth.view.screens.methods.LoginMethodsScreen
 import com.example.engaz.features.auth.view.screens.register.ActivationPinScreen
 import com.example.engaz.features.auth.view.screens.register.RegisterScreen
 import com.example.engaz.features.auth.view.screens.reset_password.*
@@ -85,25 +84,12 @@ fun Navigation(
                 )
             }
 
-            composable(LoginMethodsScreenDestination) {
-                LoginMethodsScreen(
-                    navigator = destinationsNavigator,
-                    onLoginClick = { coreViewModel.onMethodsScreenLoginClick(it) },
-                    onRegisterClick = { coreViewModel.onMethodsScreenRegisterClick(it) },
-                    onLoginWithGoogleClick = { navigator, task ->
-                        coreViewModel.onMethodsScreenLoginWithGoogleClick(
-                            navigator,
-                            task
-                        )
-                    },
-                )
-            }
 
             composable(LoginScreenDestination) {
                 LoginScreen(
                     navigator = destinationsNavigator,
                     state = loginViewModel.state,
-                    onChangePhone = { loginViewModel.updatePhone(it) },
+                    onChangeEmailOrPassCode = { loginViewModel.updatePhone(it) },
                     onChangePhoneWithCountryCode = { loginViewModel.updatePhoneWithCountryCode(it) },
                     onChangePassword = { loginViewModel.updatePassword(it) },
                     onRememberMeClick = { loginViewModel.onEvent(LoginEvent.RememberMe) },

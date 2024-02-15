@@ -97,7 +97,7 @@ fun OnBoardingScreen(
             CustomPageIndicator(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 320.dp),
+                    .padding(bottom = 380.dp),
                 totalPages = pagerState.pageCount,
                 currentPage = pagerState.currentPage,
                 indicatorSize = 7.dp,
@@ -108,10 +108,10 @@ fun OnBoardingScreen(
             MainButton(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 76.dp)
+                    .padding(bottom = 66.dp)
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .height(55.dp)
+                    .height(64.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
 
@@ -143,7 +143,7 @@ fun OnBoardingScreen(
                             R.string.start_ar
                         ),
                         style = TextStyle(
-                            fontFamily = Lato,
+                            fontFamily = Cairo,
                             color = Color.White ,
                             fontSize = 20.sp
                         )
@@ -155,7 +155,7 @@ fun OnBoardingScreen(
             Text(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 24.dp)
                     .wrapContentHeight()
                     .clickable {
 
@@ -165,7 +165,7 @@ fun OnBoardingScreen(
                     },
                 text = stringResource(R.string.skip_ar),
                 style = TextStyle(
-                    fontFamily = Lato,
+                    fontFamily = Cairo,
                     color = Color.Black,
                     fontSize = 22.sp)
             )

@@ -80,29 +80,14 @@ class CoreViewModel @Inject constructor(
     }
 
     fun onOnBoardingScreenNextClick(navigator: DestinationsNavigator?) {
-        navigator?.navigate(LoginMethodsScreenDestination())
-    }
-
-    fun onOnBoardingScreenSkipClick(navigator: DestinationsNavigator?) {
-        navigator?.navigate(LoginMethodsScreenDestination())
-    }
-
-    fun onMethodsScreenLoginClick(navigator: DestinationsNavigator?) {
         navigator?.navigate(LoginScreenDestination())
     }
 
-    fun onMethodsScreenRegisterClick(navigator: DestinationsNavigator?) {
-        navigator?.navigate(RegisterScreenDestination())
+    fun onOnBoardingScreenSkipClick(navigator: DestinationsNavigator?) {
+        navigator?.navigate(LoginScreenDestination())
     }
 
-    fun onMethodsScreenLoginWithGoogleClick(navigator: DestinationsNavigator?,task : Task<GoogleSignInAccount>) {
-        if(task.isSuccessful){
-            Log.v("Google","is successful")
-        }else {
-            Log.v("Google","is not successful")
-        }
-        navigator?.navigate(RegisterScreenDestination)
-    }
+
 
     sealed class CoreUiEvent
 

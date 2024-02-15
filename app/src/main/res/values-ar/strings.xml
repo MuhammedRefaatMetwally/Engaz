@@ -150,5 +150,8 @@
     <string name="onboarding_subtext3">يتيح التطبيق للمستخدمين دفع الرسوم المتعلقة بنقل الملكية بسهولة عبر وسائل دفع آمنة ومتنوعة، مما يقلل من التعقيدات المالية ويسهم في تسريع العمليات.</string>
     <string name="onboarding_next_ar">التالي</string>
     <string name="start_ar">البدء</string>
+    <string name="login_with_fingeprint">تسجيل الدخول بالبصمة</string>
+    <string name="new_user_text_ar">مستخدم جديد؟</string>
+    <string name="new_password_text">كلمة مرور جديدة؟</string>
 
 </resources>

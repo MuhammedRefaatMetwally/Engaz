@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -30,9 +32,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,6 +47,7 @@ import com.example.engaz.core.ui.theme.*
 import com.example.engaz.core.views.components.*
 import com.example.engaz.features.auth.view.viewmodels.login.LoginState
 import com.example.engaz.R
+import com.example.engaz.destinations.RegisterScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
@@ -51,9 +58,8 @@ import kotlinx.coroutines.launch
 fun LoginScreen(
     navigator: DestinationsNavigator?,
     state: LoginState = LoginState(),
-    onChangePhone: (String) -> Unit = {},
+    onChangeEmailOrPassCode: (String) -> Unit = {},
     onChangePhoneWithCountryCode: (PhoneNumber) -> Unit = {},
-
     onChangePassword: (String) -> Unit = {},
     onSecurePasswordClick: () -> Unit = {},
     onLoginClick: (DestinationsNavigator, Context) -> Unit = { _, _ -> },
@@ -61,7 +67,7 @@ fun LoginScreen(
     onForgotPasswordClick: (DestinationsNavigator) -> Unit = {},
     onRegisterClick: (DestinationsNavigator) -> Unit = {},
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
-    ) {
+) {
 
     val context: Context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -97,66 +103,59 @@ fun LoginScreen(
 
 
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
 
             Row(
-                modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.logo), // Provide the resource ID
+                    painter = painterResource(id = R.drawable.engaz_logo2), // Provide the resource ID
                     contentDescription = "",
                     modifier = Modifier
-                        .width(200.dp) // Adjust the size as needed
-                        .height(80.dp)
+                        .size(104.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                text = context.getString(R.string.login),
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .align(Alignment.CenterHorizontally),
+                text = stringResource(R.string.login_ar),
                 style = TextStyle(
-                    fontFamily = Lato,
+                    fontFamily = Cairo,
                     color = if (isSystemInDarkTheme()) Neutral100 else Neutral900,
                     fontSize = 32.sp
                 )
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                text = context.getString(R.string.login_sub_text),
-                style = TextStyle(
-                    fontFamily = Lato,
-                    color = Neutral500,
-                    fontSize = 16.sp,
-
-                    )
             )
 
             Spacer(modifier = Modifier.height(20.dp))
 
 
-            PhoneTextField(
-                value = state.phone,
-                onValueChange = {
-                    onChangePhone(it)
-                },
+            CustomTextField(
+                value = state.emailOrPassCode,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                placeHolder = context.getString(R.string.phone_hint),
-                isError = state.phoneError != null,
-                errorMessage = state.phoneError ?: "",
-                onPhoneChange = {
-                    onChangePhoneWithCountryCode(it)
-                }
+                onValueChange = {
+                    onChangeEmailOrPassCode(it)
+                },
+                placeHolder = stringResource(R.string.please_enter_email_passcode),
+                leadingIcon = {
+                    Image(
+                        modifier = Modifier.padding(end = 0.dp),
+                        painter = painterResource(id = R.drawable.ic_user),
+                        contentDescription = ""
+                    )
+                },
             )
-            Spacer(modifier = Modifier.height(5.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             CustomTextField(
                 isSecure = state.isPasswordSecure,
@@ -168,11 +167,11 @@ fun LoginScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                placeHolder = context.getString(R.string.password_hint),
+                placeHolder = stringResource(R.string.please_enter_password),
                 leadingIcon = {
                     Image(
                         modifier = Modifier.padding(end = 0.dp),
-                        painter = painterResource(id = R.drawable.lock_inactive),
+                        painter = painterResource(id = R.drawable.ic_lock),
                         contentDescription = ""
                     )
                 },
@@ -183,7 +182,7 @@ fun LoginScreen(
                             .clickable {
                                 onSecurePasswordClick()
                             },
-                        painter = painterResource(id = R.drawable.eye_slash),
+                        painter = painterResource(id = R.drawable.ic_password),
                         contentDescription = ""
                     )
                 },
@@ -192,113 +191,101 @@ fun LoginScreen(
 
                 )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ) {
-                CustomCheckBox(
-                    checked = state.rememberMe,
+
+                HorizontalDivider(
                     modifier = Modifier
-                        .clickable {
-
-                            scope.launch {
-                                onRememberMeClick()
-                            }
-
-                        },
-                    title = context.getString(R.string.remember_me)
+                        .padding(start = 16.dp)
+                        .fillMaxWidth()
+                        .weight(.4f)
+                        .height(1.7.dp),
+                    color = Neutral300
                 )
-
-                Text(
-
-                    modifier = Modifier
-                        .wrapContentHeight()
-                        .clickable {
-                            navigator?.let { navigator ->
-                                onForgotPasswordClick(navigator)
-                            }
-
-                        },
-                    text = context.getString(R.string.forgot_password),
-                    style = TextStyle(
-                        fontFamily = Lato,
-                        color = Secondary,
-                        fontSize = 16.sp,
-
-                        ),
-                    textAlign = TextAlign.End
-                )
-            }
-
-            Spacer(modifier = Modifier.height(50.dp))
-
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                horizontalArrangement = Arrangement.Center,
-
-                ) {
-                Text(
-
-                    modifier = Modifier.wrapContentSize(),
-                    text = context.getString(R.string.dont_have_account),
-                    style = TextStyle(
-                        fontFamily = Lato,
-                        color = Neutral400,
-                        fontSize = 16.sp,
-
-                        ),
-                    textAlign = TextAlign.End
-                )
-
-                Spacer(modifier = Modifier.width(5.dp))
 
                 Text(
 
                     modifier = Modifier
                         .wrapContentSize()
-                        .clickable {
-                            scope.launch {
-                                navigator?.let {
-                                    onRegisterClick(navigator)
-                                }
-                            }
-                        },
-                    text = context.getString(R.string.register),
+                        .padding(horizontal = 10.dp),
+                    text = " أو ",
                     style = TextStyle(
-                        fontFamily = Lato,
-                        color = Secondary,
-                        fontSize = 16.sp,
-
-                        ),
+                        fontFamily = Cairo,
+                        color = Color.Black,
+                        fontSize = 18.sp,
+                    ),
                     textAlign = TextAlign.End
                 )
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .fillMaxWidth()
+                        .weight(.4f)
+                        .height(1.7.dp),
+                    color = Neutral300
+                )
+
+
             }
 
-            Spacer(modifier = Modifier.height(15.dp))
-
-
+            Spacer(modifier = Modifier.height(16.dp))
             MainButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .height(55.dp)
+                    .height(64.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
-                            navigator?.let {
-                                onLoginClick(navigator, context)
-                            }
+                        navigator?.let {}
                     },
-                cardColor = Primary,
+                cardColor = Color.White,
+                borderColor = Neutral300
+            ) {
+                if (state.isLoginLoading) {
+                    CustomProgressIndicator(
+                        modifier = Modifier.size(20.dp)
+                    )
+                } else {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                        Image(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(48.dp),
+                            painter = painterResource(id = R.drawable.ic_finger),
+                            contentDescription = "finger_print",
+                        )
+                        Text(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            text = stringResource(R.string.login_with_fingeprint),
+                            style = TextStyle(
+                                fontFamily = Cairo,
+                                fontWeight = FontWeight.W700,
+                                color = Color.Black,
+                                fontSize = 15.sp,
+                            )
+                        )
+                    }
+                }
+
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+            MainButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(64.dp)
+                    .clip(RoundedCornerShape(100.dp))
+                    .clickable {
+                        navigator?.let {
+                            navigator.navigate(RegisterScreenDestination)
+                        }
+                    },
+                cardColor = colorResource(id = R.color.primary_color),
                 borderColor = Color.Transparent
             ) {
 
@@ -309,134 +296,98 @@ fun LoginScreen(
                 } else {
                     Text(
                         modifier = Modifier.padding(horizontal = 20.dp),
-                        text = context.getString(R.string.login),
+                        text = stringResource(id = R.string.login_ar),
                         style = TextStyle(
-                            fontFamily = Lato,
-                            color = Neutral100,
-                            fontSize = 16.sp,
+                            fontFamily = Cairo,
+                            fontWeight = FontWeight.W700,
+                            color = Color.White,
+                            fontSize = 20.sp,
                         )
                     )
                 }
 
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
-
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-
-                HorizontalDivider(
-                    modifier = Modifier
-                        .width(50.dp)
-                        .height(1.7.dp),
-                    color = Neutral300
-                )
-
-                Text(
-
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(horizontal = 10.dp),
-                    text = context.getString(R.string.or_login_with),
-                    style = TextStyle(
-                        fontFamily = Lato,
-                        color = Neutral400,
-                        fontSize = 16.sp,
-                    ),
-                    textAlign = TextAlign.End
-                )
-                HorizontalDivider(
-                    modifier = Modifier
-                        .width(50.dp)
-                        .height(1.5.dp),
-                    color = Neutral300
-                )
-
-
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-
+            Spacer(modifier = Modifier.height(24.dp))
             MainButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .height(55.dp)
+                    .height(64.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
-                            navigator?.let {
-
-                            }
+                        navigator?.let {}
                     },
-                cardColor = Color.Transparent,
-                borderColor = Neutral500
+                cardColor = Color.White,
+                borderColor = Neutral300
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Image(
-                        modifier = Modifier.padding(end = 0.dp),
-                        painter = painterResource(id = R.drawable.google),
-                        contentDescription = ""
+                if (state.isLoginLoading) {
+                    CustomProgressIndicator(
+                        modifier = Modifier.size(20.dp)
                     )
-
-                    Text(
-                        modifier = Modifier.padding(horizontal = 20.dp),
-                        text = context.getString(R.string.google),
-                        style = TextStyle(
-                            fontFamily = Lato,
-                            color = if (isSystemInDarkTheme()) Neutral100 else Neutral900,
-                            fontSize = 16.sp
+                } else {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                        Image(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(48.dp),
+                            painter = painterResource(id = R.drawable.ic_newuser),
+                            contentDescription = "finger_print",
                         )
-                    )
+                        Text(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            text = stringResource(R.string.new_user_text_ar),
+                            style = TextStyle(
+                                fontFamily = Cairo,
+                                fontWeight = FontWeight.W700,
+                                color = Color.Black,
+                                fontSize = 15.sp,
+                            )
+                        )
+                    }
                 }
+
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
+            Spacer(modifier = Modifier.height(16.dp))
             MainButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .height(55.dp)
+                    .height(64.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
-                        navigator?.let {
-
-                        }
+                        navigator?.let {}
                     },
-                cardColor = Color.Transparent,
-                borderColor = Neutral500
+                cardColor = Color.White,
+                borderColor = Neutral300
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Image(
-                        modifier = Modifier.padding(end = 0.dp),
-                        painter = painterResource(id = R.drawable.facebook),
-                        contentDescription = ""
+                if (state.isLoginLoading) {
+                    CustomProgressIndicator(
+                        modifier = Modifier.size(20.dp)
                     )
-
-                    Text(
-                        modifier = Modifier.padding(horizontal = 20.dp),
-                        text = context.getString(R.string.facebook),
-                        style = TextStyle(
-                            fontFamily = Lato,
-                            color = if (isSystemInDarkTheme()) Neutral100 else Neutral900,
-                            fontSize = 16.sp
+                } else {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                        Image(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(48.dp),
+                            painter = painterResource(id = R.drawable.ic_newpassword),
+                            contentDescription = "finger_print",
                         )
-                    )
+                        Text(
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                            text = stringResource(R.string.new_password_text),
+                            style = TextStyle(
+                                fontFamily = Cairo,
+                                fontWeight = FontWeight.W700,
+                                color = Color.Black,
+                                fontSize = 15.sp,
+                            )
+                        )
+                    }
                 }
+
             }
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-
         }
 
 

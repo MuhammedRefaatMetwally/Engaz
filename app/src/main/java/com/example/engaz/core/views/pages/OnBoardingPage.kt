@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.engaz.R
+import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.Lato
 import kotlinx.coroutines.delay
 
@@ -73,7 +74,7 @@ fun OnBoardingPage(
             contentDescription = "",
             modifier = Modifier
                 .fillMaxWidth() // Adjust the size as needed
-                .height(370.dp)
+                .height(300.dp)
                 .align(alignment = Alignment.CenterHorizontally)
         )
 
@@ -95,7 +96,7 @@ fun OnBoardingPage(
             Text(
                 text = label,
                 style = TextStyle(
-                    fontFamily = Lato,
+                    fontFamily = Cairo,
                     color = colorResource(id = R.color.primary_color),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.W700,
@@ -122,7 +123,7 @@ fun OnBoardingPage(
             Text(
                 text = subText,
                 style = TextStyle(
-                    fontFamily = Lato,
+                    fontFamily = Cairo,
                     color = Color.Black,
                     fontSize = 16.sp,
                     lineHeight = 24.sp,

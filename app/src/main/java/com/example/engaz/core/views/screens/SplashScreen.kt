@@ -24,11 +24,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.engaz.R
+import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.MarketAppTheme
 import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Neutral900
@@ -91,9 +93,10 @@ fun SplashScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = "انجاز",
+                        text = stringResource(R.string.engaz_text_ar),
                         fontWeight = FontWeight.W700,
                         fontSize = 80.sp,
+                        fontFamily = Cairo,
                         color = colorResource(id = R.color.primary_color)
                     )
 
