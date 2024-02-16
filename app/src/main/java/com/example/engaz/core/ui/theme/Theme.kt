@@ -10,10 +10,12 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorScheme = darkColorScheme(
     primary = Primary,
@@ -42,39 +44,48 @@ fun MarketAppTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
 
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val activity  = view.context as Activity
-
-            when {
-                darkTheme -> {
-                    activity.window.navigationBarColor = Neutral900.toArgb()
-                    activity.window.statusBarColor = Neutral900.toArgb()
-                }
-                else -> {
-                    activity.window.navigationBarColor = Neutral100.toArgb()
-                    activity.window.statusBarColor = Neutral100.toArgb()
-                }
+        val colorScheme = when {
+            dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+                val context = LocalContext.current
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
             }
 
-            WindowCompat.getInsetsController(activity.window, view).isAppearanceLightStatusBars = !darkTheme
-            WindowCompat.getInsetsController(activity.window, view).isAppearanceLightNavigationBars = !darkTheme
+            darkTheme -> DarkColorScheme
+            else -> LightColorScheme
         }
-    }
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
-}
+        val view = LocalView.current
+        if (!view.isInEditMode) {
+            SideEffect {
+                val activity = view.context as Activity
+
+                when {
+                    darkTheme -> {
+                        activity.window.navigationBarColor = Neutral900.toArgb()
+                        activity.window.statusBarColor = Neutral900.toArgb()
+                    }
+
+                    else -> {
+                        activity.window.navigationBarColor = Neutral100.toArgb()
+                        activity.window.statusBarColor = Neutral100.toArgb()
+                    }
+                }
+
+                WindowCompat.getInsetsController(
+                    activity.window,
+                    view
+                ).isAppearanceLightStatusBars = !darkTheme
+                WindowCompat.getInsetsController(
+                    activity.window,
+                    view
+                ).isAppearanceLightNavigationBars = !darkTheme
+            }
+        }
+
+        MaterialTheme(
+            colorScheme = colorScheme,
+            typography = Typography,
+            content = content
+        )
+    }

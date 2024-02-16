@@ -164,5 +164,17 @@
     <string name="login_with_fingeprint">تسجيل الدخول بالبصمة</string>
     <string name="new_user_text_ar">مستخدم جديد؟</string>
         <string name="new_password_text">كلمة مرور جديدة؟</string>
+    <string name="new_user_ar">مستخدم جديد</string>
+    <string name="personal_info_ar">المعلومات الشخصية</string>
+    <string name="pass_code">الرقم القومي</string>
+    <string name="phone_number_ar">رقم الهاتف</string>
+    <string name="email_ar">البريد الالكتروني</string>
+        <string name="account_label">اسم المستخدم أو الرقم القومى</string>
+        <string name="password_label">كلمة المرور</string>
+    <string name="passcode">الرقم القومى</string>
+    <string name="user_name_ar">اسم المستخدم</string>
+    <string name="reenter_password">تأكيد كلمة المرور</string>
+        <string name="login_now">تسجيل الدخول الان</string>
+        <string name="account_info_ar">معلومات الحساب</string>
 
 </resources>

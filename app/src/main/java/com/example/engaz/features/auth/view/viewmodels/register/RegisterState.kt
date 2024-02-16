@@ -6,8 +6,14 @@ data class RegisterState(
 
     var countryCode : String = "",
 
+    var passCode : String= "",
+    var passCodeError: String? =null,
+
     var phone : String = "",
     var phoneError : String? = null,
+
+    var email : String = "",
+    var emailError : String? = null,
 
     var fullName : String = "",
     var fullNameError : String? = null,

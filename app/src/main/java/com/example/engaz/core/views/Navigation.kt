@@ -221,6 +221,7 @@ fun Navigation(
                             context
                         )
                     },
+                    onChangePassCode = {},
                     onChangePhoneWithCountryCode = { registerViewModel.updatePhoneWithCountryCode(it) },
                     onChangePassword = { registerViewModel.updatePassword(it) },
                     onChangePasswordRenter = { registerViewModel.updatePasswordRenter(it) },
