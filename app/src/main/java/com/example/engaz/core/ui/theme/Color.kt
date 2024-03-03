@@ -21,7 +21,7 @@ val linearGradient =
         end = Offset.Infinite
     )
 
-val Primary = Color(0xff312183)
+val Primary = Color(0xff1BAC4B)
 val Secondary = Color(0xffEA6217)
 
 

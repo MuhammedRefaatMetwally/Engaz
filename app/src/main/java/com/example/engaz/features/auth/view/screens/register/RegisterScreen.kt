@@ -32,10 +32,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -102,23 +105,6 @@ fun RegisterScreen(
                 tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.engaz_logo2), // Provide the resource ID
-                    contentDescription = "",
-                    modifier = Modifier
-                        .size(104.dp)
-                )
-
-            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -126,7 +112,7 @@ fun RegisterScreen(
             Text(
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
-                    .align(Alignment.CenterHorizontally),
+                    .align(Alignment.Start),
                 text = stringResource(R.string.new_user_ar),
                 style = TextStyle(
                     fontFamily = Cairo,
@@ -138,40 +124,23 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                modifier = Modifier
-                    .padding(start = 16.dp)
-                    .drawBehind {
-                        val strokeWidthPx = 1.dp.toPx()
-                        val verticalOffset = size.height - 2.sp.toPx()
-                        drawLine(
-                            color = Color.Black,
-                            strokeWidth = strokeWidthPx,
-                            start = Offset(0f, verticalOffset),
-                            end = Offset(size.width, verticalOffset)
-                        )
-                    },
-                text = stringResource(R.string.personal_info_ar),
-                fontWeight = FontWeight.W700,
-                fontSize = 16.sp,
-                color = Color.Black
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             CustomTextField(
-                value = state.passCode,
-                onValueChange = {
-                    onChangePassCode(it)
-                },
+                value = state.fullName,
+                onValueChange = { onChangeFullName(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                placeHolder = stringResource(R.string.pass_code),
-                isError = state.passCodeError != null,
-                errorMessage = state.passCodeError ?: "",
-                label = stringResource(R.string.passcode)
-
+                placeHolder = stringResource(R.string.user_name_ar),
+                leadingIcon = {
+                    Image(
+                        modifier = Modifier.padding(end = 0.dp),
+                        painter = painterResource(id = R.drawable.profile_inactive),
+                        contentDescription = ""
+                    )
+                },
+                isError = state.fullNameError != null,
+                errorMessage = state.fullNameError ?: "",
+                label = stringResource(R.string.user_name_ar)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -201,60 +170,20 @@ fun RegisterScreen(
             )
 
             Spacer(modifier = Modifier.height(8.dp))
+
             CustomTextField(
-                value = state.email,
+                value = state.passCode,
                 onValueChange = {
-                    onChangeEmail(it)
+                    onChangePassCode(it)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                placeHolder = stringResource(R.string.email_ar),
-                leadingIcon = {},
-                isError = state.emailError != null,
-                errorMessage = state.emailError ?: "",
-                label = stringResource(R.string.email_ar),
-            )
+                placeHolder = stringResource(R.string.pass_code),
+                isError = state.passCodeError != null,
+                errorMessage = state.passCodeError ?: "",
+                label = stringResource(R.string.passcode)
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            Text(
-                modifier = Modifier
-                    .padding(start = 16.dp)
-                    .drawBehind {
-                        val strokeWidthPx = 1.dp.toPx()
-                        val verticalOffset = size.height - 2.sp.toPx()
-                        drawLine(
-                            color = Color.Black,
-                            strokeWidth = strokeWidthPx,
-                            start = Offset(0f, verticalOffset),
-                            end = Offset(size.width, verticalOffset)
-                        )
-                    },
-                text = stringResource(R.string.account_info_ar),
-                fontWeight = FontWeight.W700,
-                fontSize = 16.sp,
-                color = Color.Black
-            )
-
-            CustomTextField(
-                value = state.fullName,
-                onValueChange = { onChangeFullName(it) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
-                placeHolder = stringResource(R.string.user_name_ar),
-                leadingIcon = {
-                    Image(
-                        modifier = Modifier.padding(end = 0.dp),
-                        painter = painterResource(id = R.drawable.profile_inactive),
-                        contentDescription = ""
-                    )
-                },
-                isError = state.fullNameError != null,
-                errorMessage = state.fullNameError ?: "",
-                label = stringResource(R.string.user_name_ar)
             )
 
             Spacer(modifier = Modifier.height(5.dp))
@@ -329,8 +258,44 @@ fun RegisterScreen(
                 label = stringResource(R.string.reenter_password)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(132.dp))
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(
+                            fontFamily = Cairo,
+                            fontWeight = FontWeight.W700,
+                            fontSize = 16.sp
+                        )
+                    ) {
+                        append(stringResource(R.string.have_an_account_ar2))
+                    }
+                    withStyle(
+                        SpanStyle()
+                    ) {
+                        append(" ")
+                    }
+                    withStyle(
+                        SpanStyle(
+                            fontFamily = Cairo,
+                            fontWeight = FontWeight.W700,
+                            fontSize = 16.sp, color = colorResource(id = R.color.primary_color)
+                        )
+                    ) {
+                        append(stringResource(R.string.login_ar2))
+                    }
 
+                },
+                fontFamily = Cairo,
+                fontWeight = FontWeight.W700,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable {
+
+                    }
+            )
+            Spacer(modifier = Modifier.height(12.dp))
             MainButton(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -20,11 +20,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,15 +31,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,10 +48,11 @@ import com.example.engaz.core.ui.theme.*
 import com.example.engaz.core.views.components.*
 import com.example.engaz.features.auth.view.viewmodels.login.LoginState
 import com.example.engaz.R
+import com.example.engaz.destinations.LoginWithFingerPrintScreenDestination
+import com.example.engaz.destinations.MainScreenDestination
 import com.example.engaz.destinations.RegisterScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.launch
 
 @SuppressLint("ResourceType", "UnrememberedMutableState")
 @Destination
@@ -116,7 +116,7 @@ fun LoginScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.engaz_logo2), // Provide the resource ID
+                    painter = painterResource(id = R.drawable.logo1), // Provide the resource ID
                     contentDescription = "",
                     modifier = Modifier
                         .size(104.dp)
@@ -192,10 +192,90 @@ fun LoginScreen(
                 isError = state.passwordError != null,
                 errorMessage = state.passwordError ?: "",
                 label = stringResource(R.string.password_label)
-                )
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Text(
+                text = stringResource(R.string.forget_password_ar),
+                fontFamily = Cairo,
+                fontWeight = FontWeight.W700,
+                fontSize = 16.sp,
+                color = colorResource(id = R.color.primary_color),
+                modifier = Modifier.align(Alignment.End).padding(end = 18.dp)
+            )
+            Spacer(modifier = Modifier.height(80.dp))
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(
+                            fontFamily = Cairo,
+                            fontWeight = FontWeight.W700,
+                            fontSize = 16.sp
+                        )
+                    ) {
+                        append(stringResource(R.string.have_an_account_ar))
+                    }
+
+                    withStyle(
+                        SpanStyle()
+                    ) {
+                        append(" ")
+                    }
+                    withStyle(
+                        SpanStyle(
+                            fontFamily = Cairo,
+                            fontWeight = FontWeight.W700,
+                            fontSize = 16.sp, color = colorResource(id = R.color.primary_color)
+                        )
+                    ) {
+                        append(stringResource(R.string.create_an_account_ar))
+                    }
+
+                },
+                fontFamily = Cairo,
+                fontWeight = FontWeight.W700,
+                fontSize = 16.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally).clickable {
+                    navigator?.navigate(RegisterScreenDestination)
+                }
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+
+            MainButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(64.dp)
+                    .clip(RoundedCornerShape(100.dp))
+                    .clickable {
+                        navigator?.let {
+                            navigator.navigate(MainScreenDestination)
+                        }
+                    },
+                cardColor = colorResource(id = R.color.primary_color),
+                borderColor = Color.Transparent
+            ) {
+
+                if (state.isLoginLoading) {
+                    CustomProgressIndicator(
+                        modifier = Modifier.size(20.dp)
+                    )
+                } else {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 20.dp),
+                        text = stringResource(id = R.string.login_ar),
+                        style = TextStyle(
+                            fontFamily = Cairo,
+                            fontWeight = FontWeight.W700,
+                            color = Color.White,
+                            fontSize = 20.sp,
+                        )
+                    )
+                }
+
+            }
+            Spacer(modifier = Modifier.height(32.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -244,7 +324,9 @@ fun LoginScreen(
                     .height(64.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
-                        navigator?.let {}
+                        navigator?.let {
+                            navigator.navigate(LoginWithFingerPrintScreenDestination)
+                        }
                     },
                 cardColor = Color.White,
                 borderColor = Neutral300
@@ -276,124 +358,7 @@ fun LoginScreen(
                 }
 
             }
-            Spacer(modifier = Modifier.height(24.dp))
-            MainButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(64.dp)
-                    .clip(RoundedCornerShape(100.dp))
-                    .clickable {
-                        navigator?.let {
-                            navigator.navigate(RegisterScreenDestination)
-                        }
-                    },
-                cardColor = colorResource(id = R.color.primary_color),
-                borderColor = Color.Transparent
-            ) {
-
-                if (state.isLoginLoading) {
-                    CustomProgressIndicator(
-                        modifier = Modifier.size(20.dp)
-                    )
-                } else {
-                    Text(
-                        modifier = Modifier.padding(horizontal = 20.dp),
-                        text = stringResource(id = R.string.login_ar),
-                        style = TextStyle(
-                            fontFamily = Cairo,
-                            fontWeight = FontWeight.W700,
-                            color = Color.White,
-                            fontSize = 20.sp,
-                        )
-                    )
-                }
-
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-            MainButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(64.dp)
-                    .clip(RoundedCornerShape(100.dp))
-                    .clickable {
-                        navigator?.let {}
-                    },
-                cardColor = Color.White,
-                borderColor = Neutral300
-            ) {
-                if (state.isLoginLoading) {
-                    CustomProgressIndicator(
-                        modifier = Modifier.size(20.dp)
-                    )
-                } else {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                        Image(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(48.dp),
-                            painter = painterResource(id = R.drawable.ic_newuser),
-                            contentDescription = "finger_print",
-                        )
-                        Text(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            text = stringResource(R.string.new_user_text_ar),
-                            style = TextStyle(
-                                fontFamily = Cairo,
-                                fontWeight = FontWeight.W700,
-                                color = Color.Black,
-                                fontSize = 15.sp,
-                            )
-                        )
-                    }
-                }
-
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            MainButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(64.dp)
-                    .clip(RoundedCornerShape(100.dp))
-                    .clickable {
-                        navigator?.let {}
-                    },
-                cardColor = Color.White,
-                borderColor = Neutral300
-            ) {
-                if (state.isLoginLoading) {
-                    CustomProgressIndicator(
-                        modifier = Modifier.size(20.dp)
-                    )
-                } else {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
-                        Image(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(48.dp),
-                            painter = painterResource(id = R.drawable.ic_newpassword),
-                            contentDescription = "finger_print",
-                        )
-                        Text(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            text = stringResource(R.string.new_password_text),
-                            style = TextStyle(
-                                fontFamily = Cairo,
-                                fontWeight = FontWeight.W700,
-                                color = Color.Black,
-                                fontSize = 15.sp,
-                            )
-                        )
-                    }
-                }
-
-            }
         }
-
-
     }
 
 }

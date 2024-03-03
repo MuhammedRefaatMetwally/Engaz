@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -57,16 +58,14 @@ fun SplashScreen(
 
     var visible by remember { mutableStateOf(false) }
 
-    val density = LocalDensity.current
 
-    /*LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = true) {
         delay(500)
         visible = true
         navigator?.let {
-                onScreenLaunch(navigator)
+               onScreenLaunch(navigator)
             }
-    }*/
-
+    }
     var playAnimation by remember {
         mutableStateOf(false)
     }
@@ -75,49 +74,8 @@ fun SplashScreen(
         playAnimation = true
     }
 
-    AnimatedVisibility(
-        visible = playAnimation,
-        enter = scaleIn(tween(3000)),
-        exit = scaleOut(tween(3000))
-    ) {
-        LogoBackgroundAnimation()
-    }
-    AnimatedVisibility(visible = playAnimation, enter = fadeIn(), exit = fadeOut()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.engaz_logo2), // Provide the resource ID
-                contentDescription = "",
-                modifier = Modifier,
-            )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = stringResource(R.string.engaz_text_ar),
-                fontWeight = FontWeight.W700,
-                fontSize = 80.sp,
-                fontFamily = Cairo,
-                color = colorResource(id = R.color.primary_color)
-            )
-
-        }
-    }
-
-    if (playAnimation) {
-        LaunchedEffect(Unit) {
-            delay(1500)
-            navigator?.let {
-                onScreenLaunch(navigator)
-            }
-        }
-    }
-
-   /* Scaffold(
+    Scaffold(
         containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100
     ) {
         it
@@ -136,39 +94,20 @@ fun SplashScreen(
                 ) {
 
                     Image(
-                        painter = painterResource(id = R.drawable.engaz_logo2), // Provide the resource ID
+                        painter = painterResource(id = R.drawable.logo1), // Provide the resource ID
                         contentDescription = "",
                         modifier = Modifier,
                     )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = stringResource(R.string.engaz_text_ar),
-                        fontWeight = FontWeight.W700,
-                        fontSize = 80.sp,
-                        fontFamily = Cairo,
-                        color = colorResource(id = R.color.primary_color)
-                    )
-
                 }
             }
 
 
         }
 
-    }*/
-
-}
-
-@Composable
-fun LogoBackgroundAnimation() {
-    Canvas(modifier = Modifier.fillMaxSize()) {
-        scale(7F, 7F) {
-            drawCircle(linearGradient)
-        }
     }
+
 }
+
 @Preview
 @Composable
 fun DefoultSplashScreenPreview() {
