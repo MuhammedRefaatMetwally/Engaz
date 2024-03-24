@@ -15,8 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.Neutral500
 
 @Composable
@@ -54,12 +58,20 @@ fun MainButton(
 @Composable
 fun MainButtonPreview(){
     MainButton(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp).height(50.dp)
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+            .height(20.dp)
     ){
 
 
-        Text(
-            text = "Login",
+        androidx.compose.material.Text(
+            modifier = Modifier,
+            text = "إرسال طلب نقل",
+            style = TextStyle(
+                fontFamily = Cairo,
+                fontWeight = FontWeight.W400,
+                color = Color.White,
+                fontSize = 14.sp,
+            )
         )
 
     }

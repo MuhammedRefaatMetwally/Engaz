@@ -1,5 +1,7 @@
 package com.example.engaz.core.ui.theme
 
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Neutral900 = Color(0xff111827)
@@ -11,9 +13,15 @@ val Neutral400 = Color(0xff9CA3AF)
 val Neutral300 = Color(0xffD1D5DB)
 val Neutral200 = Color(0xffE5E7EB)
 val Neutral100 = Color(0xffF4F4F5)
+val linearGradient =
+    Brush.linearGradient(
+        0.0F to   Color(0xffFFFFFF) ,
+        1.0F to Color(0xff178744),
+        start = Offset.Zero,
+        end = Offset.Infinite
+    )
 
-
-val Primary = Color(0xff312183)
+val Primary = Color(0xff1BAC4B)
 val Secondary = Color(0xffEA6217)
 
 

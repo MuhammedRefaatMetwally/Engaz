@@ -29,35 +29,35 @@ class EditProfileViewModel @Inject constructor(
     private val updateProfileNameAndImageUsecase: UpdateProfileNameAndImageUsecase,
     private val saveUserInfoUseCase: SaveUserInfoUseCase,
 
-) : ViewModel() {
+    ) : ViewModel() {
 
-    var state : EditProfileState by mutableStateOf(EditProfileState())
+    var state: EditProfileState by mutableStateOf(EditProfileState())
     private var job: Job? = null
 
-    fun updateUsername(username : String){
+    fun updateUsername(username: String) {
         state = state.copy(
             usernameTextField = username
         )
     }
 
-    fun updatePhone(phone : String){
+    fun updatePhone(phone: String) {
         state = state.copy(
             phoneTextField = phone
         )
     }
 
-    fun updateProfileImage(image: Uri?){
+    fun updateProfileImage(image: Uri?) {
 
-            state = state.copy(
-                pickedProfileImage = image
-            )
+        state = state.copy(
+            pickedProfileImage = image
+        )
 
 
     }
 
 
     private fun onSave(navigator: DestinationsNavigator, context: Context) {
-        if(job == null){
+        if (job == null) {
             job = viewModelScope.launch(Dispatchers.IO) {
 
                 state = state.copy(
@@ -65,7 +65,7 @@ class EditProfileViewModel @Inject constructor(
                     profileIsLoading = true
                 )
 
-                val response = if(state.usernameTextField.isBlank()){
+                val response = if (state.usernameTextField.isBlank()) {
 
                     updateProfileNameAndImageUsecase(
                         CoreViewModel.user!!.token,
@@ -74,7 +74,7 @@ class EditProfileViewModel @Inject constructor(
                         context
                     )
 
-                }else{
+                } else {
 
                     updateProfileNameAndImageUsecase(
                         CoreViewModel.user!!.token,
@@ -90,7 +90,7 @@ class EditProfileViewModel @Inject constructor(
                     )
                     CoreViewModel.showSnackbar(("Error:" + response.failure.message))
 
-                    Log.v("CoreViewModel",response.failure.message)
+                    Log.v("CoreViewModel", response.failure.message)
 
                 } else {
 
@@ -99,7 +99,7 @@ class EditProfileViewModel @Inject constructor(
                             image = response.data!!.data.user.image,
                             fullname = response.data.data.user.fullname,
 
-                        ),
+                            ),
                         context,
                         0
                     )
@@ -126,17 +126,23 @@ class EditProfileViewModel @Inject constructor(
 
             }
 
-            Log.v("username",CoreViewModel.user.toString())
+            Log.v("username", CoreViewModel.user.toString())
 
             job = null
         }
     }
 
-    fun onEvent(event: EditProfileEvent){
-        when(event){
+    private fun onBackClick(navigator: DestinationsNavigator) {
+        navigator.popBackStack()
+    }
+
+    fun onEvent(event: EditProfileEvent) {
+        when (event) {
             is EditProfileEvent.OnSave -> {
-                onSave(event.navigator,event.context)
+                onSave(event.navigator, event.context)
             }
+
+            is EditProfileEvent.OnBackClick -> onBackClick(navigator = event.navigator)
         }
     }
 

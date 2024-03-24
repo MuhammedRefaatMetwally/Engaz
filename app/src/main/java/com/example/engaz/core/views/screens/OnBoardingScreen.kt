@@ -8,6 +8,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -66,8 +67,7 @@ fun OnBoardingScreen(
               HorizontalPager(
                   state = pagerState,
                   modifier = Modifier
-                      .fillMaxWidth()
-                      .fillMaxHeight(),
+                      .fillMaxSize(),
 
                   ) { page ->
                   when (page) {
@@ -97,7 +97,7 @@ fun OnBoardingScreen(
             CustomPageIndicator(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 380.dp),
+                    .padding(bottom = 148.dp),
                 totalPages = pagerState.pageCount,
                 currentPage = pagerState.currentPage,
                 indicatorSize = 7.dp,
@@ -108,13 +108,12 @@ fun OnBoardingScreen(
             MainButton(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(bottom = 66.dp)
+                    .padding(bottom = 48.dp)
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .height(64.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
-
                         if (pagerState.currentPage != 2) {
                             scope.launch {
 
@@ -125,10 +124,7 @@ fun OnBoardingScreen(
                                 onNextClick(navigator)
                             }
                         }
-
-
-                    }
-                    ,
+                    },
                 cardColor = colorResource(id = R.color.primary_color),
                 borderColor = Color.Transparent
             ){
@@ -154,8 +150,8 @@ fun OnBoardingScreen(
             if(pagerState.currentPage == 0)
             Text(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 24.dp)
+                    .align(Alignment.TopStart)
+                    .padding(bottom = 24.dp , start = 16.dp)
                     .wrapContentHeight()
                     .clickable {
 

@@ -1,187 +1,106 @@
 package com.example.engaz.features.home.view.components
 
 import android.content.Context
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.Color
+
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
-import coil.transform.CircleCropTransformation
+
 import com.example.engaz.R
+import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.Lato
 import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Primary
 import com.example.engaz.core.ui.theme.Secondary
 import com.example.engaz.core.views.components.shimmerEffect
+import com.example.engaz.destinations.EditProfileScreenDestination
+import com.example.engaz.destinations.NotificationSettingsScreenDestination
+import com.example.engaz.destinations.NotificationsPageDestination
+import com.example.engaz.destinations.ProfilePageDestination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeHeader(
-    isLoading : Boolean = false,
-    profileImage : String,
-    username : String,
-    wallet : String,
-    currency : String
+    isLoading: Boolean = false,
+    profileImage: String,
+    username: String,
+    wallet: String,
+    currency: String,
+    navigator: DestinationsNavigator?,
 ) {
     val context: Context = LocalContext.current
 
-    Surface(
-        Modifier
-            .fillMaxWidth()
-            .height(213.dp),
-        shape = RoundedCornerShape(bottomStart = 74.dp, bottomEnd = 74.dp),
-        color = Primary
+    Row(
+        modifier = Modifier
+            .padding(top = 24.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround
     ) {
-
-        Column(
+        Card(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 30.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                if(isLoading){
-                    Box(
-                        modifier = Modifier
-                            .size(48.dp)
-                            .clip(CircleShape)
-                            .shimmerEffect(),
-                    )
-                }else{
-                    Image(
-                        modifier = Modifier
-                            .height(48.dp)
-                            .width(48.dp)
-                            .clip(CircleShape),
-                        painter = rememberImagePainter(data = profileImage, builder = {
-                            transformations(CircleCropTransformation()) // Apply transformations if needed
-                            placeholder(R.drawable.photo) // Placeholder resource while loading
-                            error(R.drawable.photo_error) // Error resource if loading fails
-                        }),
-                        contentDescription = null, //
-                        contentScale = ContentScale.FillHeight
-                    )
-                }
-
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                if(isLoading){
-                    Box(
-                        modifier = Modifier
-                            .height(20.dp)
-                            .width(150.dp)
-                            .clip(RoundedCornerShape(24.dp))
-                            .shimmerEffect(),
-                    )
-                }else{
-                    Text(
-                        text = context.getString(R.string.welcome) + " ",
-                        style = TextStyle(
-                            fontFamily = Lato,
-                            color = Neutral100,
-                            fontSize = 18.sp
-                        )
-                    )
-
-                    Text(
-                        text = username ,
-                        style = TextStyle(
-                            fontFamily = Lato,
-                            color = Neutral100,
-                            fontSize = 18.sp
-                        )
-                    )
-                }
-
-
-
-            }
-
-
-
-
-            Spacer(modifier = Modifier.height(30.dp))
-
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-
-                if(isLoading){
-                    Box(
-                        modifier = Modifier
-                            .height(25.dp)
-                            .width(50.dp)
-                            .clip(RoundedCornerShape(24.dp))
-                            .shimmerEffect(),
-                    )
-                }else{
-                    Text(
-                        text = wallet,
-                        style = TextStyle(
-                            fontFamily = Lato,
-                            color = Secondary,
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-
-                    Spacer(modifier = Modifier.width(10.dp))
-
-                    Text(
-                        text = currency,
-                        style = TextStyle(
-                            fontFamily = Lato,
-                            color = Neutral100,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.ExtraLight
-
-                        )
-                    )
-                }
-
-
-            }
-
-
-
-            Spacer(modifier = Modifier.height(if(isLoading) 16.dp else 8.dp))
-
-            Text(
-                text = context.getString(R.string.total_balance),
-                style = TextStyle(
-                    fontFamily = Lato,
-                    color = Neutral100.copy(alpha = 0.5f),
-                    fontSize = 16.sp
-                )
+                .size(32.dp)
+                .clickable { navigator?.navigate(ProfilePageDestination) },
+            shape = CircleShape,
+            elevation = CardDefaults.elevatedCardElevation(8.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Gray
             )
-            Spacer(modifier = Modifier.height(20.dp))
-
+        ) {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 4.dp),
+                painter = painterResource(id = R.drawable.profile),
+                contentDescription = "profile"
+            )
         }
-
+        Text(
+            text = stringResource(R.string.main_ar),
+            fontFamily = Cairo,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.W700
+        )
+        Card(
+            modifier = Modifier
+                .size(32.dp)
+                .clickable { navigator?.navigate(NotificationsPageDestination) },
+            shape = CircleShape,
+            elevation = CardDefaults.elevatedCardElevation(8.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Gray
+            )
+        ) {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 4.dp),
+                painter = painterResource(id = R.drawable.notification),
+                contentDescription = "notification"
+            )
+        }
     }
 }

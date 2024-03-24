@@ -5,17 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.engaz.R
 import com.example.engaz.features.home.view.pages.home.HomePage
+import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.TransferCarOwnershipScreen
 import com.example.engaz.features.home.view.viewmodels.home.HomeEvent
 import com.example.engaz.features.home.view.viewmodels.home.HomeViewModel
-import com.example.engaz.features.notification.views.pages.NotificationsPage
-import com.example.engaz.features.notification.views.viewmodel.NotificationEvent
-import com.example.engaz.features.notification.views.viewmodel.NotificationViewModel
-import com.example.engaz.features.transactions.view.screens.OrdersDetailsPage
-import com.example.engaz.features.transactions.view.viewmodel.order.OrderEvent
-import com.example.engaz.features.transactions.view.viewmodel.order.OrderViewModel
 import com.example.engaz.features.profile.view.pages.ProfilePage
 import com.example.engaz.features.wallet.view.pages.WalletPage
-import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletEvent
 import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -24,66 +18,45 @@ sealed class BottomNavPage(
     val icon: Int,
     val label: Int
 ) {
-    object HomeNavPage : BottomNavPage(
+    data object HomeNavPage : BottomNavPage(
         page = { navigator , context ->
             val viewModel : HomeViewModel = hiltViewModel()
             HomePage(
                 navigator = navigator,
                 state = viewModel.state,
-                init = {context -> viewModel.onEvent(HomeEvent.OnHomePageInit(context))  },
+                init = {context ->  },
                 onSendOrderClick = { navigator,context ->  viewModel.onEvent(HomeEvent.OnMakeOrderClick(navigator,context))},
             )
         },
-        icon = R.drawable.home,
+        icon = R.drawable.ic_home,
         label = R.string.home
     )
 
-    object OrderNavPage : BottomNavPage(
+    data object TransferOwnership : BottomNavPage(
         page = {navigator , context ->
-            val viewModel : OrderViewModel = hiltViewModel()
-
-            OrdersDetailsPage(
-                navigator = navigator,
-                orderState = viewModel.state,
-                getOrders = { viewModel.onEvent(OrderEvent.OnGetOrders(context)) }
+            TransferCarOwnershipScreen(
+                navigator = null,
             )
         },
-        icon = R.drawable.order,
+        icon = R.drawable.ic_ownership,
         label = R.string.orders
     )
 
-    object NotificationNavPage : BottomNavPage(
-        page = {navigator , context ->
-            val viewModel : NotificationViewModel = hiltViewModel()
-
-            NotificationsPage(
-                navigator = navigator,
-                notificationState = viewModel.state,
-                getNotification = { viewModel.onEvent(NotificationEvent.OnGetNotification(context))}
-            )
-        },
-        icon = R.drawable.notification,
-        label = R.string.notification
-    )
-
-    object WalletNavPage : BottomNavPage(
+    data object Payment : BottomNavPage(
         page = {navigator , context ->
             val viewModel : WalletViewModel = hiltViewModel()
 
             WalletPage(
                 navigator = navigator,
                 state = viewModel.state,
-                getBalacne = { viewModel.onEvent(WalletEvent.OnGetBalance(context)) }
             )
         },
-        icon = R.drawable.wallet,
+        icon = R.drawable.ic_payment,
         label = R.string.wallet
     )
 
-    object ProfileNavPage : BottomNavPage(
+    data object ProfileNavPage : BottomNavPage(
         page = {navigator , context ->
-            //val viewModel : OrderViewModel = hiltViewModel()
-
             ProfilePage(
                 navigator = navigator,
             )
