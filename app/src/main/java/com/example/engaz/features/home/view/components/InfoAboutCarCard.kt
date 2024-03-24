@@ -3,6 +3,7 @@ package com.example.engaz.features.home.view.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -36,13 +37,17 @@ import com.example.engaz.core.views.components.MainButton
 
 @Composable
 fun InfoAboutCarCard(
-    noRequest: Boolean = true,
-    onClick: () -> Unit = {},
+    isRequest: Boolean = true,
+    pendingRequest: Boolean = false,
+    showButtons : Boolean = false,
+    onAcceptClick: () -> Unit = {},
+    onDeclineClick: () -> Unit = {},
+    onRequestClick: () -> Unit = {},
 ) {
     Card(
         Modifier
             .fillMaxWidth()
-            .fillMaxHeight(.35f)
+            .fillMaxHeight(if (pendingRequest) .5f else .35f)
             .padding(horizontal = 16.dp),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, Color.Gray),
@@ -94,28 +99,97 @@ fun InfoAboutCarCard(
             text = "المنصورة", fontFamily = Cairo, fontWeight = FontWeight.W700,
             fontSize = 16.sp,
         )
-          if(noRequest){
-              MainButton(
-                  Modifier
-                      .align(Alignment.End)
-                      .fillMaxWidth(.5f)
-                      .padding(end = 16.dp)
-                      .height(60.dp)
-                      .clickable { onClick() },
-                  cardColor = colorResource(id = R.color.primary_color),
-              ) {
-                  Text(
-                      modifier = Modifier,
-                      text = "إرسال طلب نقل",
-                      style = TextStyle(
-                          fontFamily = Cairo,
-                          fontWeight = FontWeight.W700,
-                          color = Color.White,
-                          fontSize = 14.sp,
-                      )
-                  )
-              }
-          }
+        Spacer(modifier = Modifier.height(8.dp))
+        if (pendingRequest) {
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                text = "اسم المشترى : ", fontFamily = Cairo, fontWeight = FontWeight.W400,
+                fontSize = 14.sp,
+            )
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                text = "الرقم القومى :", fontFamily = Cairo, fontWeight = FontWeight.W400,
+                fontSize = 14.sp,
+            )
+            Text(
+                modifier = Modifier.padding(start = 8.dp),
+                text = "المبلغ المعروض  : ",
+                fontFamily = Cairo,
+                fontWeight = FontWeight.W400,
+                fontSize = 14.sp,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+           if(showButtons){
+               Row(
+                   Modifier
+                       .fillMaxWidth()
+                       .align(Alignment.CenterHorizontally).padding(horizontal = 16.dp),
+                   horizontalArrangement = Arrangement.SpaceAround
+               ) {
+                   MainButton(
+                       Modifier
+                           .fillMaxWidth()
+                           .height(62.dp)
+                           .weight(.5f)
+                           .clickable { onAcceptClick() },
+                       cardColor = colorResource(id = R.color.primary_color),
+                   ) {
+                       Text(
+                           modifier = Modifier,
+                           text = "قبول",
+                           style = TextStyle(
+                               fontFamily = Cairo,
+                               fontWeight = FontWeight.W700,
+                               color = Color.White,
+                               fontSize = 18.sp,
+                           )
+                       )
+                   }
+                   Spacer(modifier = Modifier.width(16.dp))
+                   MainButton(
+                       Modifier
+                           .fillMaxWidth()
+                           .height(62.dp)
+                           .weight(.5f)
+                           .clickable { onDeclineClick() },
+                       cardColor = Color.Red,
+                   ) {
+                       Text(
+                           modifier = Modifier,
+                           text = "رفض",
+                           style = TextStyle(
+                               fontFamily = Cairo,
+                               fontWeight = FontWeight.W700,
+                               color = Color.White,
+                               fontSize = 18.sp,
+                           )
+                       )
+                   }
+               }
+           }
+        }
+        if (isRequest) {
+            MainButton(
+                Modifier
+                    .align(Alignment.End)
+                    .fillMaxWidth(.5f)
+                    .padding(end = 16.dp)
+                    .height(60.dp)
+                    .clickable { onRequestClick() },
+                cardColor = colorResource(id = R.color.primary_color),
+            ) {
+                Text(
+                    modifier = Modifier,
+                    text = "إرسال طلب نقل",
+                    style = TextStyle(
+                        fontFamily = Cairo,
+                        fontWeight = FontWeight.W700,
+                        color = Color.White,
+                        fontSize = 14.sp,
+                    )
+                )
+            }
+        }
 
     }
 }

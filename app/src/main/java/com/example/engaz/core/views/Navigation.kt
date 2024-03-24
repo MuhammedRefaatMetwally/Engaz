@@ -27,7 +27,7 @@ import com.example.engaz.core.views.screens.OnBoardingScreen
 import com.example.engaz.core.views.screens.SplashScreen
 import com.example.engaz.destinations.*
 import com.example.engaz.features.auth.view.screens.login.LoginScreen
-import com.example.engaz.features.auth.view.screens.login.LoginWithFingerPrintScreen
+import com.example.engaz.features.auth.view.screens.login_with_fingerprint.LoginWithFingerPrintScreen
 import com.example.engaz.features.auth.view.screens.register.ActivationPinScreen
 import com.example.engaz.features.auth.view.screens.register.RegisterScreen
 import com.example.engaz.features.auth.view.screens.reset_password.*
@@ -44,10 +44,14 @@ import com.example.engaz.features.home.view.screens.main_info_screens.CompletedR
 import com.example.engaz.features.home.view.screens.main_info_screens.InfoAboutCarScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.InfoAboutServiceScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.RenewLicenseScreen
+import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.AcceptedRequestDetails
+import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.CompletePaymentScreen
+import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.RequestsScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.SendTransferingRequestDetailsScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.SendTransferingRequestScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.TransferCarOwnershipScreen
 import com.example.engaz.features.home.view.viewmodels.main.MainViewModel
+import com.example.engaz.features.home.view.viewmodels.main_info.complete_payment.CompletePaymentViewModel
 import com.example.engaz.features.home.view.viewmodels.main_info.completed_requests.CompletedRequestsEvent
 import com.example.engaz.features.home.view.viewmodels.main_info.completed_requests.CompletedRequestsViewModel
 import com.example.engaz.features.home.view.viewmodels.main_info.info_about_service.HomeInfoCarEvent
@@ -58,6 +62,10 @@ import com.example.engaz.features.home.view.viewmodels.main_info.renew_license.R
 import com.example.engaz.features.home.view.viewmodels.main_info.renew_license.RenewLicenseViewModel
 import com.example.engaz.features.home.view.viewmodels.main_info.transfer_car_ownership.TransferCarOwnerShipEvent
 import com.example.engaz.features.home.view.viewmodels.main_info.transfer_car_ownership.TransferCarOwnerShipViewModel
+import com.example.engaz.features.identity.views.pages.FaceRecognitionScreen
+import com.example.engaz.features.identity.views.viewmodel.IdentityEvent
+import com.example.engaz.features.identity.views.viewmodel.IdentityViewModel
+import com.example.engaz.features.identity.views.pages.IdentityScreen
 import com.example.engaz.features.notification.views.pages.NotificationsPage
 import com.example.engaz.features.notification.views.viewmodel.NotificationEvent
 import com.example.engaz.features.notification.views.viewmodel.NotificationViewModel
@@ -69,6 +77,7 @@ import com.example.engaz.features.profile.view.screens.EditProfileScreen
 import com.example.engaz.features.profile.view.viewmodels.edit_profile.EditProfileEvent
 import com.example.engaz.features.profile.view.viewmodels.edit_profile.EditProfileViewModel
 import com.example.engaz.features.wallet.view.pages.ChargeBalanceScreen
+import com.example.engaz.features.wallet.view.pages.WalletPage
 import com.example.engaz.features.wallet.view.screens.WalletMessageScreen
 import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletEvent
 import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletViewModel
@@ -90,7 +99,9 @@ fun Navigation(
     renewLicenseViewModel: RenewLicenseViewModel = hiltViewModel(),
     completedRequestsViewModel: CompletedRequestsViewModel = hiltViewModel(),
     notificationViewModel: NotificationViewModel = hiltViewModel(),
+    identityViewModel: IdentityViewModel = hiltViewModel(),
     editProfileViewModel: EditProfileViewModel = hiltViewModel(),
+    completePaymentViewModel: CompletePaymentViewModel = hiltViewModel(),
     locationViewModel: SelectLocationViewModel = hiltViewModel(),
     walletViewModel: WalletViewModel = hiltViewModel(),
     profileViewModel: EditProfileViewModel = hiltViewModel(),
@@ -319,19 +330,60 @@ fun Navigation(
                 })
             }
 
-            composable(SendTransferingRequestScreenDestination){
+            composable(SendTransferingRequestScreenDestination) {
                 SendTransferingRequestScreen(
                     navigator = destinationsNavigator,
                     onBackArrowClick = {
-                        transferCarOwnerShipViewModel.onEvent(TransferCarOwnerShipEvent.OnBackClick(it))
+                        transferCarOwnerShipViewModel.onEvent(
+                            TransferCarOwnerShipEvent.OnBackClick(
+                                it
+                            )
+                        )
                     })
             }
-            composable(SendTransferingRequestDetailsScreenDestination){
+            composable(SendTransferingRequestDetailsScreenDestination) {
                 SendTransferingRequestDetailsScreen(
                     navigator = destinationsNavigator,
                     onBackArrowClick = {
-                        transferCarOwnerShipViewModel.onEvent(TransferCarOwnerShipEvent.OnBackClick(it))
+                        transferCarOwnerShipViewModel.onEvent(
+                            TransferCarOwnerShipEvent.OnBackClick(
+                                it
+                            )
+                        )
                     })
+            }
+            composable(RequestsScreenDestination) {
+                RequestsScreen(navigator = destinationsNavigator, onBackArrowClick = {
+                    transferCarOwnerShipViewModel.onEvent(TransferCarOwnerShipEvent.OnBackClick(it))
+                })
+            }
+            composable(AcceptedRequestDetailsDestination) {
+                AcceptedRequestDetails(navigator = destinationsNavigator, onBackArrowClick = {
+                    transferCarOwnerShipViewModel.onEvent(TransferCarOwnerShipEvent.OnBackClick(it))
+                })
+            }
+            composable(IdentityScreenDestination) {
+                IdentityScreen(navigator = destinationsNavigator, onBackArrowClick = {
+                    identityViewModel.onEvent(IdentityEvent.OnBackClick(it))
+                })
+            }
+            composable(FaceRecognitionScreenDestination){
+                FaceRecognitionScreen(navigator = destinationsNavigator, onBackArrowClick = {
+                    identityViewModel.onEvent(IdentityEvent.OnBackClick(it))
+                })
+            }
+
+            composable(CompletePaymentScreenDestination){
+                CompletePaymentScreen(destinationsNavigator, onBackArrowClick = {
+                    transferCarOwnerShipViewModel.onEvent(TransferCarOwnerShipEvent.OnBackClick(it))
+                }, onSecureCVCClick = {
+                    completePaymentViewModel.updateCVCSecureState()
+                })
+            }
+            composable(WalletPageDestination) {
+                WalletPage(navigator = destinationsNavigator, onBackArrowClick = {
+                    walletViewModel.onEvent(WalletEvent.OnBackClick(it))
+                })
             }
             composable(ActivationPinScreenDestination) {
                 ActivationPinScreen(

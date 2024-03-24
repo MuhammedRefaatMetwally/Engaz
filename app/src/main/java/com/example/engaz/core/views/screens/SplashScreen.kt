@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.engaz.R
@@ -45,6 +46,7 @@ import com.example.engaz.core.ui.theme.MarketAppTheme
 import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Neutral900
 import com.example.engaz.core.ui.theme.linearGradient
+import com.example.engaz.core.views.components.LeftToRightLayout
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
@@ -92,12 +94,13 @@ fun SplashScreen(
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
-                    Image(
-                        painter = painterResource(id = R.drawable.logo1), // Provide the resource ID
-                        contentDescription = "",
-                        modifier = Modifier,
-                    )
+                    LeftToRightLayout {
+                         Image(
+                             painter = painterResource(id = R.drawable.logo1), // Provide the resource ID
+                             contentDescription = "",
+                             modifier = Modifier,
+                         )
+                     }
                 }
             }
 

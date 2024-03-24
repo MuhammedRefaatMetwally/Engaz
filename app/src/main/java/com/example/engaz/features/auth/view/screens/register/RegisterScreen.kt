@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.engaz.core.ui.theme.*
 import com.example.engaz.core.views.components.*
+import com.example.engaz.destinations.LoginScreenDestination
 import com.example.engaz.destinations.RegisterScreenDestination
 import com.example.engaz.features.auth.view.viewmodels.register.RegisterState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -292,7 +293,7 @@ fun RegisterScreen(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .clickable {
-
+                        navigator?.navigate(LoginScreenDestination)
                     }
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -330,7 +331,7 @@ fun RegisterScreen(
 
             }
         }
-        }
+    }
 }
 
 @Preview

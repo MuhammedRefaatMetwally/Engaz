@@ -41,6 +41,7 @@ import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.core.views.components.CustomProgressIndicator
 import com.example.engaz.core.views.components.CustomTextField
 import com.example.engaz.core.views.components.MainButton
+import com.example.engaz.destinations.MainScreenDestination
 import com.example.engaz.features.profile.view.components.Header
 import com.example.engaz.features.profile.view.components.PhoneNumberField
 import com.example.engaz.features.profile.view.components.UsernameField
@@ -247,7 +248,7 @@ fun EditProfileScreen(
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
                         navigator?.let {
-                            onSave(navigator, context)
+                            navigator.navigate(MainScreenDestination)
                         }
                     },
                 cardColor = Primary,

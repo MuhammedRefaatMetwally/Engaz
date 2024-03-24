@@ -38,14 +38,19 @@ import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.*
+import com.example.engaz.destinations.IdentityScreenDestination
+import com.example.engaz.features.profile.view.components.BackButton
 import com.example.engaz.features.wallet.view.components.WalletItem
 import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletState
+import com.ramcosta.composedestinations.annotation.Destination
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
+@Destination
 fun WalletPage(
     navigator: DestinationsNavigator?,
     state: WalletState = WalletState(),
+    onBackArrowClick: (DestinationsNavigator) -> Unit = {},
 ) {
 
     val walletIcons = listOf(
@@ -77,23 +82,12 @@ fun WalletPage(
 
             Row(Modifier.fillMaxWidth()) {
                 if(navigator!=null){
-                    Icon(
-                        modifier = Modifier
-                            .padding(start = 20.dp)
-                            .clickable {
-                                navigator.let { }
-                            },
-                        painter = painterResource(
-                            id = R.drawable.arrow_left
-                        ),
-                        contentDescription = null,
-                        tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
-                    )
+                    BackButton(onClick = {onBackArrowClick(navigator)})
                 }
 
 
                 Text(
-                    modifier = Modifier.padding(start = 124.dp, bottom = 8.dp),
+                    modifier = Modifier.padding(start = 90.dp, bottom = 8.dp),
                     text = stringResource(R.string.choose_payment_way),
                     fontSize = 20.sp,
                     fontFamily = Cairo,
@@ -104,11 +98,13 @@ fun WalletPage(
             Spacer(modifier = Modifier.height(32.dp))
 
             walletIcons.forEachIndexed { index, item ->
-                WalletItem(paymentIcon = item, paymentName = walletNames[index])
+                WalletItem(paymentIcon = item, paymentName = walletNames[index]){
+                    navigator?.navigate(IdentityScreenDestination)
+                }
                 Spacer(modifier = Modifier.height(24.dp))
             }
             val stroke = Stroke(
-                width = 4f,
+                width = 8f,
                 pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 20f), 0f)
             )
             Card(
@@ -118,7 +114,8 @@ fun WalletPage(
                     .height(100.dp)
                     .drawBehind {
                         drawRoundRect(color = Primary, style = stroke)
-                    }.clickable { }, shape = RoundedCornerShape(0.dp),
+                    }
+                    .clickable { }, shape = RoundedCornerShape(0.dp),
             ) {
                 Row(modifier = Modifier
                     .fillMaxSize()
