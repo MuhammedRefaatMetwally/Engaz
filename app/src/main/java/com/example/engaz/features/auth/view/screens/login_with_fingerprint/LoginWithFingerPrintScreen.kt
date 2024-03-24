@@ -1,4 +1,4 @@
-package com.example.engaz.features.auth.view.screens.login
+package com.example.engaz.features.auth.view.screens.login_with_fingerprint
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +32,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.engaz.core.ui.theme.*
 import com.example.engaz.features.auth.view.viewmodels.login.LoginState
 import com.example.engaz.R
 import com.ramcosta.composedestinations.annotation.Destination
@@ -49,7 +49,7 @@ fun LoginWithFingerPrintScreen(
 
     val context: Context = LocalContext.current
     val scope = rememberCoroutineScope()
-    var isScanningFingerprint = false
+    val isScanningFingerprint = mutableStateOf(false)
 
 
     Scaffold(
@@ -82,15 +82,17 @@ fun LoginWithFingerPrintScreen(
                 )
                 Spacer(modifier = Modifier.height(40.dp))
                 Text(
-                    text =if(isScanningFingerprint) stringResource(R.string.scaing_fingerprint) else stringResource(R.string.fingerprint_description_ar),
+                    text =if(isScanningFingerprint.value) stringResource(R.string.scaing_fingerprint) else stringResource(R.string.fingerprint_description_ar),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W700,
+                    color = Color.White,
                     textAlign = TextAlign.Center
                 )
                 Text(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    text = stringResource(R.string.put_your_finger),
+                    text = if(isScanningFingerprint.value) "" else stringResource(R.string.put_your_finger),
                     fontSize = 16.sp,
+                    color = Color.White,
                     fontWeight = FontWeight.W400,
                     textAlign = TextAlign.Center
                 )
@@ -105,9 +107,9 @@ fun LoginWithFingerPrintScreen(
                     .align(Alignment.BottomCenter)
                     .padding(bottom = 24.dp)
                     .combinedClickable(onLongClick = {
-                        isScanningFingerprint = true
+                        isScanningFingerprint.value = true
                     }) {
-                        isScanningFingerprint = false
+                        isScanningFingerprint.value = false
                     }
             )
         }

@@ -115,15 +115,17 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.logo1), // Provide the resource ID
-                    contentDescription = "",
-                    modifier = Modifier
-                        .size(104.dp)
-                )
+                LeftToRightLayout{
+                    Image(
+                        painter = painterResource(id = R.drawable.logo1), // Provide the resource ID
+                        contentDescription = "",
+                        modifier = Modifier.size(120.dp)
+
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             Text(
                 modifier = Modifier

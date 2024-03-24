@@ -33,6 +33,7 @@ import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.Lato
 import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Neutral900
+import com.example.engaz.core.views.components.LeftToRightLayout
 import com.example.engaz.core.views.components.shimmerEffect
 
 @Composable
@@ -46,7 +47,8 @@ fun WalletItem(
         Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
-            .height(82.dp).clickable { onClick() },
+            .height(82.dp)
+            .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(2.dp, Color.Gray),
         colors = CardDefaults.cardColors(containerColor = Color.Transparent)
@@ -58,10 +60,13 @@ fun WalletItem(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Image(
-                painter = painterResource(id = paymentIcon),
-                contentDescription = ""
-            )
+            LeftToRightLayout {
+                Image(
+                    painter = painterResource(id = paymentIcon),
+                    contentDescription = ""
+                )
+            }
+
             Text(
                 text =paymentName ,
                 fontFamily = Cairo,

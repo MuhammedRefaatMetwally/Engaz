@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,8 +18,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Payment
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,8 +39,10 @@ import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Neutral900
 import com.example.engaz.core.ui.theme.Primary
+import com.example.engaz.core.views.components.CustomDialog
 import com.example.engaz.core.views.components.CustomTextField
 import com.example.engaz.core.views.components.MainButton
+import com.example.engaz.destinations.WalletPageDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -45,10 +53,21 @@ fun RenewLicenseScreen(
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
 ) {
     val scroll = rememberScrollState()
+    val showDialog = remember { mutableStateOf(false) }
+    if (showDialog.value)
+        CustomDialog(
+            processText = "تم إستلام طلب تجديد الرخصة",
+            buttonText = "تحميل رخصة القيادة",
+            navigator = navigator,
+            setShowDialog = {
+                showDialog.value = it
+            })
+
     Column(
         Modifier
             .fillMaxHeight()
-            .verticalScroll(scroll)) {
+            .verticalScroll(scroll)
+    ) {
         Spacer(modifier = Modifier.height(20.dp))
 
         Row(Modifier.fillMaxWidth()) {
@@ -126,30 +145,42 @@ fun RenewLicenseScreen(
             label = stringResource(R.string.request_number_ar),
         )
 
-        Text(modifier = Modifier.padding(start = 16.dp),
+        Text(
+            modifier = Modifier.padding(start = 16.dp),
             text = stringResource(R.string.payment_way_ar),
             fontWeight = FontWeight.W700,
             fontFamily = Cairo,
             fontSize = 16.sp
         )
-        Card(
+        androidx.compose.material3.Card(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .height(80.dp),
-            shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp, Color.Gray)
+                .height(100.dp)
+                .padding(16.dp)
+                .clickable {
+                    navigator?.navigate(WalletPageDestination)
+                }, shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(1.dp, Color.Gray),
+            colors = CardDefaults.cardColors(containerColor = Color.Transparent)
         ) {
-            Row {
-                Icon(modifier = Modifier.size(48.dp)
-                    .padding(8.dp)
-                    .align(Alignment.CenterVertically),painter = painterResource(id = R.drawable.ic_payment), contentDescription = "")
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(modifier = Modifier.align(Alignment.CenterVertically),
-                    text = stringResource(R.string.choose_payment_way_ar),
-                    fontWeight = FontWeight.W700,
+            Row(Modifier.fillMaxSize()) {
+                Icon(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .align(Alignment.CenterVertically),
+                    imageVector = Icons.Default.Payment,
+                    contentDescription = ""
+                )
+
+                androidx.compose.material3.Text(
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .align(Alignment.CenterVertically),
+                    text = "اختر طريقة الدفع",
+                    fontSize = 16.sp,
                     fontFamily = Cairo,
-                    fontSize = 18.sp
+                    fontWeight = FontWeight.W400,
+                    textAlign = TextAlign.Center
                 )
             }
         }
@@ -159,7 +190,8 @@ fun RenewLicenseScreen(
             Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .height(60.dp),
+                .height(60.dp)
+                .clickable { showDialog.value = true },
             cardColor = Primary,
         ) {
             Text(

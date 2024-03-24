@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.engaz.core.ui.theme.*
+import com.example.engaz.destinations.IdentityScreenDestination
 import com.example.engaz.features.home.view.components.HomeNavigationBar
 import com.example.engaz.features.home.view.viewmodels.main.MainState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -41,10 +42,13 @@ fun MainScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .wrapContentHeight()
-                    .background(if(isSystemInDarkTheme()) Neutral900 else Neutral100)
+                    .background(if (isSystemInDarkTheme()) Neutral900 else Neutral100)
                     .padding(horizontal = 20.dp, vertical = 10.dp),
                 index = state.index,
                 pages = state.pages,
+                onFBAClick = {
+                    navigator?.navigate(IdentityScreenDestination)
+                },
                 onChange = { onIndexChange(it) }
             )
 
@@ -58,7 +62,7 @@ fun MainScreen(
             label = "",
         ) {
             if (navigator != null) {
-                state.pages[it].page(navigator,context)
+                state.pages[it].page(navigator, context)
             }
         }
 

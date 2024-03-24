@@ -1,4 +1,4 @@
-package com.example.engaz.features.home.view.viewmodels.main_info.info_about_service
+package com.example.engaz.features.home.view.viewmodels.main_info.complete_payment
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,23 +10,31 @@ import kotlinx.coroutines.Job
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeInfoViewModel @Inject constructor() : ViewModel() {
+class CompletePaymentViewModel @Inject constructor() : ViewModel() {
 
-    var state by mutableStateOf(HomeInfoState())
+    var state by mutableStateOf(CompletePaymentState())
     private var job: Job? = null
 
     private fun onBackClick(navigator: DestinationsNavigator) {
         navigator.popBackStack()
     }
-    fun onEvent(event : HomeInfoEvent) {
+    fun updateCvc(cvc : String){
+        state = state.copy(
+            cvc = cvc
+        )
+    }
+
+
+    fun updateCVCSecureState(){
+        state = state.copy(
+            isCVCSecure = !state.isCVCSecure
+        )
+    }
+    fun onEvent(event : CompletedPaymentEvent) {
         when(event){
-
-
-            is HomeInfoEvent.OnBackClick -> {
+            is CompletedPaymentEvent.OnBackClick -> {
                 onBackClick(event.navigator)
             }
-
-            else -> {}
         }
     }
 

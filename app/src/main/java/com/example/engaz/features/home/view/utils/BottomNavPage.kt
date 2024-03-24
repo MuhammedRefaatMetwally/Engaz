@@ -47,7 +47,7 @@ sealed class BottomNavPage(
             val viewModel : WalletViewModel = hiltViewModel()
 
             WalletPage(
-                navigator = null,
+                navigator = navigator,
                 state = viewModel.state,
             )
         },

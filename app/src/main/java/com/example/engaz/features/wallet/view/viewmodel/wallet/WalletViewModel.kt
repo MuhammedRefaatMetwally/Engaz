@@ -28,7 +28,9 @@ class WalletViewModel @Inject constructor(
 
     var state by mutableStateOf (WalletState())
     private var job : Job? = null
-
+    private fun onBackClick(navigator: DestinationsNavigator) {
+        navigator.popBackStack()
+    }
     fun onEvent(event: WalletEvent){
         when(event){
             is WalletEvent.OnBalanceRecharge -> {
@@ -37,8 +39,14 @@ class WalletViewModel @Inject constructor(
             is WalletEvent.OnGetBalance -> {
                 onGetBalance(event.context)
             }
+
+            is WalletEvent.OnBackClick -> {
+                onBackClick(navigator = event.navigator)
+            }
         }
     }
+
+
 
     fun updateImageState(image: Uri?) {
         if(image != null){

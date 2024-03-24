@@ -48,6 +48,7 @@ fun HomeNavigationBar(
     modifier: Modifier = Modifier,
     pages : List<BottomNavPage> = emptyList(),
     index : Int = 0,
+    onFBAClick : () -> Unit = {},
     onChange : (Int) -> Unit = {}
 ){
     BottomAppBar(
@@ -84,7 +85,7 @@ fun HomeNavigationBar(
                 },
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = { /* do something */ },
+                        onClick = {onFBAClick() },
                         containerColor = colorResource(id = R.color.primary_color),
                         shape = CircleShape,
                         elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
