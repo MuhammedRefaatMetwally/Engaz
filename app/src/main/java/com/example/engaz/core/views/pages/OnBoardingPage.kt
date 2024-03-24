@@ -74,7 +74,7 @@ fun OnBoardingPage(
             contentDescription = "",
             modifier = Modifier
                 .fillMaxWidth() // Adjust the size as needed
-                .height(300.dp)
+                .height(248.dp)
                 .align(alignment = Alignment.CenterHorizontally)
         )
 

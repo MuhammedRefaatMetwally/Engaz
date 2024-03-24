@@ -22,7 +22,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 
-@SuppressLint("UnrememberedMutableState")
+@SuppressLint("UnrememberedMutableState", "UnusedMaterial3ScaffoldPaddingParameter")
 @Destination
 @Composable
 fun MainScreen(
@@ -51,7 +51,6 @@ fun MainScreen(
         },
 
         ) {
-        it
 
         AnimatedContent(
             modifier = Modifier.fillMaxSize(),

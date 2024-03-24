@@ -9,8 +9,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.engaz.R
@@ -52,17 +54,18 @@ fun ProfileItem(
                         .size(24.dp),
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    tint = if (isSystemInDarkTheme()) Neutral200 else Neutral800
+                    tint = Primary
                 )
 
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(16.dp))
 
                 Text(
                     text = leadingLabel,
                     style = TextStyle(
-                        fontFamily = Lato,
-                        color = if (isSystemInDarkTheme()) Neutral200 else Neutral800,
-                        fontSize = 16.sp
+                        fontFamily = Cairo,
+                        color = Color.Black,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.W700
                     )
                 )
             }
@@ -82,13 +85,16 @@ fun ProfileItem(
                     )
                 )
 
-                Icon(
-                    modifier = Modifier
-                        .size(24.dp),
-                    painter = painterResource(id = R.drawable.arrow_right),
-                    contentDescription = null,
-                    tint = if (isSystemInDarkTheme()) Neutral600 else Neutral400
-                )
+                if(icon !=  R.drawable.ic_logout){
+                    Icon(
+                        modifier = Modifier
+                            .size(24.dp),
+                        painter = painterResource(id = R.drawable.arrow_left),
+                        contentDescription = null,
+                        tint = if (isSystemInDarkTheme()) Neutral600 else Neutral400
+                    )
+                }
+
             }
 
 

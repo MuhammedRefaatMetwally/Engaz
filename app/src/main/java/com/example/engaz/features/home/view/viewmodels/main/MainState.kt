@@ -7,9 +7,8 @@ data class MainState(
 
     val pages: List<BottomNavPage> = listOf(
         BottomNavPage.HomeNavPage,
-        BottomNavPage.OrderNavPage,
-        BottomNavPage.NotificationNavPage,
-        BottomNavPage.WalletNavPage,
+        BottomNavPage.TransferOwnership,
+        BottomNavPage.Payment,
         BottomNavPage.ProfileNavPage,
     )
 

@@ -47,7 +47,7 @@ class ValidatePasswordLocalUseCase @Inject constructor() {
         if (password.length < 6) {
             return Resource.FailureData(
                 Failure(
-                    message = context.getString(R.string.password_is_not_eight),
+                    message = "",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0

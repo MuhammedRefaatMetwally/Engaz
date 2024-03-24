@@ -1,6 +1,6 @@
 package com.example.engaz.features.home.view.viewmodels.home
 
-data class HomeState(
+data class HomeState (
 
     var profileImage : String? = null,
     var username : String? = null,
@@ -9,6 +9,7 @@ data class HomeState(
 
     var assistantImage : String? = null,
     var assistantName : String? = null,
+
 
     var isHomePageLoading : Boolean = false,
     var error : String? = null,

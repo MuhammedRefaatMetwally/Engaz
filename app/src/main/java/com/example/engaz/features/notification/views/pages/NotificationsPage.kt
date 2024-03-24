@@ -1,5 +1,6 @@
 package com.example.engaz.features.notification.views.pages
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -21,7 +22,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultShadowColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,19 +36,24 @@ import com.example.engaz.core.views.components.shimmerEffect
 import com.example.engaz.features.notification.data.entities.get_all_notification.Notification
 import com.example.engaz.features.notification.views.components.NotificationItem
 import com.example.engaz.features.notification.views.viewmodel.NotificationState
+import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
+@Destination
 fun NotificationsPage(
     navigator: DestinationsNavigator?,
     notificationState: NotificationState = NotificationState(),
-    getNotification : ()-> Unit = {}
-) {
+    getNotification: () -> Unit = {},
+    onBackArrowClick: (DestinationsNavigator) -> Unit = {},
+
+    ) {
     val context: Context = LocalContext.current
 
-    var notificationsMap = mutableMapOf<String, List<Notification>>()
+    val notificationsMap = mutableMapOf<String, List<Notification>>()
 
-    LaunchedEffect(key1 =  true){
+    LaunchedEffect(key1 = true) {
         getNotification()
     }
 
@@ -75,30 +83,50 @@ fun NotificationsPage(
 
 
             item {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 30.dp)
-                ) {
 
-                    Text(
-                        modifier = Modifier.align(Alignment.Center),
-                        text = context.getString(R.string.notification),
-                        style = TextStyle(
-                            fontFamily = Lato,
-                            color = if (isSystemInDarkTheme()) Neutral100 else Neutral900,
-                            fontSize = 18.sp
-                        )
+                Row(Modifier.fillMaxWidth()) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(start = 20.dp)
+                            .clickable {
+                                navigator?.let {
+                                    onBackArrowClick(navigator)
+                                }
+                            },
+                        painter = painterResource(
+                            id = R.drawable.arrow_left
+                        ),
+                        contentDescription = null,
+                        tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
                     )
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 30.dp)
+                    ) {
+
+                        Text(
+                            modifier = Modifier.align(Alignment.Center),
+                            text = stringResource(R.string.notifications),
+                            style = TextStyle(
+                                fontFamily = Cairo,
+                                color = Color.Black,
+                                fontSize = 24.sp
+                            )
+                        )
+                    }
                 }
+
 
             }
 
             item {
                 Spacer(modifier = Modifier.height(25.dp))
+
             }
 
-            if(notificationState.notificationsIsLoading){
+            /*if(notificationState.notificationsIsLoading){
 
                 items(5) {
                     Box(
@@ -212,47 +240,85 @@ fun NotificationsPage(
                     else -> {
                         notificationsMap.forEach { s, notifications ->
 
-                            item {
-                                Text(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(horizontal = 30.dp),
-                                    text = notifications[0].created_at,
-                                    style = TextStyle(
-                                        fontFamily = Lato,
-                                        color = if (isSystemInDarkTheme()) Neutral100 else Neutral900,
-                                        fontSize = 14.sp
-                                    )
-                                )
-                            }
 
-                            item {
-                                Spacer(modifier = Modifier.height(5.dp))
-                            }
-
-                            items(notifications) {
-                                NotificationItem(it)
-                            }
-
-                            item {
-                                Spacer(modifier = Modifier.height(20.dp))
-                            }
-                        }
 
                     }
 
                 }
+            }*/
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
             }
 
+            item {
+                NotificationItem(
+                    icon = R.drawable.ic_cancel,
+                    isNew = true,
+                    mainTitle = "تم إلغاء طلب نقل الملكية!",
+                    secondTitle = "تم إلغاء طلبك."
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
 
+            item {
+                NotificationItem(
+                    icon = R.drawable.ic_accepted,
+                    isNew = true,
+                    mainTitle = "تم قبول طلب نقل الملكية!",
+                    secondTitle = "تم إرسال طلبك بنجاح , يمكنك الان تحميل عقد نقل الملكية."
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            item {
+                NotificationItem(
+                    icon = R.drawable.ic_payment_notifi,
+                    mainTitle = "تم الاتصال ببطاقتك الائتمانيه!",
+                    secondTitle = "تم ربط بطاقتك الائتمانيه بالابلكيشن , استعلم بخدماتها."
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            item {
+                NotificationItem(
+                    icon = R.drawable.ic_confirm,
+                    mainTitle = "تأكيد الدفع",
+                    secondTitle = "تم استلام المبلغ بنجاح , يمكنك الان تحويل ملكية السيارة."
+                )
+            }
 
-
-
-
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            item {
+                NotificationItem(
+                    icon = R.drawable.ic_update,
+                    mainTitle = "تم تحديث حالة طلب نقل الملكية",
+                    secondTitle = "طلبك مقبول."
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            item {
+                NotificationItem(
+                    icon = R.drawable.ic_created,
+                    mainTitle = "تم إنشاء حسابك!",
+                    secondTitle = "تم إنشاء حسابك بنجاح , يمكنك الان التمتع بخدمة نقل ملكية السيارة."
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
+
+
     }
-
-
 }
 
 

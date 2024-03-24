@@ -15,12 +15,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.DefaultShadowColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.engaz.R
+import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.Lato
 import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Neutral900
@@ -41,42 +44,14 @@ fun Header(
             modifier = Modifier.align(Alignment.Center),
             text = label,
             style = TextStyle(
-                fontFamily = Lato,
-                color = if (isSystemInDarkTheme()) Neutral100 else Neutral900,
-                fontSize = 18.sp
+                fontFamily = Cairo,
+                color = Color.Black,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.W700
             )
         )
 
-        Surface(
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .size(46.dp)
-                .shadow(
-                    elevation = if (isSystemInDarkTheme()) 10.dp else 10.dp,
-                    shape = CircleShape,
-                    clip = false,
-                    ambientColor = DefaultShadowColor,
-                    spotColor = DefaultShadowColor,
-                )
-                .clip(CircleShape)
-                .clickable {
-                    onClick()
-                },
-            shape = CircleShape,
-            color = if (isSystemInDarkTheme()) Neutral900 else Neutral100
-        ){
-            Icon(
-                modifier = Modifier
-                    .padding(13.dp)
-                    .align(Alignment.Center),
-                painter = painterResource(
-                    id = R.drawable.arrow_left
-                ),
-                contentDescription = null,
-                tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
-            )
-        }
-
+        BackButton(onClick)
 
     }
 

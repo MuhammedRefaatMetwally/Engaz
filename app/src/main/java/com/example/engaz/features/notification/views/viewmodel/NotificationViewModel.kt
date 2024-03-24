@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.features.notification.domain.usecase.GetAllNotificationsUseCase
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,13 +46,17 @@ class NotificationViewModel @Inject constructor(
 
         }
     }
-
+    private fun onBackClick(navigator: DestinationsNavigator) {
+        navigator.popBackStack()
+    }
 
     fun onEvent(event : NotificationEvent){
         when(event){
             is NotificationEvent.OnGetNotification -> {
                 onGetNotification(event.context)
             }
+
+            is NotificationEvent.OnBackClick -> onBackClick(navigator = event.navigator)
         }
     }
 
