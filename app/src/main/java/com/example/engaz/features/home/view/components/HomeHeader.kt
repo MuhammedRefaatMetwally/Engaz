@@ -54,7 +54,7 @@ fun HomeHeader(
 
     Row(
         modifier = Modifier
-            .padding(top = 24.dp)
+            .padding(top = 16.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround
     ) {

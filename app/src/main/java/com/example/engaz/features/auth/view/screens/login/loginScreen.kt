@@ -2,6 +2,13 @@ package com.example.engaz.features.auth.view.screens.login
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.hardware.biometrics.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import android.hardware.biometrics.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -26,7 +33,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,11 +57,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.provider.Settings
+import androidx.fragment.app.FragmentActivity
 import com.example.engaz.core.ui.theme.*
 import com.example.engaz.core.views.components.*
 import com.example.engaz.features.auth.view.viewmodels.login.LoginState
 import com.example.engaz.R
-import com.example.engaz.destinations.LoginWithFingerPrintScreenDestination
+import com.example.engaz.core.util.biometericAuth.BiometricPromptManager
+import com.example.engaz.core.util.biometericAuth.BiometricPromptManager.*
 import com.example.engaz.destinations.MainScreenDestination
 import com.example.engaz.destinations.RegisterScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
@@ -70,11 +86,33 @@ fun LoginScreen(
     onRegisterClick: (DestinationsNavigator) -> Unit = {},
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
 ) {
+    val context = LocalContext.current as FragmentActivity
 
-    val context: Context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
-
+    val promptManager by lazy {
+        BiometricPromptManager(context)
+    }
+    val biometricResult by promptManager.promptResults.collectAsState(
+        initial = null
+    )
+    val enrollLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {
+            println("Activity result: $it")
+        }
+    )
+    LaunchedEffect(biometricResult) {
+        if (biometricResult is BiometricResult.AuthenticationNotSet) {
+            if (Build.VERSION.SDK_INT >= 30) {
+                val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+                    putExtra(
+                        Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                        BIOMETRIC_STRONG or DEVICE_CREDENTIAL
+                    )
+                }
+                enrollLauncher.launch(enrollIntent)
+            }
+        }
+    }
 
     Scaffold(
         containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100
@@ -85,12 +123,15 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp, vertical = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Icon(
                 modifier = Modifier
                     .padding(start = 20.dp)
+                    .align(Alignment.Start)
                     .clickable {
                         navigator?.let {
                             onBackArrowClick(navigator)
@@ -103,10 +144,7 @@ fun LoginScreen(
                 tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
             )
 
-
-
             Spacer(modifier = Modifier.height(24.dp))
-
 
             Row(
                 modifier = Modifier
@@ -115,12 +153,11 @@ fun LoginScreen(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                LeftToRightLayout{
+                LeftToRightLayout {
                     Image(
                         painter = painterResource(id = R.drawable.logo1), // Provide the resource ID
                         contentDescription = "",
                         modifier = Modifier.size(120.dp)
-
                     )
                 }
             }
@@ -128,9 +165,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .align(Alignment.CenterHorizontally),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 text = stringResource(R.string.login_ar),
                 style = TextStyle(
                     fontFamily = Cairo,
@@ -141,12 +176,9 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-
             CustomTextField(
                 value = state.emailOrPassCode,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                modifier = Modifier.fillMaxWidth(),
                 onValueChange = {
                     onChangeEmailOrPassCode(it)
                 },
@@ -160,18 +192,16 @@ fun LoginScreen(
                 },
                 label = stringResource(R.string.account_label)
             )
+
             Spacer(modifier = Modifier.height(8.dp))
 
             CustomTextField(
                 isSecure = state.isPasswordSecure,
                 value = state.password,
                 onValueChange = {
-
                     onChangePassword(it)
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                modifier = Modifier.fillMaxWidth(),
                 placeHolder = stringResource(R.string.please_enter_password),
                 leadingIcon = {
                     Image(
@@ -204,9 +234,13 @@ fun LoginScreen(
                 fontWeight = FontWeight.W700,
                 fontSize = 16.sp,
                 color = colorResource(id = R.color.primary_color),
-                modifier = Modifier.align(Alignment.End).padding(end = 18.dp)
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(end = 18.dp)
             )
-            Spacer(modifier = Modifier.height(80.dp))
+
+            Spacer(modifier = Modifier.weight(1f))
+
             Text(
                 text = buildAnnotatedString {
                     withStyle(
@@ -228,7 +262,8 @@ fun LoginScreen(
                         SpanStyle(
                             fontFamily = Cairo,
                             fontWeight = FontWeight.W700,
-                            fontSize = 16.sp, color = colorResource(id = R.color.primary_color)
+                            fontSize = 16.sp,
+                            color = colorResource(id = R.color.primary_color)
                         )
                     ) {
                         append(stringResource(R.string.create_an_account_ar))
@@ -238,10 +273,13 @@ fun LoginScreen(
                 fontFamily = Cairo,
                 fontWeight = FontWeight.W700,
                 fontSize = 16.sp,
-                modifier = Modifier.align(Alignment.CenterHorizontally).clickable {
-                    navigator?.navigate(RegisterScreenDestination)
-                }
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable {
+                        navigator?.navigate(RegisterScreenDestination)
+                    }
             )
+
             Spacer(modifier = Modifier.height(12.dp))
 
             MainButton(
@@ -258,7 +296,6 @@ fun LoginScreen(
                 cardColor = colorResource(id = R.color.primary_color),
                 borderColor = Color.Transparent
             ) {
-
                 if (state.isLoginLoading) {
                     CustomProgressIndicator(
                         modifier = Modifier.size(20.dp)
@@ -275,15 +312,15 @@ fun LoginScreen(
                         )
                     )
                 }
-
             }
+
             Spacer(modifier = Modifier.height(32.dp))
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-
                 HorizontalDivider(
                     modifier = Modifier
                         .padding(start = 16.dp)
@@ -294,7 +331,6 @@ fun LoginScreen(
                 )
 
                 Text(
-
                     modifier = Modifier
                         .wrapContentSize()
                         .padding(horizontal = 10.dp),
@@ -306,6 +342,7 @@ fun LoginScreen(
                     ),
                     textAlign = TextAlign.End
                 )
+
                 HorizontalDivider(
                     modifier = Modifier
                         .padding(end = 16.dp)
@@ -314,11 +351,10 @@ fun LoginScreen(
                         .height(1.7.dp),
                     color = Neutral300
                 )
-
-
             }
 
             Spacer(modifier = Modifier.height(16.dp))
+
             MainButton(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -326,9 +362,10 @@ fun LoginScreen(
                     .height(64.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
-                        navigator?.let {
-                            navigator.navigate(LoginWithFingerPrintScreenDestination)
-                        }
+                        promptManager.showBiometricPrompt(
+                            title = "تسجيل الدخول",
+                            description = "استخدم البصمة لتسجيل الدخول"
+                        )
                     },
                 cardColor = Color.White,
                 borderColor = Neutral300
@@ -338,11 +375,9 @@ fun LoginScreen(
                         modifier = Modifier.size(20.dp)
                     )
                 } else {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                         Image(
-                            modifier = Modifier
-                                .fillMaxHeight()
-                                .width(48.dp),
+                            modifier = Modifier.size(48.dp),
                             painter = painterResource(id = R.drawable.ic_finger),
                             contentDescription = "finger_print",
                         )
@@ -358,21 +393,36 @@ fun LoginScreen(
                         )
                     }
                 }
+            }
 
+            biometricResult?.let { result ->
+                  when(result) {
+                    is BiometricResult.AuthenticationError -> {
+                        result.error
+                    }
+                    BiometricResult.AuthenticationFailed -> {
+                        "Authentication failed"
+                    }
+                    BiometricResult.AuthenticationNotSet -> {
+                        "Authentication not set"
+                    }
+                    BiometricResult.AuthenticationSuccess -> {
+                        navigator?.navigate(MainScreenDestination)
+                    }
+                    BiometricResult.FeatureUnavailable -> {
+                        "Feature unavailable"
+                    }
+                    BiometricResult.HardwareUnavailable -> {
+                        "Hardware unavailable"
+                    }
+
+                      else -> Unit
+                  }
             }
         }
     }
 
 }
 
-@Preview
-@Composable
-fun DefaultPreview() {
-    MarketAppTheme {
-        LoginScreen(
-            navigator = null
-        )
-    }
-}
 
 

@@ -236,5 +236,7 @@
     <string name="info_about_current_owner_ar">معلومات المالك الحالى</string>
     <string name="send_transfering_ownership_request_ar">إرسال طلب نقل ملكية</string>
     <string name="sent_requests_ar">الطلبات المرسلة من البائع</string>
+    <string name="card_number_ar">رقم البطاقة</string>
+    <string name="expiry_date_ar">تاريخ الانتهاء</string>
 
 </resources>

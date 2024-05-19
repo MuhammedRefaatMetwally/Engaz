@@ -52,10 +52,6 @@ fun HomeBody(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Spacer(modifier = Modifier.height(18.dp))
-
-
-
         if (isLoading) {
             Box(
                 modifier = Modifier
@@ -74,8 +70,8 @@ fun HomeBody(
         } else {
             Image(
                 modifier = Modifier
-                    .height(240.dp)
-                    .width(240.dp),
+                    .fillMaxWidth()
+                    .height(240.dp),
                 painter = rememberImagePainter(data = R.drawable.ic_main_picture, builder = {
                     transformations() // Apply transformations if needed
                     placeholder(R.drawable.photo) // Placeholder resource while loading
@@ -122,16 +118,13 @@ fun HomeBody(
                 this.items(infoTitles.size) { index ->
                     Card(
                         modifier = Modifier
-                            .size(100.dp)
-                            .padding(start = 16.dp)
-                            .clickable {
-                                onInfoClick(index)
-                            },
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                            .aspectRatio(1f) // Maintain a square aspect ratio
+                            .clickable { onInfoClick(index) },
                         shape = RoundedCornerShape(24.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = colorResource(
-                                id = R.color.primary_color2
-                            )
+                            containerColor = colorResource(id = R.color.primary_color2)
                         )
                     ) {
                         Text(

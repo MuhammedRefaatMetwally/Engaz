@@ -15,18 +15,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import com.example.engaz.R
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -37,11 +30,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.engaz.R
 import com.example.engaz.core.ui.theme.*
 import com.example.engaz.core.views.components.*
 import com.example.engaz.destinations.LoginScreenDestination
@@ -73,22 +65,18 @@ fun RegisterScreen(
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
     onTermsClick: () -> Unit = {},
 ) {
-
     val context: Context = LocalContext.current
     val scope = rememberCoroutineScope()
-
 
     Scaffold(
         containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100
     ) { padding ->
-        padding
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(padding)
         ) {
-
             Spacer(modifier = Modifier.height(10.dp))
 
             Icon(
@@ -99,16 +87,12 @@ fun RegisterScreen(
                             onBackArrowClick(navigator)
                         }
                     },
-                painter = painterResource(
-                    id = R.drawable.arrow_left
-                ),
+                painter = painterResource(id = R.drawable.arrow_left),
                 contentDescription = null,
                 tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
             )
 
-
             Spacer(modifier = Modifier.height(20.dp))
-
 
             Text(
                 modifier = Modifier
@@ -127,14 +111,13 @@ fun RegisterScreen(
 
             CustomTextField(
                 value = state.fullName,
-                onValueChange = { onChangeFullName(it) },
+                onValueChange = onChangeFullName,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 placeHolder = stringResource(R.string.user_name_ar),
                 leadingIcon = {
                     Image(
-                        modifier = Modifier.padding(end = 0.dp),
                         painter = painterResource(id = R.drawable.profile_inactive),
                         contentDescription = ""
                     )
@@ -155,7 +138,6 @@ fun RegisterScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 10.dp),
                 onValueChange = { (code, phone), isValid ->
-
                     phoneNumber = phone
                     fullPhoneNumber = code + phone
                     isNumberValid = isValid
@@ -174,9 +156,7 @@ fun RegisterScreen(
 
             CustomTextField(
                 value = state.passCode,
-                onValueChange = {
-                    onChangePassCode(it)
-                },
+                onValueChange = onChangePassCode,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
@@ -184,7 +164,6 @@ fun RegisterScreen(
                 isError = state.passCodeError != null,
                 errorMessage = state.passCodeError ?: "",
                 label = stringResource(R.string.passcode)
-
             )
 
             Spacer(modifier = Modifier.height(5.dp))
@@ -192,17 +171,13 @@ fun RegisterScreen(
             CustomTextField(
                 isSecure = state.isPasswordSecure,
                 value = state.password,
-                onValueChange = {
-
-                    onChangePassword(it)
-                },
+                onValueChange = onChangePassword,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 placeHolder = stringResource(R.string.please_enter_password),
                 leadingIcon = {
                     Image(
-                        modifier = Modifier.padding(end = 0.dp),
                         painter = painterResource(id = R.drawable.ic_lock),
                         contentDescription = ""
                     )
@@ -210,10 +185,7 @@ fun RegisterScreen(
                 trailingIcon = {
                     Image(
                         modifier = Modifier
-                            .padding(end = 0.dp)
-                            .clickable {
-                                onSecurePasswordClick()
-                            },
+                            .clickable(onClick = onSecurePasswordClick),
                         painter = painterResource(id = R.drawable.ic_password),
                         contentDescription = ""
                     )
@@ -228,17 +200,13 @@ fun RegisterScreen(
             CustomTextField(
                 isSecure = state.isPasswordRenterSecure,
                 value = state.passwordRenter,
-                onValueChange = {
-
-                    onChangePasswordRenter(it)
-                },
+                onValueChange = onChangePasswordRenter,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 placeHolder = stringResource(R.string.reenter_password),
                 leadingIcon = {
                     Image(
-                        modifier = Modifier.padding(end = 0.dp),
                         painter = painterResource(id = R.drawable.ic_lock),
                         contentDescription = ""
                     )
@@ -246,10 +214,7 @@ fun RegisterScreen(
                 trailingIcon = {
                     Image(
                         modifier = Modifier
-                            .padding(end = 0.dp)
-                            .clickable {
-                                onSecurePasswordClick()
-                            },
+                            .clickable(onClick = onSecurePasswordRenterClick),
                         painter = painterResource(id = R.drawable.ic_password),
                         contentDescription = ""
                     )
@@ -259,7 +224,8 @@ fun RegisterScreen(
                 label = stringResource(R.string.reenter_password)
             )
 
-            Spacer(modifier = Modifier.height(132.dp))
+            Spacer(modifier = Modifier.height(90.dp))
+
             Text(
                 text = buildAnnotatedString {
                     withStyle(
@@ -271,21 +237,17 @@ fun RegisterScreen(
                     ) {
                         append(stringResource(R.string.have_an_account_ar2))
                     }
-                    withStyle(
-                        SpanStyle()
-                    ) {
-                        append(" ")
-                    }
+                    withStyle(SpanStyle()) { append(" ") }
                     withStyle(
                         SpanStyle(
                             fontFamily = Cairo,
                             fontWeight = FontWeight.W700,
-                            fontSize = 16.sp, color = colorResource(id = R.color.primary_color)
+                            fontSize = 16.sp,
+                            color = colorResource(id = R.color.primary_color)
                         )
                     ) {
                         append(stringResource(R.string.login_ar2))
                     }
-
                 },
                 fontFamily = Cairo,
                 fontWeight = FontWeight.W700,
@@ -296,26 +258,20 @@ fun RegisterScreen(
                         navigator?.navigate(LoginScreenDestination)
                     }
             )
+
             Spacer(modifier = Modifier.height(12.dp))
+
             MainButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .height(64.dp)
-                    .clip(RoundedCornerShape(100.dp))
-                    .clickable {
-                        navigator?.let {
-                            //navigator.navigate(RegisterScreenDestination)
-                        }
-                    },
+                    .clip(RoundedCornerShape(100.dp)),
                 cardColor = colorResource(id = R.color.primary_color),
                 borderColor = Color.Transparent
             ) {
-
                 if (state.isRegisterLoading) {
-                    CustomProgressIndicator(
-                        modifier = Modifier.size(20.dp)
-                    )
+                    CustomProgressIndicator(modifier = Modifier.size(20.dp))
                 } else {
                     Text(
                         modifier = Modifier.padding(horizontal = 20.dp),
@@ -324,23 +280,12 @@ fun RegisterScreen(
                             fontFamily = Cairo,
                             fontWeight = FontWeight.W700,
                             color = Color.White,
-                            fontSize = 20.sp,
+                            fontSize = 20.sp
                         )
                     )
                 }
-
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun DefaultPreview() {
-    MarketAppTheme {
-        RegisterScreen(
-            navigator = null
-        )
     }
 }
 

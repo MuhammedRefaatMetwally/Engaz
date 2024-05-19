@@ -367,13 +367,13 @@ fun Navigation(
                     identityViewModel.onEvent(IdentityEvent.OnBackClick(it))
                 })
             }
-            composable(FaceRecognitionScreenDestination){
+            composable(FaceRecognitionScreenDestination) {
                 FaceRecognitionScreen(navigator = destinationsNavigator, onBackArrowClick = {
                     identityViewModel.onEvent(IdentityEvent.OnBackClick(it))
                 })
             }
 
-            composable(CompletePaymentScreenDestination){
+            composable(CompletePaymentScreenDestination) {
                 CompletePaymentScreen(destinationsNavigator, onBackArrowClick = {
                     transferCarOwnerShipViewModel.onEvent(TransferCarOwnerShipEvent.OnBackClick(it))
                 }, onSecureCVCClick = {

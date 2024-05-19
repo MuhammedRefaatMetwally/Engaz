@@ -3,6 +3,7 @@ package com.example.engaz.core.views.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -55,10 +56,13 @@ fun CustomDialog(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_approve),
-                    contentDescription = ""
-                )
+                LeftToRightLayout {
+                    Image(
+
+                        painter = painterResource(id = R.drawable.ic_approve),
+                        contentDescription = ""
+                    )
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = "عميلنا العزيز",

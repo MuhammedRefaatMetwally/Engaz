@@ -35,7 +35,7 @@ sealed class BottomNavPage(
     data object TransferOwnership : BottomNavPage(
         page = {navigator , context ->
             TransferCarOwnershipScreen(
-                navigator = null,
+                navigator = navigator,
             )
         },
         icon = R.drawable.ic_ownership,

@@ -55,11 +55,9 @@ fun HomePage(
     Scaffold(
         containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100
     ) {
-
         LaunchedEffect(true) {
             init(context)
         }
-
         it
         Column(
             modifier = Modifier
@@ -69,7 +67,6 @@ fun HomePage(
         ) {
 
             if (state.error != null) {
-
 
             } else {
                 HomeHeader(
@@ -84,7 +81,7 @@ fun HomePage(
 
 
 
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             if (state.error != null) {
 

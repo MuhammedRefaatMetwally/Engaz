@@ -83,7 +83,7 @@ fun TransferCarOwnershipScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .height(64.dp).clickable {
-                  navigator?.navigate(SendTransferingRequestScreenDestination)
+                    navigator?.navigate(SendTransferingRequestScreenDestination)
                 },
             cardColor = colorResource(id = R.color.primary_color)
         ){
