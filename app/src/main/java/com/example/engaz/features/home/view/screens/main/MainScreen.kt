@@ -43,7 +43,7 @@ fun MainScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .background(if (isSystemInDarkTheme()) Neutral900 else Neutral100)
-                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                    .padding(vertical = 10.dp),
                 index = state.index,
                 pages = state.pages,
                 onFBAClick = {

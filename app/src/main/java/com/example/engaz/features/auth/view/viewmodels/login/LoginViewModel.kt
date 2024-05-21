@@ -42,9 +42,9 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun updatePhone(phone : String){
+    fun updateEmailOrPassCode(emailOrPassCode : String){
         state = state.copy(
-            emailOrPassCode = phone
+            phoneOrPassCode = emailOrPassCode
         )
     }
 
@@ -90,7 +90,7 @@ class LoginViewModel @Inject constructor(
             state = state.copy(isLoginLoading = true)
             val response = loginUseCase(
                 LoginRequest(
-                    phone = state.emailOrPassCode,
+                    phone = state.phoneOrPassCode,
                     countryCode = state.countryCode,
                     password = state.password,
                     deviceToken = getDeviceId(context),
@@ -146,7 +146,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun validateForm(context: Context, callBackFunction : ()-> Unit){
-        val phoneResult = validatePhoneLocalUseCase(state.emailOrPassCode,context)
+        val phoneResult = validatePhoneLocalUseCase(state.phoneOrPassCode,context)
         val passwordResult = validatePasswordLocalUseCase(state.password,context)
 
         val hasError = listOf(
@@ -157,7 +157,7 @@ class LoginViewModel @Inject constructor(
         }
 
         state = state.copy(
-            emailOrPassCodeError = phoneResult.failure?.message,
+            phoneOrPassCodeError = phoneResult.failure?.message,
             passwordError = passwordResult.failure?.message
         )
 

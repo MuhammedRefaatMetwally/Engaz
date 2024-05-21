@@ -129,7 +129,7 @@ fun Navigation(
                 LoginScreen(
                     navigator = destinationsNavigator,
                     state = loginViewModel.state,
-                    onChangeEmailOrPassCode = { loginViewModel.updatePhone(it) },
+                    onChangeEmailOrPassCode = { loginViewModel.updateEmailOrPassCode(it) },
                     onChangePhoneWithCountryCode = { loginViewModel.updatePhoneWithCountryCode(it) },
                     onChangePassword = { loginViewModel.updatePassword(it) },
                     onRememberMeClick = { loginViewModel.onEvent(LoginEvent.RememberMe) },
@@ -266,7 +266,9 @@ fun Navigation(
                             context
                         )
                     },
-                    onChangePassCode = {},
+                    onChangePassCode = {
+                        registerViewModel.updatePassCOde(it)
+                    },
                     onChangePhoneWithCountryCode = { registerViewModel.updatePhoneWithCountryCode(it) },
                     onChangePassword = { registerViewModel.updatePassword(it) },
                     onChangePasswordRenter = { registerViewModel.updatePasswordRenter(it) },

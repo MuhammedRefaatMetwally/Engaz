@@ -25,7 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.views.components.shimmerEffect
@@ -72,11 +74,15 @@ fun HomeBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp),
-                painter = rememberImagePainter(data = R.drawable.ic_main_picture, builder = {
+                painter = // Apply transformations if needed
+                rememberAsyncImagePainter(ImageRequest.Builder // Placeholder resource while loading
+                // Error resource if loading fails
+                    (LocalContext.current).data(data = R.drawable.ic_main_picture).apply(block = fun ImageRequest.Builder.() {
                     transformations() // Apply transformations if needed
                     placeholder(R.drawable.photo) // Placeholder resource while loading
                     error(R.drawable.photo_error) // Error resource if loading fails
-                }),
+                }).build()
+                ),
                 contentDescription = null, //
             )
         }
@@ -109,38 +115,46 @@ fun HomeBody(
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(20.dp))
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(3),
-                verticalItemSpacing = 8.dp,
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                contentPadding = PaddingValues(all = 8.dp)
-            ) {
-                this.items(infoTitles.size) { index ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-                            .aspectRatio(1f) // Maintain a square aspect ratio
-                            .clickable { onInfoClick(index) },
-                        shape = RoundedCornerShape(24.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = colorResource(id = R.color.primary_color2)
-                        )
+
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(320.dp) // Specify a height constraint for the grid
+                ){
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Fixed(3),
+                        verticalItemSpacing = 8.dp,
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        contentPadding = PaddingValues(all = 8.dp)
                     ) {
-                        Text(
-                            modifier = Modifier
-                                .align(Alignment.CenterHorizontally)
-                                .padding(top = 24.dp),
-                            text = infoTitles[index],
-                            fontFamily = Cairo,
-                            fontSize = 12.sp,
-                            color = Color.White,
-                            fontWeight = FontWeight.W700,
-                            textAlign = TextAlign.Center
-                        )
+                        this.items(infoTitles.size) { index ->
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                                    .aspectRatio(1f) // Maintain a square aspect ratio
+                                    .clickable { onInfoClick(index) },
+                                shape = RoundedCornerShape(24.dp),
+                                colors = CardDefaults.cardColors(
+                                    containerColor = colorResource(id = R.color.primary_color2)
+                                )
+                            ) {
+                                Text(
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(top = 24.dp),
+                                    text = infoTitles[index],
+                                    fontFamily = Cairo,
+                                    fontSize = 12.sp,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.W700,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
                     }
-                }
-            }
+                }}
+
         }
     }
-}

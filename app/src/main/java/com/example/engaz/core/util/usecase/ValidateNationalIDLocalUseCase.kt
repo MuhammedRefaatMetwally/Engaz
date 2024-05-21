@@ -6,14 +6,14 @@ import com.example.engaz.core.errors.Failure
 import com.example.engaz.core.util.Resource
 import javax.inject.Inject
 
-class ValidateUsernameLocalUseCase @Inject constructor()  {
+class ValidateNationalIDLocalUseCase @Inject constructor()  {
 
-    operator fun invoke(username: String, context: Context): Resource<Boolean?> {
+    operator fun invoke(passCode: String, context: Context): Resource<Boolean?> {
 
-        if (username.isBlank()) {
+        if (passCode.isBlank()) {
             return Resource.FailureData(
                 Failure(
-                    message = "ادخل اسم المستخدم",
+                    message = "أدخل الرقم القومي",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0
@@ -22,10 +22,21 @@ class ValidateUsernameLocalUseCase @Inject constructor()  {
         }
 
         val regex = Regex("[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>?/~]")
-        if (username.contains(regex)) {
+        if (passCode.contains(regex)) {
             return Resource.FailureData(
                 Failure(
                     message = context.getString(R.string.username_contain_special_char),
+                    screenIdInt = 0,
+                    exceptionCode = 0,
+                    customCode = 0
+                )
+            )
+        }
+
+        if (passCode.length > 14 || passCode.length < 14) {
+            return Resource.FailureData(
+                Failure(
+                    message = "يجب أن يكون الرقم القومي مكون من 14",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0

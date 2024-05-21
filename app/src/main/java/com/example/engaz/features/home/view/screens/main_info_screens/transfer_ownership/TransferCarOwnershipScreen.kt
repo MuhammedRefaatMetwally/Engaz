@@ -25,6 +25,7 @@ import com.example.engaz.core.ui.theme.Neutral900
 import com.example.engaz.core.views.components.CustomTextField
 import com.example.engaz.core.views.components.MainButton
 import com.example.engaz.destinations.SendTransferingRequestScreenDestination
+import com.example.engaz.features.profile.view.components.Header
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -38,29 +39,13 @@ fun TransferCarOwnershipScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         if(navigator != null){
-            Icon(
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .clickable {
-                        navigator?.let {
-                            onBackArrowClick(navigator)
-                        }
-                    },
-                painter = painterResource(
-                    id = R.drawable.arrow_left
-                ),
-                contentDescription = null,
-                tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
-            )
+            Header(label = stringResource(R.string.enter_car_number)){
+                onBackArrowClick(navigator)
+            }
         }
 
         Spacer(modifier = Modifier.height(32.dp))
-        Text(modifier = Modifier.padding(start = 16.dp),
-            text = stringResource(R.string.enter_car_number),
-            fontSize = 30.sp,
-            fontWeight = FontWeight.W700,
-            fontFamily = Cairo
-        )
+
         Text(modifier = Modifier.padding(start = 16.dp),
             text = stringResource(R.string.please_enter_car_number_ar),
             fontFamily = Cairo,

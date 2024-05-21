@@ -37,7 +37,7 @@ fun Header(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 30.dp)
+            .padding(horizontal = 8.dp)
     ) {
 
         Text(

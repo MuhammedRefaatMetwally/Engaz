@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -59,7 +60,7 @@ fun HomePage(
             init(context)
         }
         it
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -69,35 +70,40 @@ fun HomePage(
             if (state.error != null) {
 
             } else {
-                HomeHeader(
-                    isLoading = state.isHomePageLoading,
-                    profileImage = state.profileImage ?: "---",
-                    username = state.username ?: "---",
-                    wallet = state.wallet.toString(),
-                    currency = state.currency ?: "---",
-                    navigator
-                )
+                item {
+                    HomeHeader(
+                        isLoading = state.isHomePageLoading,
+                        profileImage = state.profileImage ?: "---",
+                        username = state.username ?: "---",
+                        wallet = state.wallet.toString(),
+                        currency = state.currency ?: "---",
+                        navigator
+                    )
+                }
+
             }
 
 
+            item { Spacer(modifier = Modifier.height(16.dp)) }
 
-            Spacer(modifier = Modifier.height(16.dp))
 
             if (state.error != null) {
+                item { Spacer(modifier = Modifier.height(185.dp)) }
 
-                    Spacer(modifier = Modifier.height(185.dp))
-
+                item {
                     Icon(
                         modifier = Modifier
                             .width(150.dp)
                             .height(150.dp),
                         painter = painterResource(id = R.drawable.warning),
                         contentDescription = null,
-                        tint = if(isSystemInDarkTheme()) Neutral300 else Neutral700
+                        tint = if (isSystemInDarkTheme()) Neutral300 else Neutral700
                     )
+                }
 
-                    Spacer(modifier = Modifier.height(30.dp))
+                item { Spacer(modifier = Modifier.height(30.dp)) }
 
+                item {
                     Text(
                         modifier = Modifier.padding(horizontal = 50.dp),
                         text = state.error!!.toString(),
@@ -108,9 +114,11 @@ fun HomePage(
                         ),
                         textAlign = TextAlign.Center
                     )
+                }
 
-                    Spacer(modifier = Modifier.height(40.dp))
+                item { Spacer(modifier = Modifier.height(40.dp)) }
 
+                item {
                     MainButton(
                         modifier = Modifier
                             .width(136.dp)
@@ -134,24 +142,29 @@ fun HomePage(
                         )
 
                     }
+                }
+
 
             } else {
-                HomeBody(
-                    isLoading = state.isHomePageLoading,
-                    assistantImage = state.assistantImage ?: "---",
-                    assistantName = state.assistantName ?: "",
-                    onInfoClick = {index->
-                        if (navigator != null) {
-                           when(index){
-                               0->navigator.navigate(InfoAboutServiceScreenDestination)
-                               1->navigator.navigate(InfoAboutCarScreenDestination)
-                               2->navigator.navigate(TransferCarOwnershipScreenDestination)
-                               3->navigator.navigate(RenewLicenseScreenDestination)
-                               4->navigator.navigate(CompletedRequestsScreenDestination)
-                           }
+                item {
+                    HomeBody(
+                        isLoading = state.isHomePageLoading,
+                        assistantImage = state.assistantImage ?: "---",
+                        assistantName = state.assistantName ?: "",
+                        onInfoClick = { index ->
+                            if (navigator != null) {
+                                when (index) {
+                                    0 -> navigator.navigate(InfoAboutServiceScreenDestination)
+                                    1 -> navigator.navigate(InfoAboutCarScreenDestination)
+                                    2 -> navigator.navigate(TransferCarOwnershipScreenDestination)
+                                    3 -> navigator.navigate(RenewLicenseScreenDestination)
+                                    4 -> navigator.navigate(CompletedRequestsScreenDestination)
+                                }
+                            }
                         }
-                    }
-                )
+                    )
+                }
+
             }
 
 
@@ -165,12 +178,4 @@ fun HomePage(
 
 
 
-@Preview
-@Composable
-fun HomePagePreview() {
-    MarketAppTheme {
-        HomePage(
-            navigator = null
-        )
-    }
-}
+

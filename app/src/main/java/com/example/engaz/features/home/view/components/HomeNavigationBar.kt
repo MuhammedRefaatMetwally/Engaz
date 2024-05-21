@@ -41,7 +41,7 @@ fun HomeNavigationBar(
                 val iconSize = calculateIconSize(screenWidth) // Implement logic to calculate icon size
                 val spacing = calculateSpacing(screenWidth) // Implement logic to calculate spacing
 
-                Spacer(modifier = Modifier.width(spacing))
+                Spacer(modifier = Modifier.width(8.dp))
 
                 Icon(
                     modifier = Modifier.size(iconSize).clickable {
@@ -51,6 +51,7 @@ fun HomeNavigationBar(
                     contentDescription = null,
                     tint = if (thisIndex == index) Primary else Neutral500
                 )
+                Spacer(modifier = Modifier.width(spacing))
 
             }
         },
@@ -83,7 +84,7 @@ private fun calculateIconSize(screenWidth: Dp): Dp {
 
 private fun calculateSpacing(screenWidth: Dp): Dp {
     // Example: Set spacing to 16dp
-    return 22.dp
+    return 32.dp
 }
 
 

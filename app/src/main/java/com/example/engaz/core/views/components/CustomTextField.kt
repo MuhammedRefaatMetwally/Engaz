@@ -47,7 +47,8 @@ fun CustomTextField(
     errorMessage: String = "",
     leadingIcon: @Composable (() -> Unit) = {},
     trailingIcon: @Composable (() -> Unit) = {},
-    isSecure: Boolean = false
+    isSecure: Boolean = false,
+    isNumber: Boolean = false,
 ) {
 
     val colors = TextFieldDefaults.colors(
@@ -123,7 +124,9 @@ fun CustomTextField(
             trailingIcon = trailingIcon,
             shape = RoundedCornerShape(100.dp),
             keyboardOptions = KeyboardOptions(
-                keyboardType = if (isSecure) KeyboardType.Password else KeyboardType.Text // This disables suggestions
+                keyboardType =if(isNumber) KeyboardType.Number else{
+                    if (isSecure) KeyboardType.Password else KeyboardType.Text
+                }  // This disables suggestions
             )
         )
 

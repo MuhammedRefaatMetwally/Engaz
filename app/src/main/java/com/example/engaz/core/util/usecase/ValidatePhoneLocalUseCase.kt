@@ -11,23 +11,23 @@ class ValidatePhoneLocalUseCase @Inject constructor(
     val validator : Validator
 ) {
 
-    operator fun invoke(email: String, context: Context): Resource<Boolean?> {
+    operator fun invoke(usernameOrPassCode: String, context: Context): Resource<Boolean?> {
 
-        if (email.isBlank()) {
+        if (usernameOrPassCode.isBlank()) {
             return Resource.FailureData(
                 Failure(
-                    message = context.getString(R.string.string_is_blank),
+                    message = "أدخل اسم المستخدم أو الرقم القومي",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0
                 )
             )
         }
-
-        if (!validator.isValidPhone(email)) {
+        val regex = Regex("[0123456789]")
+        if (!validator.isValidPassCode(usernameOrPassCode) && usernameOrPassCode.contains(regex)) {
             return Resource.FailureData(
                 Failure(
-                    message = context.getString(R.string.string_is_not_phone),
+                    message ="يجب أن يكون الرقم القومي مكون من 14",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.engaz.core.util.usecase.ValidateNationalIDLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePasswordLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePasswordRepeatedLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePhoneLocalUseCase
@@ -34,6 +35,7 @@ class RegisterViewModel @Inject constructor(
     private val resendActivitionCodeUseCase: ResendActivitionCodeUseCase,
     private val confirmCodeUseCase: ConfirmCodeUseCase,
     private val validateUsernameLocalUseCase: ValidateUsernameLocalUseCase,
+    private val validateNationalIDLocalUseCase : ValidateNationalIDLocalUseCase,
     private val validatePhoneLocalUseCase: ValidatePhoneLocalUseCase,
     private val validatePasswordLocalUseCase: ValidatePasswordLocalUseCase,
     private val validatePasswordRepeatedLocalUseCase: ValidatePasswordRepeatedLocalUseCase,
@@ -66,6 +68,11 @@ class RegisterViewModel @Inject constructor(
     fun updatePassword(password: String) {
         state = state.copy(
             password = password
+        )
+    }
+    fun updatePassCOde(passCode:String){
+        state = state.copy(
+            passCode = passCode
         )
     }
 
@@ -224,6 +231,7 @@ class RegisterViewModel @Inject constructor(
 
         val fullNameResult = validateUsernameLocalUseCase(state.fullName, context)
         val phoneResult = validatePhoneLocalUseCase(state.countryCode + state.phone, context)
+        val passCode = validateNationalIDLocalUseCase(state.passCode,context)
         val passwordResult = validatePasswordLocalUseCase(state.password, context)
         val passwordRepeatedResult = validatePasswordRepeatedLocalUseCase(state.passwordRenter, state.password, context)
 
@@ -232,6 +240,7 @@ class RegisterViewModel @Inject constructor(
             fullNameResult,
             phoneResult,
             passwordResult,
+            passCode,
             passwordRepeatedResult
         ).any {
             it.failure != null
@@ -241,6 +250,7 @@ class RegisterViewModel @Inject constructor(
             fullNameError = fullNameResult.failure?.message,
             phoneError = phoneResult.failure?.message,
             passwordError = passwordResult.failure?.message,
+            passCodeError = passCode.failure?.message ?:"",
             passwordRenterError = passwordRepeatedResult.failure?.message
         )
 

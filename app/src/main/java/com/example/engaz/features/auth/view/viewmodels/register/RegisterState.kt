@@ -31,11 +31,11 @@ data class RegisterState(
     var isResendingPinCode : Boolean = false,
     var isValidatingPinCode : Boolean = false,
 
-    val isPhoneValid: Boolean = false,
+    var isPhoneValid: Boolean = false,
     var isRegisterLoading : Boolean = false,
     var isPasswordSecure : Boolean = true,
     var isPasswordRenterSecure : Boolean = true,
 
 
 
-)
+    )

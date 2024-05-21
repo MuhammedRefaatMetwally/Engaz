@@ -37,6 +37,7 @@ import com.example.engaz.destinations.RequestsScreenDestination
 import com.example.engaz.destinations.WalletPageDestination
 import com.example.engaz.features.home.view.components.InfoAboutCarCard
 import com.example.engaz.features.profile.view.components.BackButton
+import com.example.engaz.features.profile.view.components.Header
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -49,20 +50,12 @@ fun AcceptedRequestDetails(
     Column {
         Spacer(modifier = Modifier.height(24.dp))
         Row(Modifier.fillMaxWidth()) {
-            BackButton(onClick = {
+            Header(label = stringResource(R.string.sent_requests_ar)){
                 navigator?.let {
                     onBackArrowClick(navigator)
                 }
-            })
+            }
 
-            Text(
-                modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
-                text = stringResource(R.string.sent_requests_ar),
-                fontSize = 20.sp,
-                fontFamily = Cairo,
-                fontWeight = FontWeight.W700,
-                textAlign = TextAlign.Center
-            )
         }
         Spacer(modifier = Modifier.height(24.dp))
         InfoAboutCarCard(

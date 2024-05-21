@@ -39,6 +39,7 @@ import com.example.engaz.core.views.components.*
 import com.example.engaz.destinations.LoginScreenDestination
 import com.example.engaz.destinations.RegisterScreenDestination
 import com.example.engaz.features.auth.view.viewmodels.register.RegisterState
+import com.example.engaz.features.profile.view.components.Header
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.togitech.ccp.component.TogiCountryCodePicker
@@ -79,18 +80,11 @@ fun RegisterScreen(
         ) {
             Spacer(modifier = Modifier.height(10.dp))
 
-            Icon(
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .clickable {
-                        navigator?.let {
-                            onBackArrowClick(navigator)
-                        }
-                    },
-                painter = painterResource(id = R.drawable.arrow_left),
-                contentDescription = null,
-                tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
-            )
+            Header(label = "") {
+                navigator?.let {
+                    onBackArrowClick(navigator)
+                }
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -118,7 +112,7 @@ fun RegisterScreen(
                 placeHolder = stringResource(R.string.user_name_ar),
                 leadingIcon = {
                     Image(
-                        painter = painterResource(id = R.drawable.profile_inactive),
+                        painter = painterResource(id = R.drawable.ic_profie2),
                         contentDescription = ""
                     )
                 },
@@ -139,15 +133,15 @@ fun RegisterScreen(
                     .padding(horizontal = 10.dp),
                 onValueChange = { (code, phone), isValid ->
                     phoneNumber = phone
-                    fullPhoneNumber = code + phone
-                    isNumberValid = isValid
+                     state.phone = code + phone
+                    state.isPhoneValid = isValid
                 },
                 fallbackCountry = CountryData.Egypt,
                 label = { Text(stringResource(id = R.string.phone_number_ar)) },
+                showError = state.isPhoneValid,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
                     unfocusedLabelColor = Neutral500,
                     focusedBorderColor = colorResource(id = R.color.primary_color),
-                    errorBorderColor = colorResource(id = R.color.primary_color),
                     errorTrailingIconColor = colorResource(id = R.color.primary_color),
                 )
             )
@@ -162,6 +156,7 @@ fun RegisterScreen(
                     .padding(horizontal = 20.dp),
                 placeHolder = stringResource(R.string.pass_code),
                 isError = state.passCodeError != null,
+                isNumber = true,
                 errorMessage = state.passCodeError ?: "",
                 label = stringResource(R.string.passcode)
             )
@@ -224,7 +219,7 @@ fun RegisterScreen(
                 label = stringResource(R.string.reenter_password)
             )
 
-            Spacer(modifier = Modifier.height(90.dp))
+            Spacer(modifier = Modifier.height(72.dp))
 
             Text(
                 text = buildAnnotatedString {
@@ -266,7 +261,12 @@ fun RegisterScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .height(64.dp)
-                    .clip(RoundedCornerShape(100.dp)),
+                    .clip(RoundedCornerShape(100.dp))
+                    .clickable {
+                        if (navigator != null) {
+                            onRegisterClick(navigator, context)
+                        }
+                    },
                 cardColor = colorResource(id = R.color.primary_color),
                 borderColor = Color.Transparent
             ) {

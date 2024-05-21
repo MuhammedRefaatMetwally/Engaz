@@ -6,9 +6,11 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
@@ -36,6 +38,7 @@ import com.example.engaz.core.views.components.CustomTextField
 import com.example.engaz.core.views.components.MainButton
 import com.example.engaz.destinations.RequestsScreenDestination
 import com.example.engaz.features.home.view.components.InfoAboutCarCard
+import com.example.engaz.features.profile.view.components.Header
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -48,51 +51,38 @@ fun SendTransferingRequestDetailsScreen(
     Column {
         Spacer(modifier = Modifier.height(24.dp))
         Row(Modifier.fillMaxWidth()) {
-            Icon(
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .clickable {
-                        navigator?.let {
-                            onBackArrowClick(navigator)
-                        }
-                    },
-                painter = painterResource(
-                    id = R.drawable.arrow_left
-                ),
-                contentDescription = null,
-                tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
-            )
-
-            Text(
-                modifier = Modifier.padding(start = 8.dp, bottom = 16.dp),
-                text = stringResource(R.string.request_ownership_details),
-                fontSize = 20.sp,
-                fontFamily = Cairo,
-                fontWeight = FontWeight.W700,
-                textAlign = TextAlign.Center
-            )
+            Header(label = stringResource(R.string.request_ownership_details)) {
+                navigator?.let {
+                    onBackArrowClick(navigator)
+                }
+            }
         }
         Spacer(modifier = Modifier.height(24.dp))
+
         Text(
-            modifier = Modifier.padding(start = 16.dp, bottom = 4.dp),
             text = stringResource(R.string.car_info_ar),
             fontWeight = FontWeight.W700,
             fontSize = 16.sp,
-            fontFamily = Cairo
+            fontFamily = Cairo,
+            modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
         )
-        InfoAboutCarCard(false) {
 
+        InfoAboutCarCard(false) {
+            // Your callback here
         }
+
         Spacer(modifier = Modifier.height(8.dp))
+
         Text(
-            modifier = Modifier.padding(start = 16.dp, bottom = 4.dp),
             text = stringResource(R.string.info_about_current_owner_ar),
             fontWeight = FontWeight.W700,
             fontSize = 16.sp,
-            fontFamily = Cairo
+            fontFamily = Cairo,
+            modifier = Modifier.padding(start = 16.dp, bottom = 4.dp)
         )
+
         Card(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
                 .height(80.dp),
@@ -100,13 +90,16 @@ fun SendTransferingRequestDetailsScreen(
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(containerColor = Color.Transparent)
         ) {
-            Row {
+            Row(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
-                    modifier = Modifier
-                        .align(Alignment.CenterVertically)
-                        .padding(start = 16.dp),
                     imageVector = Icons.Default.Person,
-                    contentDescription = ""
+                    contentDescription = "",
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 Column {
@@ -127,13 +120,16 @@ fun SendTransferingRequestDetailsScreen(
         }
 
         CustomTextField(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp), label = "المبلغ"
+                .padding(16.dp),
+            label = "المبلغ"
         )
+
         Spacer(modifier = Modifier.height(24.dp))
+
         MainButton(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .height(64.dp)

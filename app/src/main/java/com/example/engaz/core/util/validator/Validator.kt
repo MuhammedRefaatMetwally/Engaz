@@ -12,6 +12,10 @@ class Validator() {
         return Patterns.PHONE.matcher(string).matches()
     }
 
+    fun isValidPassCode(string: String) : Boolean{
+        return  string.length == 14
+    }
+
     fun isValidUsername( string: String): Boolean{
         return true
     }

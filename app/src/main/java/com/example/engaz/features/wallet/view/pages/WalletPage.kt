@@ -6,6 +6,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -66,28 +67,22 @@ fun WalletPage(
         "ApplePay",
     )
 
-
-    Scaffold(
-        containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(8.dp)
     ) {
+        item { Spacer(modifier = Modifier.height(30.dp)) }
 
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Spacer(modifier = Modifier.height(30.dp))
-
+        item {
             Row(Modifier.fillMaxWidth()) {
-                if(navigator!=null){
-                    BackButton(onClick = {onBackArrowClick(navigator)})
+                if (navigator != null) {
+                    BackButton(onClick = { onBackArrowClick(navigator) })
                 }
-
-
                 Text(
-                    modifier = Modifier.padding(start = 90.dp, bottom = 8.dp),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(bottom = 8.dp),
                     text = stringResource(R.string.choose_payment_way),
                     fontSize = 20.sp,
                     fontFamily = Cairo,
@@ -95,18 +90,26 @@ fun WalletPage(
                     textAlign = TextAlign.Center
                 )
             }
-            Spacer(modifier = Modifier.height(32.dp))
+        }
 
-            walletIcons.forEachIndexed { index, item ->
-                WalletItem(paymentIcon = item, paymentName = walletNames[index]){
-                    navigator?.navigate(IdentityScreenDestination)
-                }
-                Spacer(modifier = Modifier.height(24.dp))
+        item { Spacer(modifier = Modifier.height(32.dp)) }
+
+        items(walletIcons.size) { index ->
+            WalletItem(
+                paymentIcon = walletIcons[index],
+                paymentName = walletNames[index]
+            ) {
+                navigator?.navigate(IdentityScreenDestination)
             }
-            val stroke = Stroke(
-                width = 8f,
-                pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 20f), 0f)
-            )
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+
+        val stroke = Stroke(
+            width = 8f,
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(20f, 20f), 0f)
+        )
+
+        item {
             Card(
                 Modifier
                     .fillMaxWidth()
@@ -137,15 +140,11 @@ fun WalletPage(
                 }
             }
         }
-
+        
+        item { 
+            Spacer(modifier = Modifier.height(100.dp))
+        }
     }
-
-
 }
 
 
-@Preview
-@Composable
-fun WalletPagePreview() {
-    WalletPage(navigator = null)
-}

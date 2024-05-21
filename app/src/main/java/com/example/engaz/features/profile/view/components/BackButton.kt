@@ -22,7 +22,7 @@ import com.example.engaz.core.ui.theme.Neutral900
 
 @Composable
 fun BackButton(onClick : ()-> Unit = {}) {
-    Box(Modifier.padding(start = 16.dp)){
+    Box(Modifier.padding(start = 8.dp)){
         Surface(
             modifier = Modifier
                 .align(Alignment.CenterStart)
