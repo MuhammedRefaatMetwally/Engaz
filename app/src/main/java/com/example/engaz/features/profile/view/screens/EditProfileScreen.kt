@@ -41,7 +41,6 @@ import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.core.views.components.CustomProgressIndicator
 import com.example.engaz.core.views.components.CustomTextField
 import com.example.engaz.core.views.components.MainButton
-import com.example.engaz.destinations.MainScreenDestination
 import com.example.engaz.features.profile.view.components.Header
 import com.example.engaz.features.profile.view.components.PhoneNumberField
 import com.example.engaz.features.profile.view.components.UsernameField
@@ -49,6 +48,7 @@ import com.example.engaz.features.profile.view.viewmodels.edit_profile.EditProfi
 import com.ramcosta.composedestinations.annotation.Destination
 import com.togitech.ccp.component.TogiCountryCodePicker
 import com.togitech.ccp.data.CountryData
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Destination

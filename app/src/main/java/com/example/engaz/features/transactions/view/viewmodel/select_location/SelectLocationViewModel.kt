@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.engaz.R
 import com.example.engaz.core.viewmodel.CoreViewModel
-import com.example.engaz.destinations.OrderMessageScreenDestination
-import com.example.engaz.destinations.SearchLocationFromScreenDestination
-import com.example.engaz.destinations.SearchLocationToScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.OrderMessageScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SearchLocationFromScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SearchLocationToScreenDestination
 import com.example.engaz.features.transactions.domain.usecases.order.MakeOrderStep2UseCase
 import com.example.engaz.features.transactions.domain.usecases.places.GetDirectionsUseCase
 import com.example.engaz.features.transactions.domain.usecases.places.GetPlaceLatLongUseCase

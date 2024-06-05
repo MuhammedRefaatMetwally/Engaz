@@ -1,29 +1,29 @@
 package com.example.engaz.features.wallet.view.viewmodel.wallet
 
-import android.content.Context
-import android.net.Uri
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.example.engaz.R
-import com.example.engaz.core.viewmodel.CoreViewModel
-import com.example.engaz.destinations.WalletMessageScreenDestination
+import com.example.engaz.core.util.Consts
+import com.example.engaz.features.wallet.data.entities.stripe_payment.CreatePaymentIntentResponse
+import com.example.engaz.features.wallet.data.repo.PaymentRepository
 import com.example.engaz.features.wallet.domain.usecase.ChargeBalanceUseCase
 import com.example.engaz.features.wallet.domain.usecase.GetBalanceUseCase
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.stripe.android.paymentsheet.PaymentSheetResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 
 @HiltViewModel
 class WalletViewModel @Inject constructor(
     private val chargeBalanceUseCase: ChargeBalanceUseCase,
-    private val getBalanceUseCase: GetBalanceUseCase
+    private val getBalanceUseCase: GetBalanceUseCase,
+    private val repository: PaymentRepository
 ) : ViewModel() {
 
     var state by mutableStateOf (WalletState())
@@ -34,10 +34,10 @@ class WalletViewModel @Inject constructor(
     fun onEvent(event: WalletEvent){
         when(event){
             is WalletEvent.OnBalanceRecharge -> {
-                onBalanceRecharge(event.navigator,event.context)
+               // onBalanceRecharge(event.navigator,event.context)
             }
             is WalletEvent.OnGetBalance -> {
-                onGetBalance(event.context)
+               // onGetBalance(event.context)
             }
 
             is WalletEvent.OnBackClick -> {
@@ -47,8 +47,27 @@ class WalletViewModel @Inject constructor(
     }
 
 
+    suspend fun makePayment(onPaymentDetailsFetched: (clientSecret: String?, customerId: String?, ephemeralKey: String?) -> Unit) {
+        val paymentIntentResponse = repository.createPaymentIntent()
+        val ephemeralKeyResponse = repository.refreshCustomerEphemeralKey()
+        val clientSecret = paymentIntentResponse.clientSecret
+        val customerId = paymentIntentResponse.customer
+        val ephemeralKey = ephemeralKeyResponse.secret
+        onPaymentDetailsFetched(clientSecret, customerId, ephemeralKey)
+    }
 
-    fun updateImageState(image: Uri?) {
+
+
+    fun handlePaymentResult(result: PaymentSheetResult) {
+        when(result) {
+            PaymentSheetResult.Canceled -> TODO()
+            PaymentSheetResult.Completed -> TODO()
+            is PaymentSheetResult.Failed -> TODO()
+        }
+    }
+
+
+   /* fun updateImageState(image: Uri?) {
         if(image != null){
             state = state.copy(moneyTransferPhoto = image)
         }
@@ -109,7 +128,7 @@ class WalletViewModel @Inject constructor(
             job = null
         }
     }
-
+*/
 
 
 }

@@ -42,19 +42,6 @@ sealed class BottomNavPage(
         label = R.string.orders
     )
 
-    data object Payment : BottomNavPage(
-        page = {navigator , context ->
-            val viewModel : WalletViewModel = hiltViewModel()
-
-            WalletPage(
-                navigator = navigator,
-                state = viewModel.state,
-            )
-        },
-        icon = R.drawable.ic_payment,
-        label = R.string.wallet
-    )
-
     data object ProfileNavPage : BottomNavPage(
         page = {navigator , context ->
             ProfilePage(

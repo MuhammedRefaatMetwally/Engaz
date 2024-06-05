@@ -12,11 +12,11 @@ import com.example.engaz.core.util.usecase.ValidatePasswordRepeatedLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePhoneLocalUseCase
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.core.views.components.PhoneNumber
-import com.example.engaz.destinations.DoneMessageScreenDestination
-import com.example.engaz.destinations.LoginScreenDestination
-import com.example.engaz.destinations.ResetPasswordByPhoneScreenDestination
-import com.example.engaz.destinations.ResetPasswordNewPasswordScreenDestination
-import com.example.engaz.destinations.ResetPasswordPinScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.DoneMessageScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ResetPasswordByPhoneScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ResetPasswordNewPasswordScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ResetPasswordPinScreenDestination
 import com.example.engaz.features.auth.domain.usecases.ResetPasswordUseCase
 import com.example.engaz.features.auth.domain.usecases.SendCodeToPhoneUseCase
 import com.example.engaz.features.auth.domain.usecases.CheckCodeSentUseCase

@@ -34,10 +34,10 @@ import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Primary
 import com.example.engaz.core.ui.theme.Secondary
 import com.example.engaz.core.views.components.shimmerEffect
-import com.example.engaz.destinations.EditProfileScreenDestination
-import com.example.engaz.destinations.NotificationSettingsScreenDestination
-import com.example.engaz.destinations.NotificationsPageDestination
-import com.example.engaz.destinations.ProfilePageDestination
+import io.github.raamcosta.compose_destinations.destinations.EditProfileScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.NotificationSettingsScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.NotificationsPageDestination
+import io.github.raamcosta.compose_destinations.destinations.ProfilePageDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)

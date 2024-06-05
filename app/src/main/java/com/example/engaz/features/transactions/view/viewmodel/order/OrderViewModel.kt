@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.engaz.R
 import com.example.engaz.core.viewmodel.CoreViewModel
-import com.example.engaz.destinations.SelectLocationScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SelectLocationScreenDestination
 import com.example.engaz.features.transactions.domain.usecases.order.MakeOrderStep1UseCase
 import com.example.engaz.features.transactions.domain.usecases.order.OrderUseCase
 import com.example.engaz.features.transactions.infrastructure.api.requests.MakeOrderStep1Input

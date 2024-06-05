@@ -36,7 +36,7 @@ import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Neutral900
 import com.example.engaz.core.views.components.CustomTextField
 import com.example.engaz.core.views.components.MainButton
-import com.example.engaz.destinations.RequestsScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.RequestsScreenDestination
 import com.example.engaz.features.home.view.components.InfoAboutCarCard
 import com.example.engaz.features.profile.view.components.Header
 import com.ramcosta.composedestinations.annotation.Destination

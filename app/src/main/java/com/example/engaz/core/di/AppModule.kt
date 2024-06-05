@@ -1,6 +1,7 @@
 package com.example.engaz.core.di
 
 import android.content.Context
+import android.util.Log
 import com.example.engaz.core.infrastructure.services.NetworkServiceImpl
 import com.example.engaz.core.util.Consts.BASE_URL
 import com.example.engaz.core.util.usecase.ValidateEmailLocalUseCase
@@ -40,11 +41,14 @@ import com.example.engaz.features.wallet.domain.usecase.ChargeBalanceUseCase
 import com.example.engaz.features.wallet.domain.usecase.GetBalanceUseCase
 import com.example.engaz.features.wallet.infrastructure.api.WalletApi
 import com.example.engaz.R
+import com.example.engaz.core.util.Consts.BASE_URL_STRIPE
 import com.example.engaz.features.notification.data.data_source.remote.NotificationRemoteDataSourceImpl
 import com.example.engaz.features.notification.data.repo.NotificationRepoImpl
 import com.example.engaz.features.notification.domain.usecase.GetAllNotificationsUseCase
 import com.example.engaz.features.notification.domain.usecase.GetNotificationUseCase
 import com.example.engaz.features.notification.domain.usecase.GetNotificationsCountUseCase
+import com.example.engaz.features.wallet.data.repo.PaymentRepository
+import com.example.engaz.features.wallet.infrastructure.StripeApiService
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -58,6 +62,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -87,6 +92,36 @@ object AppModule {
             .client(okHttpClient)
             .build()
             .create(AuthApi::class.java)
+    }
+
+
+    @Provides
+    fun provideLoggingInterceptor() : HttpLoggingInterceptor{
+        val loggingInterceptor = HttpLoggingInterceptor{
+            Log.e("api", it)
+        }
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        return  loggingInterceptor
+    }
+    @Provides
+    @Singleton
+    fun provideStripeApi(loggingInterceptor: HttpLoggingInterceptor,) : StripeApiService {
+        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(60, TimeUnit.SECONDS)
+            .build()
+
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL_STRIPE)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
+            .build()
+            .create(StripeApiService::class.java)
     }
 
     @Provides
@@ -533,6 +568,12 @@ object AppModule {
         return ChargeBalanceUseCase(repo)
     }
 
+
+    @Provides
+    @Singleton
+    fun providePaymentRepository(stripeApiService: StripeApiService) :PaymentRepository{
+        return  PaymentRepository(stripeApiService)
+    }
 
 
     // Utils

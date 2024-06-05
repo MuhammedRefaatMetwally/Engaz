@@ -4,5 +4,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 sealed class TransferCarOwnerShipEvent {
     data class OnBackClick(val navigator: DestinationsNavigator) : TransferCarOwnerShipEvent()
+    data class OnAcceptRequest(
+        val navigator: DestinationsNavigator,
+        val onAcceptPayment: () -> Unit
+    ) : TransferCarOwnerShipEvent()
 
 }

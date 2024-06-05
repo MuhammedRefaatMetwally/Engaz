@@ -5,13 +5,15 @@ import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.AndroidViewModel
-import com.example.engaz.destinations.*
 import com.example.engaz.features.auth.data.entities.login.User
 import com.example.engaz.features.auth.domain.usecases.GetUserInfoUseCase
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.tasks.Task
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.OnBoardingScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SelectLocationScreenDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

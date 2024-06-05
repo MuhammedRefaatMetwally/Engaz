@@ -13,17 +13,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TransferCarOwnerShipViewModel @Inject constructor() : ViewModel() {
-
+    val showDialog = mutableStateOf(false)
     var state by mutableStateOf(HomeInfoState())
     private var job: Job? = null
 
     private fun onBackClick(navigator: DestinationsNavigator) {
         navigator.popBackStack()
     }
+
     fun onEvent(event : TransferCarOwnerShipEvent) {
         when(event){
             is TransferCarOwnerShipEvent.OnBackClick -> {
                 onBackClick(event.navigator)
+            }
+            is TransferCarOwnerShipEvent.OnAcceptRequest ->{
+                event.onAcceptPayment()
             }
         }
     }

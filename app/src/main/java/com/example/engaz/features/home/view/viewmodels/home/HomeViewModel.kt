@@ -7,9 +7,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.engaz.core.viewmodel.CoreViewModel
-import com.example.engaz.destinations.OrderScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.OrderScreenDestination
 import com.example.engaz.features.auth.domain.usecases.SaveUserInfoUseCase
 import com.example.engaz.features.home.domain.usecases.HomeUseCase
+import com.example.engaz.features.wallet.data.repo.PaymentRepository
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,8 @@ class HomeViewModel @Inject constructor(
 
     var state by mutableStateOf(HomeState())
     private var job: Job? = null
+
+
 
 
     private fun onMakeOrderClick(navigator: DestinationsNavigator,context: Context){

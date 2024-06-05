@@ -2,7 +2,7 @@ package com.example.engaz.features.home.view.utils
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import com.example.engaz.R
-import com.example.engaz.destinations.DirectionDestination
+import io.github.raamcosta.compose_destinations.destinations.DirectionDestination
 
 sealed class HomeFeatures(
     val screen: DirectionDestination?,

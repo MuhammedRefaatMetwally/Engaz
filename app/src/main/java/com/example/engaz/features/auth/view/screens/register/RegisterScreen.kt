@@ -36,14 +36,13 @@ import androidx.compose.ui.unit.sp
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.*
 import com.example.engaz.core.views.components.*
-import com.example.engaz.destinations.LoginScreenDestination
-import com.example.engaz.destinations.RegisterScreenDestination
 import com.example.engaz.features.auth.view.viewmodels.register.RegisterState
 import com.example.engaz.features.profile.view.components.Header
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.togitech.ccp.component.TogiCountryCodePicker
 import com.togitech.ccp.data.CountryData
+import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
 import kotlinx.coroutines.launch
 
 @SuppressLint("ResourceType", "UnrememberedMutableState")

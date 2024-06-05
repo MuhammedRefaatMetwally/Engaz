@@ -11,9 +11,9 @@ import com.example.engaz.core.util.usecase.ValidatePasswordLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePhoneLocalUseCase
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.core.views.components.PhoneNumber
-import com.example.engaz.destinations.MainScreenDestination
-import com.example.engaz.destinations.RegisterScreenDestination
-import com.example.engaz.destinations.ResetPasswordByPhoneScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.RegisterScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ResetPasswordByPhoneScreenDestination
 import com.example.engaz.features.auth.domain.usecases.LoginUseCase
 import com.example.engaz.features.auth.infrastructure.api.request.LoginRequest
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -33,16 +33,16 @@ class LoginViewModel @Inject constructor(
 
     val loginScreenId = 0
     var state by mutableStateOf(LoginState())
-    private var job : Job? = null
+    private var job: Job? = null
 
 
-    fun updatePassword(paasword : String){
+    fun updatePassword(paasword: String) {
         state = state.copy(
             password = paasword
         )
     }
 
-    fun updateEmailOrPassCode(emailOrPassCode : String){
+    fun updateEmailOrPassCode(emailOrPassCode: String) {
         state = state.copy(
             phoneOrPassCode = emailOrPassCode
         )
@@ -54,23 +54,23 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun updatePasswordSecureState(){
+    fun updatePasswordSecureState() {
         state = state.copy(
             isPasswordSecure = !state.isPasswordSecure
         )
     }
 
-    private fun updateRememberMeState(){
+    private fun updateRememberMeState() {
         state = state.copy(
             rememberMe = !state.rememberMe
         )
     }
 
-    private fun onForgotPasswordClick(navigator: DestinationsNavigator){
+    private fun onForgotPasswordClick(navigator: DestinationsNavigator) {
         navigator.navigate(ResetPasswordByPhoneScreenDestination())
     }
 
-    private fun onRegisterClick(navigator: DestinationsNavigator){
+    private fun onRegisterClick(navigator: DestinationsNavigator) {
         navigator.navigate(RegisterScreenDestination())
     }
 
@@ -83,7 +83,7 @@ class LoginViewModel @Inject constructor(
         return Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
     }
 
-    private fun onLoginClick(navigator: DestinationsNavigator,context: Context){
+    private fun onLoginClick(navigator: DestinationsNavigator, context: Context) {
         job?.cancel()
         job = viewModelScope.launch(Dispatchers.IO) {
 
@@ -100,11 +100,11 @@ class LoginViewModel @Inject constructor(
             )
             state = state.copy(isLoginLoading = false)
 
-            if(response.failure != null) {
+            if (response.failure != null) {
                 CoreViewModel.showSnackbar(("Error:" + response.failure.message))
             } else {
                 CoreViewModel.showSnackbar(("Success:" + response.data?.message))
-                viewModelScope.launch(Dispatchers.Main){
+                viewModelScope.launch(Dispatchers.Main) {
                     navigator.navigate(MainScreenDestination())
                 }
 
@@ -114,27 +114,29 @@ class LoginViewModel @Inject constructor(
     }
 
 
-
-
-    private fun loginWithGoogle(){
+    private fun loginWithGoogle() {
 
     }
 
-    fun onEvent(event : LoginEvent){
+    fun onEvent(event: LoginEvent) {
 
-        when(event){
+        when (event) {
             is LoginEvent.Login -> {
-                validateForm(event.context) { onLoginClick(event.navigator,event.context) }
+                validateForm(event.context) { onLoginClick(event.navigator, event.context) }
             }
+
             is LoginEvent.Register -> {
                 onRegisterClick(event.navigator)
             }
+
             is LoginEvent.LoginWithGoogle -> {
                 loginWithGoogle()
             }
+
             is LoginEvent.RememberMe -> {
                 updateRememberMeState()
             }
+
             is LoginEvent.ForgotPassword -> {
                 onForgotPasswordClick(event.navigator)
             }
@@ -145,9 +147,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun validateForm(context: Context, callBackFunction : ()-> Unit){
-        val phoneResult = validatePhoneLocalUseCase(state.phoneOrPassCode,context)
-        val passwordResult = validatePasswordLocalUseCase(state.password,context)
+    private fun validateForm(context: Context, callBackFunction: () -> Unit) {
+        val phoneResult = validatePhoneLocalUseCase(state.phoneOrPassCode, context)
+        val passwordResult = validatePasswordLocalUseCase(state.password, context)
 
         val hasError = listOf(
             phoneResult,
@@ -161,14 +163,13 @@ class LoginViewModel @Inject constructor(
             passwordError = passwordResult.failure?.message
         )
 
-        if(hasError) {
+        if (hasError) {
             return
         }
 
         callBackFunction()
 
     }
-
 
 
 }

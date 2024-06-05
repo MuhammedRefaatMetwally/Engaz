@@ -22,7 +22,7 @@ import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Neutral900
-import com.example.engaz.destinations.AcceptedRequestDetailsDestination
+import io.github.raamcosta.compose_destinations.destinations.AcceptedRequestDetailsDestination
 import com.example.engaz.features.home.view.components.InfoAboutCarCard
 import com.example.engaz.features.profile.view.components.BackButton
 import com.example.engaz.features.profile.view.components.Header

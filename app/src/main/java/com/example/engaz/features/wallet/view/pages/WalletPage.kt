@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.*
-import com.example.engaz.destinations.IdentityScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.IdentityScreenDestination
 import com.example.engaz.features.profile.view.components.BackButton
 import com.example.engaz.features.wallet.view.components.WalletItem
 import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletState

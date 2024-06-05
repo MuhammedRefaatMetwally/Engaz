@@ -30,9 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Cairo
-import com.example.engaz.destinations.FaceRecognitionScreenDestination
-import com.example.engaz.destinations.MainScreenDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 
 @Composable
 fun CustomDialog(

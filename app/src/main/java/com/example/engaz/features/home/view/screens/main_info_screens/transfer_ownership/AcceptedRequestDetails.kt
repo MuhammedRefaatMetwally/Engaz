@@ -19,6 +19,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,24 +32,41 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Cairo
+import com.example.engaz.core.views.components.CustomDialog
 import com.example.engaz.core.views.components.MainButton
-import com.example.engaz.destinations.CompletePaymentScreenDestination
-import com.example.engaz.destinations.RequestsScreenDestination
-import com.example.engaz.destinations.WalletPageDestination
+import io.github.raamcosta.compose_destinations.destinations.CompletePaymentScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.RequestsScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.WalletPageDestination
 import com.example.engaz.features.home.view.components.InfoAboutCarCard
+import com.example.engaz.features.home.view.viewmodels.main_info.transfer_car_ownership.TransferCarOwnerShipViewModel
 import com.example.engaz.features.profile.view.components.BackButton
 import com.example.engaz.features.profile.view.components.Header
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.stripe.android.paymentsheet.PaymentSheetResult
+import io.grpc.Context
 
 @Composable
 @Destination
 fun AcceptedRequestDetails(
     navigator: DestinationsNavigator?,
+    transferCarOwnerShipViewModel: TransferCarOwnerShipViewModel= hiltViewModel(),
+    onAcceptRequest :() -> Unit,
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
 ) {
+
+    if (transferCarOwnerShipViewModel.showDialog.value)
+        CustomDialog(
+            processText = "تمت عملية الدفع",
+            buttonText = "إرسال إيصال",
+            navigator = navigator,
+            setShowDialog = {
+                transferCarOwnerShipViewModel.showDialog.value = it
+            })
+
     Column {
         Spacer(modifier = Modifier.height(24.dp))
         Row(Modifier.fillMaxWidth()) {
@@ -63,43 +83,7 @@ fun AcceptedRequestDetails(
             pendingRequest = true,
             showButtons = false
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            modifier = Modifier.padding(start = 16.dp),
-            text = "طريقة الدفع",
-            fontSize = 20.sp,
-            fontFamily = Cairo,
-            fontWeight = FontWeight.W700,
-            textAlign = TextAlign.Center
-        )
-        Card(
-            Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .padding(16.dp)
-                .clickable {
-                    navigator?.navigate(WalletPageDestination)
-                }, shape = RoundedCornerShape(16.dp),
-            border = BorderStroke(1.dp,Color.Gray),
-            colors = CardDefaults.cardColors(containerColor = Color.Transparent)
-        ) {
-            Row(Modifier.fillMaxSize()) {
-                Icon(
-                    modifier = Modifier.padding(start = 16.dp).align(Alignment.CenterVertically),
-                    imageVector = Icons.Default.Payment,
-                    contentDescription = ""
-                )
 
-                Text(
-                    modifier = Modifier.padding(start = 16.dp).align(Alignment.CenterVertically),
-                    text = "اختر طريقة الدفع",
-                    fontSize = 16.sp,
-                    fontFamily = Cairo,
-                    fontWeight = FontWeight.W400,
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
         Spacer(modifier = Modifier.height(32.dp))
         MainButton(
             Modifier
@@ -107,7 +91,7 @@ fun AcceptedRequestDetails(
                 .padding(horizontal = 16.dp)
                 .height(64.dp)
                 .clickable {
-                navigator?.navigate(CompletePaymentScreenDestination)
+                    onAcceptRequest()
                 },
             cardColor = colorResource(id = R.color.primary_color)
         ) {
@@ -118,6 +102,27 @@ fun AcceptedRequestDetails(
                 color = Color.White,
                 fontSize = 20.sp
             )
+        }
+    }
+}
+
+fun onPaymentSheetAcceptedRequestResult(
+    paymentSheetResult: PaymentSheetResult,
+    showDialog: MutableState<Boolean>
+) {
+
+    when (paymentSheetResult) {
+        is PaymentSheetResult.Canceled -> {
+            println("Canceled")
+        }
+
+        is PaymentSheetResult.Failed -> {
+            println("Error: ${paymentSheetResult.error}")
+        }
+
+        is PaymentSheetResult.Completed -> {
+            showDialog.value = true
+            println("Completed")
         }
     }
 }

@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.engaz.core.ui.theme.*
-import com.example.engaz.destinations.IdentityScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.IdentityScreenDestination
 import com.example.engaz.features.home.view.components.HomeNavigationBar
 import com.example.engaz.features.home.view.viewmodels.main.MainState
 import com.ramcosta.composedestinations.annotation.Destination

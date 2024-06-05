@@ -11,13 +11,13 @@ import com.example.engaz.core.util.usecase.ValidatePasswordLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePhoneLocalUseCase
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.core.views.components.PhoneNumber
-import com.example.engaz.destinations.MainScreenDestination
-import com.example.engaz.destinations.RegisterScreenDestination
-import com.example.engaz.destinations.ResetPasswordByPhoneScreenDestination
 import com.example.engaz.features.auth.domain.usecases.LoginUseCase
 import com.example.engaz.features.auth.infrastructure.api.request.LoginRequest
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.RegisterScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ResetPasswordByPhoneScreenDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch

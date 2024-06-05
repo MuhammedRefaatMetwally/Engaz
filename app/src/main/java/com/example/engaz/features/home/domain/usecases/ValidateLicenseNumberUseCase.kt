@@ -1,33 +1,31 @@
-package com.example.engaz.core.util.usecase
+package com.example.engaz.features.home.domain.usecases
 
 import android.content.Context
 import com.example.engaz.R
 import com.example.engaz.core.errors.Failure
 import com.example.engaz.core.util.Resource
-import com.example.engaz.core.util.validator.Validator
 import javax.inject.Inject
 
-class ValidatePhoneLocalUseCase @Inject constructor(
-    val validator : Validator
-) {
+class ValidateLicenseNumberUseCase @Inject constructor()  {
 
-    operator fun invoke(phone: String, context: Context): Resource<Boolean?> {
+    operator fun invoke(licenseNumber: String, context: Context): Resource<Boolean?> {
 
-        if (phone.isBlank()) {
+        if (licenseNumber.isBlank()) {
             return Resource.FailureData(
                 Failure(
-                    message = "أدخل رقم الهاتف",
+                    message = "ادخل رقم الرخصة",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0
                 )
             )
         }
-        val regex = Regex("[0123456789]")
-        if (!validator.isValidPhone(phone) && phone.contains(regex)) {
+
+        val regex = Regex("[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>?/~]")
+        if (licenseNumber.contains(regex)) {
             return Resource.FailureData(
                 Failure(
-                    message ="رقم الهاتف غير صحيح",
+                    message = "لا يجب أن يحتوي على هذه الرموز",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0
@@ -41,5 +39,4 @@ class ValidatePhoneLocalUseCase @Inject constructor(
 
 
     }
-
 }

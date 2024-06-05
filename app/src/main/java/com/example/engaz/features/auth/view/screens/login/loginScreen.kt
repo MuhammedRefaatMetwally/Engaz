@@ -56,10 +56,10 @@ import com.example.engaz.features.auth.view.viewmodels.login.LoginState
 import com.example.engaz.R
 import com.example.engaz.core.util.biometericAuth.BiometricPromptManager
 import com.example.engaz.core.util.biometericAuth.BiometricPromptManager.*
-import com.example.engaz.destinations.MainScreenDestination
-import com.example.engaz.destinations.RegisterScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.RegisterScreenDestination
 
 @SuppressLint("ResourceType", "UnrememberedMutableState")
 @Destination

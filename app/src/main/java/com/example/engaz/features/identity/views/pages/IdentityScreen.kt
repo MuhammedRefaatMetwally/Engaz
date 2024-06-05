@@ -30,10 +30,10 @@ import com.example.engaz.R
 import com.example.engaz.core.ui.theme.*
 import com.example.engaz.core.util.biometericAuth.BiometricPromptManager
 import com.example.engaz.core.views.components.MainButton
-import com.example.engaz.destinations.AcceptedRequestDetailsDestination
-import com.example.engaz.destinations.FaceRecognitionScreenDestination
-import com.example.engaz.destinations.MainScreenDestination
-import com.example.engaz.destinations.OrdersDetailsPageDestination
+import io.github.raamcosta.compose_destinations.destinations.AcceptedRequestDetailsDestination
+import io.github.raamcosta.compose_destinations.destinations.FaceRecognitionScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.OrdersDetailsPageDestination
 import com.example.engaz.features.profile.view.components.BackButton
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator

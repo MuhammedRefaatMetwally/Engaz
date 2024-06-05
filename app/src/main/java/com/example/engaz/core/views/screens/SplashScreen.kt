@@ -48,6 +48,7 @@ import com.example.engaz.core.ui.theme.Neutral900
 import com.example.engaz.core.ui.theme.linearGradient
 import com.example.engaz.core.views.components.LeftToRightLayout
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
 

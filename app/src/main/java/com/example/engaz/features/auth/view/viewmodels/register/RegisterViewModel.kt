@@ -13,9 +13,9 @@ import com.example.engaz.core.util.usecase.ValidatePhoneLocalUseCase
 import com.example.engaz.core.util.usecase.ValidateUsernameLocalUseCase
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.core.views.components.PhoneNumber
-import com.example.engaz.destinations.ActivationPinScreenDestination
-import com.example.engaz.destinations.LoginScreenDestination
-import com.example.engaz.destinations.MainScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ActivationPinScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 import com.example.engaz.features.auth.domain.usecases.ConfirmCodeUseCase
 import com.example.engaz.features.auth.domain.usecases.RegisterUseCase
 import com.example.engaz.features.auth.domain.usecases.ResendActivitionCodeUseCase

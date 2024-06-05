@@ -9,7 +9,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
@@ -18,14 +22,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.engaz.NavGraphs
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.*
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.core.views.screens.DoneMessageScreen
 import com.example.engaz.core.views.screens.OnBoardingScreen
 import com.example.engaz.core.views.screens.SplashScreen
-import com.example.engaz.destinations.*
 import com.example.engaz.features.auth.view.screens.login.LoginScreen
 import com.example.engaz.features.auth.view.screens.login_with_fingerprint.LoginWithFingerPrintScreen
 import com.example.engaz.features.auth.view.screens.register.ActivationPinScreen
@@ -44,12 +46,15 @@ import com.example.engaz.features.home.view.screens.main_info_screens.CompletedR
 import com.example.engaz.features.home.view.screens.main_info_screens.InfoAboutCarScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.InfoAboutServiceScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.RenewLicenseScreen
+import com.example.engaz.features.home.view.screens.main_info_screens.onPaymentSheetResult
+import com.example.engaz.features.home.view.screens.main_info_screens.presentPaymentSheet
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.AcceptedRequestDetails
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.CompletePaymentScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.RequestsScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.SendTransferingRequestDetailsScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.SendTransferingRequestScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.TransferCarOwnershipScreen
+import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.onPaymentSheetAcceptedRequestResult
 import com.example.engaz.features.home.view.viewmodels.main.MainViewModel
 import com.example.engaz.features.home.view.viewmodels.main_info.complete_payment.CompletePaymentViewModel
 import com.example.engaz.features.home.view.viewmodels.main_info.completed_requests.CompletedRequestsEvent
@@ -83,6 +88,43 @@ import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletEvent
 import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletViewModel
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.manualcomposablecalls.composable
+import com.stripe.android.paymentsheet.PaymentSheet
+import com.stripe.android.paymentsheet.rememberPaymentSheet
+import io.github.raamcosta.compose_destinations.NavGraphs
+import io.github.raamcosta.compose_destinations.destinations.AcceptedRequestDetailsDestination
+import io.github.raamcosta.compose_destinations.destinations.ActivationPinScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ChargeBalanceScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.CompletePaymentScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.CompletedRequestsScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.DoneMessageScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.EditProfileScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.FaceRecognitionScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.IdentityScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.InfoAboutCarScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.InfoAboutServiceScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.LoginWithFingerPrintScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.NotificationsPageDestination
+import io.github.raamcosta.compose_destinations.destinations.OnBoardingScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.OrderMessageScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ProfilePageDestination
+import io.github.raamcosta.compose_destinations.destinations.RegisterScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.RenewLicenseScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.RequestsScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ResetPasswordByPhoneScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ResetPasswordNewPasswordScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ResetPasswordPinScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SearchLocationFromScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SearchLocationToScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SelectLocationScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SendTransferingRequestDetailsScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SendTransferingRequestScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SplashScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.TransferCarOwnershipScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.WalletMessageScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.WalletPageDestination
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
@@ -315,9 +357,58 @@ fun Navigation(
             }
 
             composable(RenewLicenseScreenDestination) {
-                RenewLicenseScreen(navigator = destinationsNavigator, onBackArrowClick = {
-                    renewLicenseViewModel.onEvent(RenewLicenseEvent.OnBackClick(it))
-                })
+                val paymentSheet = rememberPaymentSheet {
+                    onPaymentSheetResult(it, renewLicenseViewModel.showDialog)
+                }
+                var customerConfig by remember {
+                    mutableStateOf<PaymentSheet.CustomerConfiguration?>(
+                        null
+                    )
+                }
+                var paymentIntentClientSecret by remember { mutableStateOf<String?>(null) }
+                RenewLicenseScreen(
+                    navigator = destinationsNavigator,
+                    state = renewLicenseViewModel.state,
+                    onBackArrowClick = {
+                        renewLicenseViewModel.onEvent(RenewLicenseEvent.OnBackClick(it))
+                    },
+                    onRenewLicense = { navigator, context ->
+                        renewLicenseViewModel.onEvent(
+                            RenewLicenseEvent.OnRenewLicense(
+                                navigator ?: destinationsNavigator,
+                                context = context,
+                                onPayment = {
+                                    scope.launch(Dispatchers.IO) {
+                                        walletViewModel.makePayment { clientSecret, customerId, ephemeralKey ->
+                                            paymentIntentClientSecret = clientSecret
+                                            customerConfig = PaymentSheet.CustomerConfiguration(
+                                                customerId ?: "",
+                                                ephemeralKey ?: ""
+                                            )
+                                        }
+                                        presentPaymentSheet(
+                                            paymentSheet,
+                                            paymentIntentClientSecret!!,
+                                            customerConfig!!
+                                        )
+                                    }
+                                }
+                            )
+                        )
+
+                    },
+                    showDialog = renewLicenseViewModel.showDialog,
+                    onChangeCarDescription = {
+                        renewLicenseViewModel.updateCarDescription(it)
+                    },
+                    onChangeCurrentAddress = { renewLicenseViewModel.updateCurrentAddress(it) },
+                    onChangeDriverName = { renewLicenseViewModel.updateDriverName(it) },
+                    onChangeEmail = { renewLicenseViewModel.updateEmail(it) },
+                    onChangeExpiryDate = { renewLicenseViewModel.updateExpiryDate(it) },
+                    onChangeLicenseNumber = { renewLicenseViewModel.updateLicenseNumber(it) },
+                    onChangePhoneNumber = { renewLicenseViewModel.updatePhone(it) },
+                    onChangeRequestNumber = { renewLicenseViewModel.updateRequestNumber(it) }
+                )
             }
 
             composable(NotificationsPageDestination) {
@@ -360,8 +451,38 @@ fun Navigation(
                 })
             }
             composable(AcceptedRequestDetailsDestination) {
+                val paymentSheet = rememberPaymentSheet {
+                    onPaymentSheetAcceptedRequestResult(it, transferCarOwnerShipViewModel.showDialog)
+                }
+                var customerConfig by remember {
+                    mutableStateOf<PaymentSheet.CustomerConfiguration?>(
+                        null
+                    )
+                }
+                var paymentIntentClientSecret by remember { mutableStateOf<String?>(null) }
                 AcceptedRequestDetails(navigator = destinationsNavigator, onBackArrowClick = {
                     transferCarOwnerShipViewModel.onEvent(TransferCarOwnerShipEvent.OnBackClick(it))
+                }, onAcceptRequest = {
+                    transferCarOwnerShipViewModel.onEvent(
+                        TransferCarOwnerShipEvent.OnAcceptRequest(
+                            destinationsNavigator
+                        ) {
+                            scope.launch(Dispatchers.IO) {
+                                walletViewModel.makePayment { clientSecret, customerId, ephemeralKey ->
+                                    paymentIntentClientSecret = clientSecret
+                                    customerConfig = PaymentSheet.CustomerConfiguration(
+                                        customerId ?: "",
+                                        ephemeralKey ?: ""
+                                    )
+                                }
+                                presentPaymentSheet(
+                                    paymentSheet,
+                                    paymentIntentClientSecret!!,
+                                    customerConfig!!
+                                )
+                            }
+                        })
+
                 })
             }
             composable(IdentityScreenDestination) {
@@ -501,19 +622,19 @@ fun Navigation(
             }
 
             composable(ChargeBalanceScreenDestination) {
-                ChargeBalanceScreen(
-                    navigator = destinationsNavigator,
-                    walletState = walletViewModel.state,
-                    onImageSelection = { walletViewModel.updateImageState(it) },
-                    onUploadImage = { navigator, context ->
-                        walletViewModel.onEvent(
-                            WalletEvent.OnBalanceRecharge(
-                                navigator,
-                                context
-                            )
-                        )
-                    },
-                )
+                /* ChargeBalanceScreen(
+                     navigator = destinationsNavigator,
+                     walletState = walletViewModel.state,
+                     onImageSelection = { walletViewModel.updateImageState(it) },
+                     onUploadImage = { navigator, context ->
+                         walletViewModel.onEvent(
+                             WalletEvent.OnBalanceRecharge(
+                                 navigator,
+                                 context
+                             )
+                         )
+                     },
+                 )*/
 
             }
 
@@ -543,7 +664,6 @@ fun Navigation(
                 )
 
             }
-
 
         }
 

@@ -16,7 +16,7 @@ class ValidateEmailLocalUseCase @Inject constructor(
         if (email.isBlank()) {
             return Resource.FailureData(
                 Failure(
-                    message = "",
+                    message = "ادخل البريد الاكتروني",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0
@@ -27,7 +27,7 @@ class ValidateEmailLocalUseCase @Inject constructor(
         if (!validator.isValidEmail(email)) {
             return Resource.FailureData(
                 Failure(
-                    message ="",
+                    message ="البريد الالكتروني غير صحيح",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0
