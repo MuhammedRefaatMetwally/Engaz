@@ -238,5 +238,6 @@
     <string name="sent_requests_ar">الطلبات المرسلة من البائع</string>
     <string name="card_number_ar">رقم البطاقة</string>
     <string name="expiry_date_ar">تاريخ الانتهاء</string>
+    <string name="useranme_cant_be_less_than_8_ar">اسم المستخدم يجب اي يحتوي على 8 أحرف عللا الأقل</string>
 
 </resources>

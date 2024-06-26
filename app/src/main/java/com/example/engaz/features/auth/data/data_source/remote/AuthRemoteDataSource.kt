@@ -4,8 +4,9 @@ import com.example.engaz.R
 import com.example.engaz.core.errors.RemoteDataException
 import com.example.engaz.features.auth.data.entities.check_code_sent.CheckCodeSentResponse
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
+import com.example.engaz.features.auth.data.entities.logout.LogoutResponse
 import com.example.engaz.features.auth.data.entities.register.RegisterResponse
-import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivitionCodeResponse
+import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivationCodeResponse
 import com.example.engaz.features.auth.data.entities.reset_password.ResetPasswordResponse
 import com.example.engaz.features.auth.data.entities.send_code_to_phone.SendCodeToPhoneResponse
 import com.example.engaz.features.auth.infrastructure.api.AuthApi
@@ -24,11 +25,11 @@ interface AuthRemoteDataSource {
 
     suspend fun confirmCode(
         confirmCodeRequest: ConfirmCodeRequest
-    ): Response<LoginResponse>
+    ): Response<RegisterResponse>
 
     suspend fun resendActivitionCode(
-        resendActivitionCodeRequest: ResendActivitionCodeRequest
-    ): Response<ResendActivitionCodeResponse>
+        resendActivitionCodeRequest: ResendActivationCodeRequest
+    ): Response<ResendActivationCodeResponse>
 
     suspend fun sendCodeToPhone(
         sendCodeToPhoneRequest: SendCodeToPhoneRequest
@@ -42,6 +43,7 @@ interface AuthRemoteDataSource {
         resetPasswordRequest: ResetPasswordRequest
     ): Response<ResetPasswordResponse>
 
+    suspend fun logout(): Response<LogoutResponse>
 
 }
 
@@ -84,7 +86,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(val api: AuthApi) : AuthRemot
 
     override suspend fun confirmCode(
         confirmCodeRequest: ConfirmCodeRequest
-    ): Response<LoginResponse> {
+    ): Response<RegisterResponse> {
         try {
             return api.confirmCode(
                 confirmCodeRequest
@@ -97,10 +99,10 @@ class AuthRemoteDataSourceImpl @Inject constructor(val api: AuthApi) : AuthRemot
     }
 
     override suspend fun resendActivitionCode(
-        resendActivitionCodeRequest: ResendActivitionCodeRequest
-    ): Response<ResendActivitionCodeResponse> {
+        resendActivitionCodeRequest: ResendActivationCodeRequest
+    ): Response<ResendActivationCodeResponse> {
         try {
-            return api.resendActivitionCode(
+            return api.resendActivationCode(
                 resendActivitionCodeRequest
             )
 
@@ -113,7 +115,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(val api: AuthApi) : AuthRemot
 
     override suspend fun sendCodeToPhone(
         sendCodeToPhoneRequest: SendCodeToPhoneRequest
-    ): Response<SendCodeToPhoneResponse>{
+    ): Response<SendCodeToPhoneResponse> {
         try {
             return api.sendSmsCode(
                 sendCodeToPhoneRequest
@@ -150,6 +152,15 @@ class AuthRemoteDataSourceImpl @Inject constructor(val api: AuthApi) : AuthRemot
         } catch (e: Exception) {
             throw RemoteDataException(R.string.internet_connection.toString())
 
+        }
+    }
+
+    override suspend fun logout(): Response<LogoutResponse> {
+        try {
+            return api.logOut()
+
+        } catch (e: Exception) {
+            throw RemoteDataException(R.string.internet_connection.toString())
         }
     }
 

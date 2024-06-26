@@ -24,7 +24,7 @@ fun ProfileItem(
     icon : Int = R.drawable.profile,
     leadingLabel : String = "",
     trailingLabel : String = "",
-    onClick : ()-> Unit = {}
+    onClick :  ()-> Unit = {}
 
 ) {
 

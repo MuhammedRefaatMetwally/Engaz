@@ -5,8 +5,10 @@ import com.example.engaz.core.util.Resource
 import com.example.engaz.features.auth.data.entities.check_code_sent.CheckCodeSentResponse
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
 import com.example.engaz.features.auth.data.entities.login.User
+import com.example.engaz.features.auth.data.entities.login.UserLogin
+import com.example.engaz.features.auth.data.entities.logout.LogoutResponse
 import com.example.engaz.features.auth.data.entities.register.RegisterResponse
-import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivitionCodeResponse
+import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivationCodeResponse
 import com.example.engaz.features.auth.data.entities.reset_password.ResetPasswordResponse
 import com.example.engaz.features.auth.data.entities.send_code_to_phone.SendCodeToPhoneResponse
 import com.example.engaz.features.auth.infrastructure.api.request.*
@@ -25,12 +27,12 @@ interface AuthRepo {
     suspend fun confirmCode(
         confirmCodeRequest: ConfirmCodeRequest,
         context: Context
-    ): Resource<LoginResponse>
+    ): Resource<RegisterResponse>
 
     suspend fun resendActivitionCode(
-        resendActivitionCodeRequest: ResendActivitionCodeRequest,
+        resendActivitionCodeRequest: ResendActivationCodeRequest,
         context: Context
-    ): Resource<ResendActivitionCodeResponse>
+    ): Resource<ResendActivationCodeResponse>
 
     suspend fun sendCodeToPhone(
         sendCodeToPhoneRequest: SendCodeToPhoneRequest,
@@ -47,21 +49,24 @@ interface AuthRepo {
         context: Context,
     ): Resource<ResetPasswordResponse>
 
+    suspend fun logout(context: Context): Resource<LogoutResponse>
+
     fun getUserInfo(
         context: Context,
         screenId: Int
 
-    ) : Resource<User>
+    ): Resource<UserLogin>
 
     fun saveUserInfo(
         context: Context,
-        user: User,
+        user: UserLogin,
         screenId: Int
-    ): Resource.FailureData<User>
+    ): Resource.FailureData<UserLogin>
 
     fun deleteUserInfo(
         context: Context,
         screenId: Int
-    ) : Resource.FailureData<User>?
+    ): Resource.FailureData<UserLogin>?
+
 
 }

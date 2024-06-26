@@ -25,15 +25,17 @@ class NotificationViewModel @Inject constructor(
     private var job : Job = Job()
 
     private fun onGetNotification(context: Context) {
-        job = viewModelScope.launch(Dispatchers.IO) {
+        /*job = viewModelScope.launch(Dispatchers.IO) {
             state = state.copy(notificationsError = null)
 
             state = state.copy(notificationsIsLoading = true)
 
-            val response = getAllNotificationsUseCase(
-                CoreViewModel.user!!.token,
-                context = context
-            )
+            val response = CoreViewModel.user!!.token?.let {
+                getAllNotificationsUseCase(
+                    it,
+                    context = context
+                )
+            }
 
             state = state.copy(notificationsIsLoading = false)
 
@@ -42,9 +44,7 @@ class NotificationViewModel @Inject constructor(
             }else {
                 state = state.copy(notifications = response.data!!.data.notifications)
             }
-
-
-        }
+        }*/
     }
     private fun onBackClick(navigator: DestinationsNavigator) {
         navigator.popBackStack()

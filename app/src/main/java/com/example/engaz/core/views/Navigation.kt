@@ -30,6 +30,8 @@ import com.example.engaz.core.views.screens.OnBoardingScreen
 import com.example.engaz.core.views.screens.SplashScreen
 import com.example.engaz.features.auth.view.screens.login.LoginScreen
 import com.example.engaz.features.auth.view.screens.login_with_fingerprint.LoginWithFingerPrintScreen
+import com.example.engaz.features.auth.view.screens.otp_screen.OTPScreen
+import com.example.engaz.features.auth.view.screens.otp_screen.SuccessScreen
 import com.example.engaz.features.auth.view.screens.register.ActivationPinScreen
 import com.example.engaz.features.auth.view.screens.register.RegisterScreen
 import com.example.engaz.features.auth.view.screens.reset_password.*
@@ -81,7 +83,6 @@ import com.example.engaz.features.transactions.view.viewmodel.select_location.Se
 import com.example.engaz.features.profile.view.screens.EditProfileScreen
 import com.example.engaz.features.profile.view.viewmodels.edit_profile.EditProfileEvent
 import com.example.engaz.features.profile.view.viewmodels.edit_profile.EditProfileViewModel
-import com.example.engaz.features.wallet.view.pages.ChargeBalanceScreen
 import com.example.engaz.features.wallet.view.pages.WalletPage
 import com.example.engaz.features.wallet.view.screens.WalletMessageScreen
 import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletEvent
@@ -106,6 +107,7 @@ import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestinat
 import io.github.raamcosta.compose_destinations.destinations.LoginWithFingerPrintScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.NotificationsPageDestination
+import io.github.raamcosta.compose_destinations.destinations.OTPScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.OnBoardingScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.OrderMessageScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.ProfilePageDestination
@@ -121,6 +123,7 @@ import io.github.raamcosta.compose_destinations.destinations.SelectLocationScree
 import io.github.raamcosta.compose_destinations.destinations.SendTransferingRequestDetailsScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.SendTransferingRequestScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.SplashScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SuccessScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.TransferCarOwnershipScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.WalletMessageScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.WalletPageDestination
@@ -171,7 +174,7 @@ fun Navigation(
                 LoginScreen(
                     navigator = destinationsNavigator,
                     state = loginViewModel.state,
-                    onChangeEmailOrPassCode = { loginViewModel.updateEmailOrPassCode(it) },
+                    onChangeEmailOrPassCode = { loginViewModel.updateEmail(it) },
                     onChangePhoneWithCountryCode = { loginViewModel.updatePhoneWithCountryCode(it) },
                     onChangePassword = { loginViewModel.updatePassword(it) },
                     onRememberMeClick = { loginViewModel.onEvent(LoginEvent.RememberMe) },
@@ -309,7 +312,7 @@ fun Navigation(
                         )
                     },
                     onChangePassCode = {
-                        registerViewModel.updatePassCOde(it)
+                        registerViewModel.updateEmail(it)
                     },
                     onChangePhoneWithCountryCode = { registerViewModel.updatePhoneWithCountryCode(it) },
                     onChangePassword = { registerViewModel.updatePassword(it) },
@@ -420,6 +423,15 @@ fun Navigation(
             composable(ProfilePageDestination) {
                 ProfilePage(navigator = destinationsNavigator, onBackArrowClick = {
                     editProfileViewModel.onEvent(EditProfileEvent.OnBackClick(it))
+                }, onLogOut = { destinationsNavigator, context ->
+                    {
+                        editProfileViewModel.onEvent(
+                            EditProfileEvent.OnLogOut(
+                                destinationsNavigator,
+                                context = context
+                            )
+                        )
+                    }
                 })
             }
 
@@ -452,7 +464,10 @@ fun Navigation(
             }
             composable(AcceptedRequestDetailsDestination) {
                 val paymentSheet = rememberPaymentSheet {
-                    onPaymentSheetAcceptedRequestResult(it, transferCarOwnerShipViewModel.showDialog)
+                    onPaymentSheetAcceptedRequestResult(
+                        it,
+                        transferCarOwnerShipViewModel.showDialog
+                    )
                 }
                 var customerConfig by remember {
                     mutableStateOf<PaymentSheet.CustomerConfiguration?>(
@@ -663,6 +678,43 @@ fun Navigation(
                     }
                 )
 
+            }
+
+            composable(OTPScreenDestination) {
+                OTPScreen(
+                    navigator = destinationsNavigator,
+                    state = registerViewModel.state,
+                    onBackArrowClick = {
+                        registerViewModel.onEvent(
+                            RegisterEvent.OnBackClick(
+                                it
+                            )
+                        )
+                    },
+                    onPinChangeClick = { registerViewModel.updatePin(it) },
+                    onValidateClick = { navaigator, context ->
+                        registerViewModel.onEvent(
+                            RegisterEvent.OnValidateClick(
+                                navaigator, context
+                            )
+                        )
+                    },
+                    onComplete = { navaigator, context ->
+                        registerViewModel.onEvent(
+                            RegisterEvent.OnValidateClick(
+                                navaigator, context
+                            )
+                        )
+                    },
+                    onResendClick = { navigator, context ->
+                        registerViewModel.onEvent(
+                            RegisterEvent.OnResendClick(navigator, context)
+                        )
+                    })
+            }
+
+            composable(SuccessScreenDestination) {
+                SuccessScreen()
             }
 
         }

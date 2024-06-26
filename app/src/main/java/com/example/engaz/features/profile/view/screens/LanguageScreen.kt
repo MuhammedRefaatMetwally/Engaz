@@ -1,5 +1,6 @@
 package com.example.engaz.features.profile.view.screens
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import com.example.engaz.features.profile.view.components.Header
 import com.example.engaz.features.profile.view.components.LanguageItem
 import com.ramcosta.composedestinations.annotation.Destination
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Destination
 @Composable
 fun LanguageScreen(
@@ -29,6 +31,7 @@ fun LanguageScreen(
     Scaffold(
         containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()

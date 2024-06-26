@@ -33,6 +33,17 @@ class ValidateUsernameLocalUseCase @Inject constructor()  {
             )
         }
 
+        if (username.length < 8) {
+            return Resource.FailureData(
+                Failure(
+                    message = context.getString(R.string.useranme_cant_be_less_than_8_ar),
+                    screenIdInt = 0,
+                    exceptionCode = 0,
+                    customCode = 0
+                )
+            )
+        }
+
         return Resource.SuccessData(
             true
         )

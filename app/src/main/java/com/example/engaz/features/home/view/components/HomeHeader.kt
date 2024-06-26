@@ -61,31 +61,6 @@ fun HomeHeader(
         Card(
             modifier = Modifier
                 .size(32.dp)
-                .clickable { navigator?.navigate(ProfilePageDestination) },
-            shape = CircleShape,
-            elevation = CardDefaults.elevatedCardElevation(8.dp),
-            border = BorderStroke(
-                1.dp,
-                Color.Gray
-            )
-        ) {
-            Icon(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 4.dp),
-                painter = painterResource(id = R.drawable.profile),
-                contentDescription = "profile"
-            )
-        }
-        Text(
-            text = stringResource(R.string.main_ar),
-            fontFamily = Cairo,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.W700
-        )
-        Card(
-            modifier = Modifier
-                .size(32.dp)
                 .clickable { navigator?.navigate(NotificationsPageDestination) },
             shape = CircleShape,
             elevation = CardDefaults.elevatedCardElevation(8.dp),
@@ -102,5 +77,33 @@ fun HomeHeader(
                 contentDescription = "notification"
             )
         }
+
+        Text(
+            text = stringResource(R.string.main_ar),
+            fontFamily = Cairo,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.W700
+        )
+
+        Card(
+            modifier = Modifier
+                .size(32.dp)
+                .clickable { navigator?.navigate(ProfilePageDestination) },
+            shape = CircleShape,
+            elevation = CardDefaults.elevatedCardElevation(8.dp),
+            border = BorderStroke(
+                1.dp,
+                Color.Gray
+            )
+        ) {
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(top = 4.dp),
+                painter = painterResource(id = R.drawable.profile),
+                contentDescription = "profile"
+            )
+        }
+
     }
 }

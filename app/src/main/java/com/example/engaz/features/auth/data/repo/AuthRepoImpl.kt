@@ -10,8 +10,10 @@ import com.example.engaz.features.auth.data.data_source.remote.AuthRemoteDataSou
 import com.example.engaz.features.auth.data.entities.check_code_sent.CheckCodeSentResponse
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
 import com.example.engaz.features.auth.data.entities.login.User
+import com.example.engaz.features.auth.data.entities.login.UserLogin
+import com.example.engaz.features.auth.data.entities.logout.LogoutResponse
 import com.example.engaz.features.auth.data.entities.register.RegisterResponse
-import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivitionCodeResponse
+import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivationCodeResponse
 import com.example.engaz.features.auth.data.entities.reset_password.ResetPasswordResponse
 import com.example.engaz.features.auth.data.entities.send_code_to_phone.SendCodeToPhoneResponse
 import com.example.engaz.features.auth.domain.repo.AuthRepo
@@ -140,8 +142,6 @@ class AuthRepoImpl @Inject constructor(
         context: Context
     ): Resource<RegisterResponse> {
         try {
-
-
             if (!networkService.isNetworkConnected(context)) {
                 return Resource.FailureData(
                     failure = ServiceFailure(
@@ -263,7 +263,7 @@ class AuthRepoImpl @Inject constructor(
     override suspend fun confirmCode(
         confirmCodeRequest: ConfirmCodeRequest,
         context: Context,
-    ): Resource<LoginResponse> {
+    ): Resource<RegisterResponse> {
         try {
 
 
@@ -368,9 +368,9 @@ class AuthRepoImpl @Inject constructor(
     }
 
     override suspend fun resendActivitionCode(
-        resendActivitionCodeRequest: ResendActivitionCodeRequest,
+        resendActivitionCodeRequest: ResendActivationCodeRequest,
         context: Context
-    ): Resource<ResendActivitionCodeResponse> {
+    ): Resource<ResendActivationCodeResponse> {
         try {
 
 
@@ -794,10 +794,130 @@ class AuthRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun logout(context: Context): Resource<LogoutResponse> {
+        try {
+
+
+            if (!networkService.isNetworkConnected(context)) {
+                return Resource.FailureData(
+                    failure = ServiceFailure(
+                        message = context.getString(R.string.internet_connection),
+                        screenId = 0,
+                        customCode = 0,
+                    )
+                )
+            }
+
+            val logoutResponse = remoteDataSource.logout()
+
+            Log.v("Register", "${logoutResponse.raw().request.url}")
+
+
+            when {
+
+                !logoutResponse.isSuccessful -> {
+
+
+                    val errorBody = logoutResponse.errorBody()
+                    var errorMessage = ""
+
+                    if (errorBody != null) {
+                        val errorJson = errorBody.string()
+
+
+                        val jsonObjectError = JSONObject(errorJson)
+
+                        if (jsonObjectError.has("errors")) {
+                            val errorObj = jsonObjectError.getJSONObject("errors")
+
+                            if (errorObj.has("fullname")) {
+                                errorMessage = errorObj.getJSONArray("fullname").join(" and ")
+
+
+                            } else if (errorObj.has("phone")) {
+                                errorMessage = errorObj.getJSONArray("phone").join(" and ")
+
+                            } else if (errorObj.has("password")) {
+                                errorMessage = errorObj.getJSONArray("password").join(" and ")
+
+                            } else if (errorObj.has("confirm_password")) {
+                                errorMessage =
+                                    errorObj.getJSONArray("confirm_password").join(" and ")
+
+
+                            } else if (errorObj.has("terms")) {
+                                errorMessage = errorObj.getJSONArray("terms").join(" and ")
+
+                            } else {
+                                errorMessage = context.getString(R.string.unknown_error)
+                            }
+
+                            return Resource.FailureData(
+                                failure = ServiceFailure(
+                                    message = errorMessage,
+                                    screenId = 0,
+                                    customCode = 0,
+                                )
+                            )
+                        }
+                    }
+                }
+
+                logoutResponse.body() == null -> {
+                    return Resource.FailureData(
+                        failure = RemoteDataFailure(
+                            message = context.getString(R.string.the_server_returned_null),
+                            screenId = 0,
+                            customCode = 1,
+                        )
+                    )
+                }
+
+            }
+
+
+            return Resource.SuccessData(
+                data = logoutResponse.body()!!,
+            )
+
+        } catch (e: Exception) {
+            val failure = when (e) {
+                is ServiceException -> ServiceFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is RemoteDataException -> RemoteDataFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is LocalDataException -> LocalDataFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                else -> InternalFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+            }
+
+            return Resource.FailureData(
+                failure = failure
+            )
+
+        }
+    }
+
     override fun getUserInfo(
         context: Context,
         screenId: Int
-    ): Resource<User> {
+    ): Resource<UserLogin> {
         try {
 
             val user = sharedPref.getUserInfo(context)
@@ -837,9 +957,9 @@ class AuthRepoImpl @Inject constructor(
 
     override fun saveUserInfo(
         context: Context,
-        user: User,
+        user: UserLogin,
         screenId: Int
-    ): Resource.FailureData<User> {
+    ): Resource.FailureData<UserLogin> {
         try {
 
             val userInfo = sharedPref.saveUserInfo(context, user)
@@ -873,7 +993,7 @@ class AuthRepoImpl @Inject constructor(
     override fun deleteUserInfo(
         context: Context,
         screenId: Int
-    ): Resource.FailureData<User> {
+    ): Resource.FailureData<UserLogin> {
         try {
 
             val userInfo = sharedPref.deleteUserInfo(context)

@@ -9,12 +9,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.engaz.core.viewmodel.CoreViewModel
+import com.example.engaz.features.auth.domain.usecases.LogoutUseCase
 import com.example.engaz.features.auth.domain.usecases.SaveUserInfoUseCase
+import com.example.engaz.features.auth.infrastructure.api.request.LoginRequest
 import com.example.engaz.features.profile.domain.usecase.UpdatePhoneNumberStep2Usecase
 import com.example.engaz.features.profile.domain.usecase.UpdatePhoneNumberUsecase
 import com.example.engaz.features.profile.domain.usecase.UpdateProfileNameAndImageUsecase
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -25,7 +29,7 @@ import javax.inject.Inject
 class EditProfileViewModel @Inject constructor(
     private val updatePhoneNumberUsecase: UpdatePhoneNumberUsecase,
     private val updatePhoneNumberStep2Usecase: UpdatePhoneNumberStep2Usecase,
-
+    private val logoutUseCase: LogoutUseCase,
     private val updateProfileNameAndImageUsecase: UpdateProfileNameAndImageUsecase,
     private val saveUserInfoUseCase: SaveUserInfoUseCase,
 
@@ -55,6 +59,28 @@ class EditProfileViewModel @Inject constructor(
 
     }
 
+    private fun onLogout(navigator: DestinationsNavigator, context: Context) {
+        job?.cancel()
+        job = viewModelScope.launch(Dispatchers.IO) {
+
+            val response = logoutUseCase(
+                context = context,
+            )
+
+
+            if (response.failure != null) {
+                CoreViewModel.showSnackbar(("Error:" + response.failure.message))
+            } else {
+                CoreViewModel.showSnackbar(("Success:" + response.data?.message))
+                viewModelScope.launch(Dispatchers.Main) {
+                    navigator.popBackStack()
+                    navigator.navigate(LoginScreenDestination())
+                }
+
+            }
+
+        }
+    }
 
     private fun onSave(navigator: DestinationsNavigator, context: Context) {
         if (job == null) {
@@ -67,24 +93,28 @@ class EditProfileViewModel @Inject constructor(
 
                 val response = if (state.usernameTextField.isBlank()) {
 
-                    updateProfileNameAndImageUsecase(
-                        CoreViewModel.user!!.token,
-                        CoreViewModel.user!!.fullname,
-                        state.pickedProfileImage,
-                        context
-                    )
+                    CoreViewModel.user!!.token?.let {
+                        updateProfileNameAndImageUsecase(
+                            it,
+                            CoreViewModel.user!!.username,
+                            state.pickedProfileImage,
+                            context
+                        )
+                    }
 
                 } else {
 
-                    updateProfileNameAndImageUsecase(
-                        CoreViewModel.user!!.token,
-                        state.usernameTextField,
-                        state.pickedProfileImage,
-                        context
-                    )
+                    CoreViewModel.user!!.token?.let {
+                        updateProfileNameAndImageUsecase(
+                            it,
+                            state.usernameTextField,
+                            state.pickedProfileImage,
+                            context
+                        )
+                    }
                 }
 
-                if (response.failure != null) {
+                if (response?.failure != null) {
                     state = state.copy(
                         profileError = response.failure.message
                     )
@@ -96,8 +126,8 @@ class EditProfileViewModel @Inject constructor(
 
                     saveUserInfoUseCase(
                         CoreViewModel.user!!.copy(
-                            image = response.data!!.data.user.image,
-                            fullname = response.data.data.user.fullname,
+                            imageUrl = response?.data!!.data.user.image,
+                            username = response.data.data.user.fullname,
 
                             ),
                         context,
@@ -105,8 +135,8 @@ class EditProfileViewModel @Inject constructor(
                     )
 
                     CoreViewModel.user = CoreViewModel.user!!.copy(
-                        image = response.data.data.user.image,
-                        fullname = response.data.data.user.fullname,
+                        imageUrl = response.data.data.user.image,
+                        username = response.data.data.user.fullname,
                     )
 
                     state = state.copy(
@@ -143,6 +173,7 @@ class EditProfileViewModel @Inject constructor(
             }
 
             is EditProfileEvent.OnBackClick -> onBackClick(navigator = event.navigator)
+            is EditProfileEvent.OnLogOut -> onLogout(navigator = event.navigator, event.context)
         }
     }
 

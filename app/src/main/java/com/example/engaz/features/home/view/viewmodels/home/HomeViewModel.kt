@@ -10,7 +10,6 @@ import com.example.engaz.core.viewmodel.CoreViewModel
 import io.github.raamcosta.compose_destinations.destinations.OrderScreenDestination
 import com.example.engaz.features.auth.domain.usecases.SaveUserInfoUseCase
 import com.example.engaz.features.home.domain.usecases.HomeUseCase
-import com.example.engaz.features.wallet.data.repo.PaymentRepository
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -36,35 +35,37 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun onHomePageInit(context: Context) {
-        if(job == null){
+        /*if(job == null){
             job = viewModelScope.launch(Dispatchers.IO) {
 
                 state = state.copy(
                     error = null,
                     isHomePageLoading = true
                 )
-                val response = homeUseCase(
-                    CoreViewModel.user!!.token,
-                    context
-                )
-                if (response.failure != null) {
+                val response = CoreViewModel.user!!.token?.let {
+                    homeUseCase(
+                        it,
+                        context
+                    )
+                }
+                if (response?.failure != null) {
                     state = state.copy(
                         error = response.failure.message
                     )
 
                 } else {
                     state = state.copy(
-                        profileImage = response.data!!.data.order.user_image,
-                        username = response.data.data.order.user_name,
-                        wallet = response.data.data.order.user_wallet_balance.toDouble(),
-                        assistantName = response.data.data.order.delivery_name,
-                        assistantImage = response.data.data.order.delivery_image
+                        profileImage = response?.data!!.data.order.user_image,
+                        username = response?.data.data.order.user_name,
+                        wallet = response?.data.data.order.user_wallet_balance.toDouble(),
+                        assistantName = response?.data.data.order.delivery_name,
+                        assistantImage = response?.data.data.order.delivery_image
                     )
 
                     saveUserInfoUseCase(
                         CoreViewModel.user!!.copy(
                             image = response.data.data.order.user_image,
-                            fullname = response.data.data.order.user_name,
+                            userName = response.data.data.order.user_name,
 
                             ),
                         context,
@@ -73,7 +74,7 @@ class HomeViewModel @Inject constructor(
 
                     CoreViewModel.user = CoreViewModel.user!!.copy(
                         image = response.data.data.order.user_image,
-                        fullname = response.data.data.order.user_name,
+                        userName = response.data.data.order.user_name,
                     )
                 }
 
@@ -83,7 +84,7 @@ class HomeViewModel @Inject constructor(
 
             }
             job = null
-        }
+        }*/
 
     }
 

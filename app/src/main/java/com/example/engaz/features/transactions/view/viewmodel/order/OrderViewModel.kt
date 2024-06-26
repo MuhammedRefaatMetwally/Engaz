@@ -74,7 +74,7 @@ class OrderViewModel @Inject constructor(
 
                     viewModelScope.launch(Dispatchers.Main) {
                         orderId = response.data!!.data.order.id
-                        navigator.navigate(SelectLocationScreenDestination)
+                       // navigator.navigate(SelectLocationScreenDestination)
                     }
                 }
 
@@ -93,17 +93,19 @@ class OrderViewModel @Inject constructor(
 
                 state = state.copy(isOrdersLoading = true)
 
-                val response = orderUseCase(
-                    CoreViewModel.user!!.token,
-                    context = context
-                )
+                val response = CoreViewModel.user!!.token?.let {
+                    orderUseCase(
+                        it,
+                        context = context
+                    )
+                }
 
                 state = state.copy(isOrdersLoading = false)
 
-                if(response.failure != null) {
+                if(response?.failure != null) {
                     state = state.copy(ordersError = response.failure.message)
                 }else {
-                    state = state.copy(orders = response.data!!.data.orders)
+                    state = state.copy(orders = response?.data!!.data.orders)
                 }
 
 

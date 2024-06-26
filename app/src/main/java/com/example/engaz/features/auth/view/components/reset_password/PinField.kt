@@ -117,7 +117,7 @@ fun PinField(
                 fontSize = 20.sp
             ),
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .alpha(0f)
         )
     }

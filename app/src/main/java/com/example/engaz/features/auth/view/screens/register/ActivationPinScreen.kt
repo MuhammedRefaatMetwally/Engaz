@@ -49,7 +49,7 @@ import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnrememberedMutableState")
-@Destination
+@Destination()
 @Composable
 fun ActivationPinScreen(
     navigator: DestinationsNavigator?,
@@ -135,7 +135,7 @@ fun ActivationPinScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 40.dp),
-                value = state.pinCode,
+                value = state.otpCode,
                 onValueChange = {
                     onPinChangeClick(it)
                 },
@@ -192,10 +192,7 @@ fun ActivationPinScreen(
             }
 
 
-
-
             Spacer(modifier = Modifier.height(400.dp))
-
 
 
             MainButton(

@@ -6,6 +6,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 sealed class EditProfileEvent {
     data class OnBackClick(val navigator: DestinationsNavigator) : EditProfileEvent()
+    data class OnLogOut(val navigator: DestinationsNavigator,val context: Context) : EditProfileEvent()
 
     class OnSave(val navigator: DestinationsNavigator,val context: Context) : EditProfileEvent()
 

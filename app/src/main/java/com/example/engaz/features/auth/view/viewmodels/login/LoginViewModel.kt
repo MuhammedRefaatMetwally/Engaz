@@ -1,5 +1,6 @@
 package com.example.engaz.features.auth.view.viewmodels.login
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import androidx.compose.runtime.getValue
@@ -7,8 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.engaz.core.util.usecase.ValidateEmailLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePasswordLocalUseCase
-import com.example.engaz.core.util.usecase.ValidatePhoneLocalUseCase
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.core.views.components.PhoneNumber
 import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
@@ -26,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val validatePhoneLocalUseCase: ValidatePhoneLocalUseCase,
+    private val validateEmailLocalUseCase: ValidateEmailLocalUseCase,
     private val validatePasswordLocalUseCase: ValidatePasswordLocalUseCase,
 
     ) : ViewModel() {
@@ -42,9 +43,9 @@ class LoginViewModel @Inject constructor(
         )
     }
 
-    fun updateEmailOrPassCode(emailOrPassCode: String) {
+    fun updateEmail(email: String) {
         state = state.copy(
-            phoneOrPassCode = emailOrPassCode
+            email = email
         )
     }
 
@@ -78,6 +79,7 @@ class LoginViewModel @Inject constructor(
         navigator.popBackStack()
     }
 
+    @SuppressLint("HardwareIds")
     fun getDeviceId(context: Context): String {
         val contentResolver = context.contentResolver
         return Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
@@ -90,11 +92,8 @@ class LoginViewModel @Inject constructor(
             state = state.copy(isLoginLoading = true)
             val response = loginUseCase(
                 LoginRequest(
-                    phone = state.phoneOrPassCode,
-                    countryCode = state.countryCode,
+                    email = state.email,
                     password = state.password,
-                    deviceToken = getDeviceId(context),
-                    deviceType = "android",
                 ),
                 context,
             )
@@ -105,6 +104,7 @@ class LoginViewModel @Inject constructor(
             } else {
                 CoreViewModel.showSnackbar(("Success:" + response.data?.message))
                 viewModelScope.launch(Dispatchers.Main) {
+                    navigator.popBackStack()
                     navigator.navigate(MainScreenDestination())
                 }
 
@@ -148,7 +148,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun validateForm(context: Context, callBackFunction: () -> Unit) {
-        val phoneResult = validatePhoneLocalUseCase(state.phoneOrPassCode, context)
+        val phoneResult = validateEmailLocalUseCase(state.email, context)
         val passwordResult = validatePasswordLocalUseCase(state.password, context)
 
         val hasError = listOf(
@@ -159,7 +159,7 @@ class LoginViewModel @Inject constructor(
         }
 
         state = state.copy(
-            phoneOrPassCodeError = phoneResult.failure?.message,
+            emailError = phoneResult.failure?.message,
             passwordError = passwordResult.failure?.message
         )
 

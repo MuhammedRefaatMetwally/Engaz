@@ -3,13 +3,14 @@ package com.example.engaz.features.auth.infrastructure.database.user_info_shared
 import android.content.Context
 import com.example.engaz.core.errors.LocalDataException
 import com.example.engaz.features.auth.data.entities.login.User
+import com.example.engaz.features.auth.data.entities.login.UserLogin
 import com.google.gson.Gson
 
 interface UserInfoSharedPref {
 
-    fun getUserInfo(context: Context) : User?
+    fun getUserInfo(context: Context) : UserLogin?
 
-    fun saveUserInfo(context: Context, user: User)
+    fun saveUserInfo(context: Context, user: UserLogin)
 
     fun deleteUserInfo(context: Context)
 
@@ -21,20 +22,20 @@ class UserInfoSharedPrefImpl : UserInfoSharedPref {
     private val USER_INFO_KEY = "user_info_key"
     private val USER_INFO_PREF_NAME = "user_info_pref_name"
 
-    private fun serializeObject(user: User): String {
+    private fun serializeObject(user: UserLogin): String {
         val gson = Gson()
         return gson.toJson(user)
     }
 
 
-    override fun getUserInfo(context: Context): User? {
+    override fun getUserInfo(context: Context): UserLogin?{
         try {
             val sharedPreferences = context.getSharedPreferences(USER_INFO_PREF_NAME, Context.MODE_PRIVATE)
             val serializedObject = sharedPreferences.getString(USER_INFO_KEY, null)
 
             if (serializedObject != null) {
                 val gson = Gson()
-                return gson.fromJson(serializedObject, User::class.java)
+                return gson.fromJson(serializedObject, UserLogin::class.java)
             }
 
             return null
@@ -43,7 +44,7 @@ class UserInfoSharedPrefImpl : UserInfoSharedPref {
         }
 
     }
-    override fun saveUserInfo(context: Context, user: User) {
+    override fun saveUserInfo(context: Context, user: UserLogin) {
         try {
             val sharedPreferences = context.getSharedPreferences(USER_INFO_PREF_NAME, Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()

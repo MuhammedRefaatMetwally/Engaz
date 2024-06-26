@@ -13,7 +13,7 @@ class ValidateNationalIDLocalUseCase @Inject constructor()  {
         if (passCode.isBlank()) {
             return Resource.FailureData(
                 Failure(
-                    message = "أدخل الرقم القومي",
+                    message = "أدخل البريد الالكتروني",
                     screenIdInt = 0,
                     exceptionCode = 0,
                     customCode = 0
@@ -21,17 +21,6 @@ class ValidateNationalIDLocalUseCase @Inject constructor()  {
             )
         }
 
-        val regex = Regex("[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>?/~]")
-        if (passCode.contains(regex)) {
-            return Resource.FailureData(
-                Failure(
-                    message = context.getString(R.string.username_contain_special_char),
-                    screenIdInt = 0,
-                    exceptionCode = 0,
-                    customCode = 0
-                )
-            )
-        }
 
         if (passCode.length > 14 || passCode.length < 14) {
             return Resource.FailureData(

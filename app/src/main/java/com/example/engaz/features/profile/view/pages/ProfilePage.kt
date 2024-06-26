@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -17,6 +18,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +44,7 @@ import io.github.raamcosta.compose_destinations.destinations.MainScreenDestinati
 import io.github.raamcosta.compose_destinations.destinations.NotificationSettingsScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.NotificationsPageDestination
 import com.example.engaz.features.profile.view.components.Header
+import com.example.engaz.features.profile.view.components.LogoutAlertDialog
 import com.example.engaz.features.profile.view.viewmodels.edit_profile.EditProfileState
 import com.ramcosta.composedestinations.annotation.Destination
 
@@ -48,10 +54,12 @@ import com.ramcosta.composedestinations.annotation.Destination
 fun ProfilePage(
     profileState: EditProfileState = EditProfileState(),
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
+    onLogOut :(DestinationsNavigator, Context) -> Unit= { _, _ -> },
     navigator: DestinationsNavigator?,
 ) {
     val context: Context = LocalContext.current
     val scroll = rememberScrollState()
+    var showDialog by remember { mutableStateOf(false)}
     Scaffold(
         containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100
     ) {
@@ -173,23 +181,19 @@ fun ProfilePage(
                 icon = R.drawable.ic_logout,
                 leadingLabel = stringResource(R.string.logout_ar2),
                 onClick = {
-                    navigator?.let {
-                        navigator.navigate(LanguageScreenDestination)
-                    }
+                    showDialog = true
                 },
             )
-            ProfileItem(
-                icon = R.drawable.ic_logout,
-                leadingLabel = stringResource(R.string.logout_ar2),
-                onClick = {
-                    navigator?.let {
-                        navigator.navigate(LanguageScreenDestination)
-                    }
-                },
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
 
+            Spacer(modifier = Modifier.height(8.dp))
+            if (showDialog) {
+                LogoutAlertDialog(onDismiss = { showDialog = false }, onConfirm = {
+                    showDialog = false
+                    if (navigator != null) {
+                            onLogOut(navigator,context)
+                    }
+                })
+            }
         }
     }
 
@@ -197,8 +201,3 @@ fun ProfilePage(
 }
 
 
-@Preview
-@Composable
-fun ProfilePagePreview() {
-    ProfilePage(navigator = null)
-}

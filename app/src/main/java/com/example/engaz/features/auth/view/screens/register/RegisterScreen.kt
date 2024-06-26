@@ -2,7 +2,6 @@ package com.example.engaz.features.auth.view.screens.register
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -10,8 +9,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material.TextFieldDefaults
@@ -29,7 +26,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,7 +39,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.togitech.ccp.component.TogiCountryCodePicker
 import com.togitech.ccp.data.CountryData
 import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
-import kotlinx.coroutines.launch
 
 @SuppressLint("ResourceType", "UnrememberedMutableState")
 @Destination
@@ -103,7 +98,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             CustomTextField(
-                value = state.fullName,
+                value = state.userName,
                 onValueChange = onChangeFullName,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,8 +110,8 @@ fun RegisterScreen(
                         contentDescription = ""
                     )
                 },
-                isError = state.fullNameError != null,
-                errorMessage = state.fullNameError ?: "",
+                isError = state.userNameError != null,
+                errorMessage = state.userNameError ?: "",
                 label = stringResource(R.string.user_name_ar)
             )
 
@@ -148,16 +143,15 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             CustomTextField(
-                value = state.passCode,
+                value = state.email,
                 onValueChange = onChangePassCode,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-                placeHolder = stringResource(R.string.pass_code),
-                isError = state.passCodeError != null,
-                isNumber = true,
-                errorMessage = state.passCodeError ?: "",
-                label = stringResource(R.string.passcode)
+                placeHolder = stringResource(R.string.email_ar),
+                isError = state.emailError != null,
+                errorMessage = state.emailError ?: "",
+                label = stringResource(R.string.email_ar)
             )
 
             Spacer(modifier = Modifier.height(5.dp))

@@ -42,6 +42,8 @@ import com.example.engaz.features.wallet.domain.usecase.GetBalanceUseCase
 import com.example.engaz.features.wallet.infrastructure.api.WalletApi
 import com.example.engaz.R
 import com.example.engaz.core.util.Consts.BASE_URL_STRIPE
+import com.example.engaz.core.viewmodel.CoreViewModel
+import com.example.engaz.features.auth.infrastructure.api.AuthInterceptor
 import com.example.engaz.features.notification.data.data_source.remote.NotificationRemoteDataSourceImpl
 import com.example.engaz.features.notification.data.repo.NotificationRepoImpl
 import com.example.engaz.features.notification.domain.usecase.GetAllNotificationsUseCase
@@ -56,6 +58,7 @@ import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.gson.GsonBuilder
 import com.google.maps.GeoApiContext
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -76,9 +79,17 @@ object AppModule {
     // Apis
     @Provides
     @Singleton
-    fun provideAuthApi() : AuthApi {
+    fun provideAuthApi(): AuthApi {
+        val token = CoreViewModel.user?.token
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(provideLoggingInterceptor())
+            .addInterceptor(
+                AuthInterceptor(
+                    token
+                        ?: "gg"
+                )
+            )
             .connectTimeout(60, TimeUnit.SECONDS)
             .build()
 
@@ -96,16 +107,17 @@ object AppModule {
 
 
     @Provides
-    fun provideLoggingInterceptor() : HttpLoggingInterceptor{
-        val loggingInterceptor = HttpLoggingInterceptor{
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        val loggingInterceptor = HttpLoggingInterceptor {
             Log.e("api", it)
         }
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        return  loggingInterceptor
+        return loggingInterceptor
     }
+
     @Provides
     @Singleton
-    fun provideStripeApi(loggingInterceptor: HttpLoggingInterceptor,) : StripeApiService {
+    fun provideStripeApi(loggingInterceptor: HttpLoggingInterceptor): StripeApiService {
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor)
@@ -126,7 +138,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePlacesClient(@ApplicationContext context: Context) : PlacesClient {
+    fun providePlacesClient(@ApplicationContext context: Context): PlacesClient {
         // Initialize the SDK
         Places.initialize(context, "AIzaSyBlRyjrVDFE3Ry_wivw70bqbH6VYccL9n0")
 
@@ -136,7 +148,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHomeApi() : HomeApi {
+    fun provideHomeApi(): HomeApi {
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -156,7 +168,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOrderApi() : OrderApi {
+    fun provideOrderApi(): OrderApi {
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -176,7 +188,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProfileApi() : ProfileApi {
+    fun provideProfileApi(): ProfileApi {
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -196,7 +208,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNotificationApi() : NotificationApi {
+    fun provideNotificationApi(): NotificationApi {
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -216,7 +228,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideWalletApi() : WalletApi {
+    fun provideWalletApi(): WalletApi {
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -238,17 +250,17 @@ object AppModule {
     // Services
     @Provides
     @Singleton
-    fun provideNetworkService() : NetworkServiceImpl{
+    fun provideNetworkService(): NetworkServiceImpl {
         return NetworkServiceImpl()
     }
 
     @Provides
     @Singleton
     fun providePlacesService(
-        client : PlacesClient,
-        directionsClient : GeoApiContext,
+        client: PlacesClient,
+        directionsClient: GeoApiContext,
         @ApplicationContext context: Context
-    ) : PlacesService{
+    ): PlacesService {
         return PlacesService(
             client,
             directionsClient,
@@ -258,13 +270,13 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDirectionsService() : GeoApiContext{
+    fun provideDirectionsService(): GeoApiContext {
         return GeoApiContext.Builder().apiKey("AIzaSyBlRyjrVDFE3Ry_wivw70bqbH6VYccL9n0").build()
     }
 
     @Singleton
     @Provides
-    fun provideSignWithGoogleService(@ApplicationContext context: Context) : GoogleSignInClient {
+    fun provideSignWithGoogleService(@ApplicationContext context: Context): GoogleSignInClient {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
             .requestIdToken(R.string.gcp_id.toString())
@@ -278,37 +290,36 @@ object AppModule {
     //  Remote Data Source
     @Provides
     @Singleton
-    fun provideAuthRemoteDataSource(api : AuthApi) : AuthRemoteDataSourceImpl {
+    fun provideAuthRemoteDataSource(api: AuthApi): AuthRemoteDataSourceImpl {
         return AuthRemoteDataSourceImpl(api)
     }
 
-    fun provideHomeRemoteDataSource(api : HomeApi) : HomeRemoteDataSourceImpl {
+    fun provideHomeRemoteDataSource(api: HomeApi): HomeRemoteDataSourceImpl {
         return HomeRemoteDataSourceImpl(api)
     }
 
-    fun provideOrderRemoteDataSource(api : OrderApi) : OrderRemoteDataSourceImpl {
+    fun provideOrderRemoteDataSource(api: OrderApi): OrderRemoteDataSourceImpl {
         return OrderRemoteDataSourceImpl(api)
     }
 
-    fun provideProfileRemoteDataSource(api : ProfileApi) : ProfileRemoteDataSourceImpl {
+    fun provideProfileRemoteDataSource(api: ProfileApi): ProfileRemoteDataSourceImpl {
         return ProfileRemoteDataSourceImpl(api)
     }
 
-    fun provideNotificationRemoteDataSource(api : NotificationApi) : NotificationRemoteDataSourceImpl {
+    fun provideNotificationRemoteDataSource(api: NotificationApi): NotificationRemoteDataSourceImpl {
         return NotificationRemoteDataSourceImpl(api)
     }
 
-    fun provideWalletRemoteDataSource(api : WalletApi) : WalletRemoteDataSourceImpl {
+    fun provideWalletRemoteDataSource(api: WalletApi): WalletRemoteDataSourceImpl {
         return WalletRemoteDataSourceImpl(api)
     }
-
 
 
     // Local Data Source
     @Provides
     @Singleton
-    fun provideUserInfoSharedPref (
-    ) : UserInfoSharedPrefImpl {
+    fun provideUserInfoSharedPref(
+    ): UserInfoSharedPrefImpl {
         return UserInfoSharedPrefImpl()
     }
 
@@ -317,10 +328,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAuthRepo(
-        networkService : NetworkServiceImpl,
+        networkService: NetworkServiceImpl,
         sharedPref: UserInfoSharedPrefImpl,
-        remoteDataSource : AuthRemoteDataSourceImpl
-    ) : AuthRepoImpl {
+        remoteDataSource: AuthRemoteDataSourceImpl
+    ): AuthRepoImpl {
         return AuthRepoImpl(
             networkService = networkService,
             sharedPref = sharedPref,
@@ -331,18 +342,19 @@ object AppModule {
     @Provides
     @Singleton
     fun provideOrderRepo(
-        networkService : NetworkServiceImpl,
-        remoteDataSource : OrderRemoteDataSourceImpl
-    ) : OrderRepoImpl {
+        networkService: NetworkServiceImpl,
+        remoteDataSource: OrderRemoteDataSourceImpl
+    ): OrderRepoImpl {
         return OrderRepoImpl(
             networkService = networkService,
             remoteDataSource = remoteDataSource
         )
     }
+
     fun provideHomeRepo(
-        networkService : NetworkServiceImpl,
-        remoteDataSource : HomeRemoteDataSourceImpl
-    ) : HomeRepoImpl {
+        networkService: NetworkServiceImpl,
+        remoteDataSource: HomeRemoteDataSourceImpl
+    ): HomeRepoImpl {
         return HomeRepoImpl(
             networkService = networkService,
             remoteDataSource = remoteDataSource
@@ -350,9 +362,9 @@ object AppModule {
     }
 
     fun provideProfileRepo(
-        networkService : NetworkServiceImpl,
-        remoteDataSource : ProfileRemoteDataSourceImpl
-    ) : ProfileRepoImpl {
+        networkService: NetworkServiceImpl,
+        remoteDataSource: ProfileRemoteDataSourceImpl
+    ): ProfileRepoImpl {
         return ProfileRepoImpl(
             networkService = networkService,
             remoteDataSource = remoteDataSource
@@ -360,9 +372,9 @@ object AppModule {
     }
 
     fun provideNotificationRepo(
-        networkService : NetworkServiceImpl,
-        remoteDataSource : NotificationRemoteDataSourceImpl
-    ) : NotificationRepoImpl {
+        networkService: NetworkServiceImpl,
+        remoteDataSource: NotificationRemoteDataSourceImpl
+    ): NotificationRepoImpl {
         return NotificationRepoImpl(
             networkService = networkService,
             remoteDataSource = remoteDataSource
@@ -370,9 +382,9 @@ object AppModule {
     }
 
     fun provideWalletRepo(
-        networkService : NetworkServiceImpl,
-        remoteDataSource : WalletRemoteDataSourceImpl
-    ) : WalletRepoImpl {
+        networkService: NetworkServiceImpl,
+        remoteDataSource: WalletRemoteDataSourceImpl
+    ): WalletRepoImpl {
         return WalletRepoImpl(
             networkService = networkService,
             remoteDataSource = remoteDataSource
@@ -383,207 +395,219 @@ object AppModule {
     // Use cases
     @Provides
     @Singleton
-    fun provideSaveUserInfoUseCase(repo : AuthRepoImpl,) : SaveUserInfoUseCase {
+    fun provideSaveUserInfoUseCase(repo: AuthRepoImpl): SaveUserInfoUseCase {
         return SaveUserInfoUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideGetUserInfoUseCase(repo : AuthRepoImpl) : GetUserInfoUseCase {
+    fun provideGetUserInfoUseCase(repo: AuthRepoImpl): GetUserInfoUseCase {
         return GetUserInfoUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideDeleteUserInfoUseCasee(repo : AuthRepoImpl) : DeleteUserInfoUseCase {
+    fun provideDeleteUserInfoUseCasee(repo: AuthRepoImpl): DeleteUserInfoUseCase {
         return DeleteUserInfoUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideLoginUseCase(repo : AuthRepoImpl,saveUserInfoUseCase: SaveUserInfoUseCase) : LoginUseCase {
-        return LoginUseCase(repo,saveUserInfoUseCase)
+    fun provideLoginUseCase(
+        repo: AuthRepoImpl,
+        saveUserInfoUseCase: SaveUserInfoUseCase
+    ): LoginUseCase {
+        return LoginUseCase(repo, saveUserInfoUseCase)
     }
 
     @Provides
     @Singleton
-    fun provideRegisterUseCase(repo : AuthRepoImpl) : RegisterUseCase {
+    fun provideRegisterUseCase(repo: AuthRepoImpl): RegisterUseCase {
         return RegisterUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideActivateAccountUseCase(repo : AuthRepoImpl,saveUserInfoUseCase: SaveUserInfoUseCase) : ConfirmCodeUseCase {
-        return ConfirmCodeUseCase(repo,saveUserInfoUseCase)
+    fun provideActivateAccountUseCase(
+        repo: AuthRepoImpl,
+        saveUserInfoUseCase: SaveUserInfoUseCase
+    ): ConfirmCodeUseCase {
+        return ConfirmCodeUseCase(repo, saveUserInfoUseCase)
     }
 
 
     @Provides
     @Singleton
-    fun provideResetPasswordUseCase(repo : AuthRepoImpl) : ResetPasswordUseCase {
+    fun provideResetPasswordUseCase(repo: AuthRepoImpl): ResetPasswordUseCase {
         return ResetPasswordUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideSendCodeToPhoneUseCase(repo : AuthRepoImpl) : SendCodeToPhoneUseCase {
+    fun provideSendCodeToPhoneUseCase(repo: AuthRepoImpl): SendCodeToPhoneUseCase {
         return SendCodeToPhoneUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideValidateSmsCodeUseCase(repo : AuthRepoImpl) : CheckCodeSentUseCase {
+    fun provideValidateSmsCodeUseCase(repo: AuthRepoImpl): CheckCodeSentUseCase {
         return CheckCodeSentUseCase(repo)
     }
 
 
     @Provides
     @Singleton
-    fun provideLocalValidateUsernameUseCase() : ValidateUsernameLocalUseCase {
+    fun provideLocalValidateUsernameUseCase(): ValidateUsernameLocalUseCase {
         return ValidateUsernameLocalUseCase()
     }
 
     @Provides
     @Singleton
-    fun provideLocalValidateEmailUseCase(validator: Validator) : ValidateEmailLocalUseCase {
+    fun provideLocalValidateEmailUseCase(validator: Validator): ValidateEmailLocalUseCase {
         return ValidateEmailLocalUseCase(validator)
     }
 
     @Provides
     @Singleton
-    fun provideLocalValidatePhoneUseCase(validator: Validator) : ValidatePhoneLocalUseCase {
+    fun provideLocalValidatePhoneUseCase(validator: Validator): ValidatePhoneLocalUseCase {
         return ValidatePhoneLocalUseCase(validator)
     }
 
     @Provides
     @Singleton
-    fun provideValidatePasswordUseCase() : ValidatePasswordLocalUseCase {
+    fun provideValidatePasswordUseCase(): ValidatePasswordLocalUseCase {
         return ValidatePasswordLocalUseCase()
     }
 
     @Provides
     @Singleton
-    fun provideValidatePasswordRepeatedUseCase() : ValidatePasswordRepeatedLocalUseCase {
+    fun provideValidatePasswordRepeatedUseCase(): ValidatePasswordRepeatedLocalUseCase {
         return ValidatePasswordRepeatedLocalUseCase()
     }
 
     @Provides
     @Singleton
-    fun provideHomeUseCase(repo: HomeRepoImpl) : HomeUseCase {
+    fun provideHomeUseCase(repo: HomeRepoImpl): HomeUseCase {
         return HomeUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideMakeOrderStep1UseCase(repo: OrderRepoImpl) : MakeOrderStep1UseCase {
+    fun provideMakeOrderStep1UseCase(repo: OrderRepoImpl): MakeOrderStep1UseCase {
         return MakeOrderStep1UseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideMakeOrderStep2UseCase(repo: OrderRepoImpl) : MakeOrderStep2UseCase {
+    fun provideMakeOrderStep2UseCase(repo: OrderRepoImpl): MakeOrderStep2UseCase {
         return MakeOrderStep2UseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideOrderDetailsUseCase(repo: OrderRepoImpl) : OrderDetailsUseCase {
+    fun provideOrderDetailsUseCase(repo: OrderRepoImpl): OrderDetailsUseCase {
         return OrderDetailsUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideOrderUseCase(repo: OrderRepoImpl) : OrderUseCase {
+    fun provideOrderUseCase(repo: OrderRepoImpl): OrderUseCase {
         return OrderUseCase(repo)
     }
+
     @Provides
     @Singleton
-    fun provideSearchPlacesUseCase(service: PlacesService) : SearchPlacesUseCase {
+    fun provideSearchPlacesUseCase(service: PlacesService): SearchPlacesUseCase {
         return SearchPlacesUseCase(service)
     }
+
     @Provides
     @Singleton
-    fun provideGetPlaceLatLongUseCase(service: PlacesService) : GetPlaceLatLongUseCase {
+    fun provideGetPlaceLatLongUseCase(service: PlacesService): GetPlaceLatLongUseCase {
         return GetPlaceLatLongUseCase(service)
     }
 
     @Provides
     @Singleton
-    fun provideGetDirectionsUseCase(service: PlacesService) : GetDirectionsUseCase {
+    fun provideGetDirectionsUseCase(service: PlacesService): GetDirectionsUseCase {
         return GetDirectionsUseCase(service)
     }
 
 
     @Provides
     @Singleton
-    fun provideCancelOrderUseCase(repo: OrderRepoImpl) : CancelOrderUseCase {
+    fun provideCancelOrderUseCase(repo: OrderRepoImpl): CancelOrderUseCase {
         return CancelOrderUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideUpdatePhoneNumberUseCase(repo: ProfileRepoImpl) : UpdatePhoneNumberUsecase {
+    fun provideUpdatePhoneNumberUseCase(repo: ProfileRepoImpl): UpdatePhoneNumberUsecase {
         return UpdatePhoneNumberUsecase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideUpdatePhoneNumberStep2UseCase(repo: ProfileRepoImpl) : UpdatePhoneNumberStep2Usecase {
+    fun provideUpdatePhoneNumberStep2UseCase(repo: ProfileRepoImpl): UpdatePhoneNumberStep2Usecase {
         return UpdatePhoneNumberStep2Usecase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideUpdateProfileNameAndImageUseCase(repo: ProfileRepoImpl) : UpdateProfileNameAndImageUsecase {
+    fun provideUpdateProfileNameAndImageUseCase(repo: ProfileRepoImpl): UpdateProfileNameAndImageUsecase {
         return UpdateProfileNameAndImageUsecase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideGetAllNotificationsUseCase(repo: NotificationRepoImpl) : GetAllNotificationsUseCase {
+    fun provideGetAllNotificationsUseCase(repo: NotificationRepoImpl): GetAllNotificationsUseCase {
         return GetAllNotificationsUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideGetNotificationUseCase(repo: NotificationRepoImpl) : GetNotificationUseCase {
+    fun provideGetNotificationUseCase(repo: NotificationRepoImpl): GetNotificationUseCase {
         return GetNotificationUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideGetNotificationCountUseCase(repo: NotificationRepoImpl) : GetNotificationsCountUseCase {
+    fun provideGetNotificationCountUseCase(repo: NotificationRepoImpl): GetNotificationsCountUseCase {
         return GetNotificationsCountUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideGetWalletUseCase(repo: WalletRepoImpl) : GetBalanceUseCase {
+    fun provideLogoutUseCase(repo: AuthRepoImpl): LogoutUseCase {
+        return LogoutUseCase(repo)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetWalletUseCase(repo: WalletRepoImpl): GetBalanceUseCase {
         return GetBalanceUseCase(repo)
     }
 
     @Provides
     @Singleton
-    fun provideChargeBalanceUseCase(repo: WalletRepoImpl) : ChargeBalanceUseCase {
+    fun provideChargeBalanceUseCase(repo: WalletRepoImpl): ChargeBalanceUseCase {
         return ChargeBalanceUseCase(repo)
     }
 
 
     @Provides
     @Singleton
-    fun providePaymentRepository(stripeApiService: StripeApiService) :PaymentRepository{
-        return  PaymentRepository(stripeApiService)
+    fun providePaymentRepository(stripeApiService: StripeApiService): PaymentRepository {
+        return PaymentRepository(stripeApiService)
     }
 
 
     // Utils
     @Provides
     @Singleton
-    fun provideValidator() : Validator {
+    fun provideValidator(): Validator {
         return Validator()
     }
-
-
 
 
 }

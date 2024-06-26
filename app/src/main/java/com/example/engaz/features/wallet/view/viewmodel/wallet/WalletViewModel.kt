@@ -21,8 +21,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WalletViewModel @Inject constructor(
-    private val chargeBalanceUseCase: ChargeBalanceUseCase,
-    private val getBalanceUseCase: GetBalanceUseCase,
     private val repository: PaymentRepository
 ) : ViewModel() {
 
@@ -67,68 +65,6 @@ class WalletViewModel @Inject constructor(
     }
 
 
-   /* fun updateImageState(image: Uri?) {
-        if(image != null){
-            state = state.copy(moneyTransferPhoto = image)
-        }
-    }
-
-    private fun onGetBalance(context: Context) {
-        if (job == null){
-            state = state.copy(balanceError = null)
-
-            job = viewModelScope.launch(Dispatchers.IO) {
-                state = state.copy(balanceIsLoading = true)
-                val response = getBalanceUseCase(
-                    (CoreViewModel.user?.token ?: ""),
-                    context,
-                )
-                state = state.copy(balanceIsLoading = false)
-
-                if(response.failure != null) {
-                    state = state.copy(balanceError = response.failure.message)
-
-                } else {
-                    state = state.copy(balance = response.data?.data?.wallet?.balance?.toDouble()?: 0.0)
-                }
-            }
-            job = null
-        }
-    }
-
-    private fun onBalanceRecharge(navigator: DestinationsNavigator, context: Context) {
-
-        if(state.moneyTransferPhoto == null) {
-            state = state.copy(chargeBalanceError = context.getString(R.string.select_image))
-            return
-        }
-
-        if (job == null){
-            state = state.copy(chargeBalanceError = null)
-
-            job = viewModelScope.launch(Dispatchers.IO) {
-                state = state.copy(chargeBalanceIsLoading = true)
-                val response = chargeBalanceUseCase(
-                    CoreViewModel.user!!.token,
-                    state.moneyTransferPhoto!!,
-                    context,
-                )
-                state = state.copy(chargeBalanceIsLoading = false)
-
-                if(response.failure != null) {
-                    CoreViewModel.showSnackbar(("Error:" + response.failure.message))
-
-                } else {
-                    viewModelScope.launch(Dispatchers.Main) {
-                        navigator.navigate(WalletMessageScreenDestination)
-                    }
-
-                }
-            }
-            job = null
-        }
-    }
-*/
 
 
 }

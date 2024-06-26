@@ -44,7 +44,7 @@ class LoginWithFignerPrintViewModel @Inject constructor(
 
     fun updatePhone(phone : String){
         state = state.copy(
-            emailOrPassCode = phone
+            email = phone
         )
     }
 
@@ -90,11 +90,8 @@ class LoginWithFignerPrintViewModel @Inject constructor(
             state = state.copy(isLoginLoading = true)
             val response = loginUseCase(
                 LoginRequest(
-                    phone = state.emailOrPassCode,
-                    countryCode = state.countryCode,
+                    email = state.email,
                     password = state.password,
-                    deviceToken = getDeviceId(context),
-                    deviceType = "android",
                 ),
                 context,
             )
@@ -146,7 +143,7 @@ class LoginWithFignerPrintViewModel @Inject constructor(
     }
 
     private fun validateForm(context: Context, callBackFunction : ()-> Unit){
-        val phoneResult = validatePhoneLocalUseCase(state.emailOrPassCode,context)
+        val phoneResult = validatePhoneLocalUseCase(state.email,context)
         val passwordResult = validatePasswordLocalUseCase(state.password,context)
 
         val hasError = listOf(
@@ -157,7 +154,7 @@ class LoginWithFignerPrintViewModel @Inject constructor(
         }
 
         state = state.copy(
-            emailOrPassCodeError = phoneResult.failure?.message,
+            emailError = phoneResult.failure?.message,
             passwordError = passwordResult.failure?.message
         )
 

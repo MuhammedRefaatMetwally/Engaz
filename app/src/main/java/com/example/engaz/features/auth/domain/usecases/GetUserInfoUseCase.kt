@@ -3,6 +3,7 @@ package com.example.engaz.features.auth.domain.usecases
 import android.content.Context
 import com.example.engaz.core.util.Resource
 import com.example.engaz.features.auth.data.entities.login.User
+import com.example.engaz.features.auth.data.entities.login.UserLogin
 import com.example.engaz.features.auth.data.repo.AuthRepoImpl
 import javax.inject.Inject
 
@@ -13,7 +14,7 @@ class GetUserInfoUseCase @Inject constructor(
     operator fun invoke(
         context: Context,
         screenId: Int
-    ): Resource<User> {
+    ): Resource<UserLogin> {
 
         return repo.getUserInfo(
             context,screenId

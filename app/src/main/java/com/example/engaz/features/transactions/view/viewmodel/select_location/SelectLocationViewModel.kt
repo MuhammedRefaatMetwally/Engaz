@@ -113,18 +113,20 @@ class SelectLocationViewModel @Inject constructor(
                     mapError = null
                 )
 
-                val response = makeOrderStep2UseCase(
-                    token = CoreViewModel.user!!.token,
-                    makeOrderStep2Request = MakeOrderStep2Request(
-                        state.fromPlaceInfo!!.latLng!!.latitude,
-                        state.fromPlaceInfo!!.latLng!!.longitude,
-                        state.toPlaceInfo!!.latLng!!.latitude,
-                        state.toPlaceInfo!!.latLng!!.longitude,
-                        OrderViewModel.orderId!!
-                    ),
-                    context = context
-                )
-                if (response.failure != null) {
+                val response = CoreViewModel.user!!.token?.let {
+                    makeOrderStep2UseCase(
+                        token = it,
+                        makeOrderStep2Request = MakeOrderStep2Request(
+                            state.fromPlaceInfo!!.latLng!!.latitude,
+                            state.fromPlaceInfo!!.latLng!!.longitude,
+                            state.toPlaceInfo!!.latLng!!.latitude,
+                            state.toPlaceInfo!!.latLng!!.longitude,
+                            OrderViewModel.orderId!!
+                        ),
+                        context = context
+                    )
+                }
+                if (response?.failure != null) {
                     CoreViewModel.showSnackbar(("Error:" + response.failure.message))
 
                 } else {

@@ -6,14 +6,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.engaz.core.util.usecase.ValidateNationalIDLocalUseCase
+import com.example.engaz.core.util.usecase.ValidateEmailLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePasswordLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePasswordRepeatedLocalUseCase
 import com.example.engaz.core.util.usecase.ValidatePhoneLocalUseCase
 import com.example.engaz.core.util.usecase.ValidateUsernameLocalUseCase
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.core.views.components.PhoneNumber
-import io.github.raamcosta.compose_destinations.destinations.ActivationPinScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 import com.example.engaz.features.auth.domain.usecases.ConfirmCodeUseCase
@@ -21,9 +20,10 @@ import com.example.engaz.features.auth.domain.usecases.RegisterUseCase
 import com.example.engaz.features.auth.domain.usecases.ResendActivitionCodeUseCase
 import com.example.engaz.features.auth.infrastructure.api.request.ConfirmCodeRequest
 import com.example.engaz.features.auth.infrastructure.api.request.RegisterRequest
-import com.example.engaz.features.auth.infrastructure.api.request.ResendActivitionCodeRequest
+import com.example.engaz.features.auth.infrastructure.api.request.ResendActivationCodeRequest
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.raamcosta.compose_destinations.destinations.OTPScreenDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -35,7 +35,7 @@ class RegisterViewModel @Inject constructor(
     private val resendActivitionCodeUseCase: ResendActivitionCodeUseCase,
     private val confirmCodeUseCase: ConfirmCodeUseCase,
     private val validateUsernameLocalUseCase: ValidateUsernameLocalUseCase,
-    private val validateNationalIDLocalUseCase : ValidateNationalIDLocalUseCase,
+    private val validateEmailLocalUseCase :  ValidateEmailLocalUseCase,
     private val validatePhoneLocalUseCase: ValidatePhoneLocalUseCase,
     private val validatePasswordLocalUseCase: ValidatePasswordLocalUseCase,
     private val validatePasswordRepeatedLocalUseCase: ValidatePasswordRepeatedLocalUseCase,
@@ -48,7 +48,7 @@ class RegisterViewModel @Inject constructor(
 
     fun updateFullName(fullName: String) {
         state = state.copy(
-            fullName = fullName
+            userName = fullName
         )
     }
 
@@ -70,9 +70,9 @@ class RegisterViewModel @Inject constructor(
             password = password
         )
     }
-    fun updatePassCOde(passCode:String){
+    fun updateEmail(email:String){
         state = state.copy(
-            passCode = passCode
+            email = email
         )
     }
 
@@ -100,9 +100,9 @@ class RegisterViewModel @Inject constructor(
         )
     }
 
-    fun updatePin(pinCode: String) {
+    fun updatePin(otpCode: String) {
         state = state.copy(
-            pinCode = pinCode
+            otpCode = otpCode
         )
     }
 
@@ -114,14 +114,9 @@ class RegisterViewModel @Inject constructor(
             state = state.copy(isRegisterLoading = true)
             val response = registerUseCase(
                 RegisterRequest(
-                    fullName = state.fullName,
-                    countryCode = state.countryCode,
-                    phone = state.phone,
+                    userName = state.userName,
+                    email = state.email,
                     password = state.password,
-                    confirmPassword = state.passwordRenter,
-                    provider = "",
-                    providerId = "",
-                    terms = if(state.terms) "1" else "0",
                 ),
                 context = context,
             )
@@ -132,7 +127,7 @@ class RegisterViewModel @Inject constructor(
             } else {
                 CoreViewModel.showSnackbar(("Success:" + (response.data?.message ?: "")))
                 viewModelScope.launch(Dispatchers.Main) {
-                    navigator.navigate(ActivationPinScreenDestination)
+                    navigator.navigate(OTPScreenDestination)
                 }
             }
 
@@ -152,7 +147,9 @@ class RegisterViewModel @Inject constructor(
 
         when (event) {
             is RegisterEvent.Register -> {
-                validateForm(event.context, callBackFunction = { register(event.navigator,event.context) })
+                validateForm(event.context, callBackFunction = {
+                    register(event.navigator,event.context)
+                })
             }
 
             is RegisterEvent.OnBackClick -> {
@@ -181,9 +178,8 @@ class RegisterViewModel @Inject constructor(
 
             state = state.copy(isResendingPinCode = true)
             val response = resendActivitionCodeUseCase(
-                ResendActivitionCodeRequest(
-                    phone = state.phone,
-                    countryCode = state.countryCode
+                ResendActivationCodeRequest(
+                   email = state.email
                 ),
                 context = context
             )
@@ -205,11 +201,8 @@ class RegisterViewModel @Inject constructor(
             state = state.copy(isValidatingPinCode = true)
             val response = confirmCodeUseCase(
                 ConfirmCodeRequest(
-                    phone = state.phone,
-                    countryCode = state.countryCode,
-                    otp = state.pinCode,
-                    type = "android",
-                    deviceToken = "ssssssssssss"
+                   email = state.email,
+                    otpCode = state.otpCode
                 ),
                 context = context
             )
@@ -220,6 +213,7 @@ class RegisterViewModel @Inject constructor(
             } else {
                 CoreViewModel.showSnackbar(("Success:" + (response.data?.message ?: "")))
                 viewModelScope.launch(Dispatchers.Main) {
+                    navigator.popBackStack()
                     navigator.navigate(MainScreenDestination)
                 }
             }
@@ -229,9 +223,9 @@ class RegisterViewModel @Inject constructor(
 
     private fun validateForm(context: Context, callBackFunction: () -> Unit) {
 
-        val fullNameResult = validateUsernameLocalUseCase(state.fullName, context)
+        val fullNameResult = validateUsernameLocalUseCase(state.userName, context)
         val phoneResult = validatePhoneLocalUseCase(state.countryCode + state.phone, context)
-        val passCode = validateNationalIDLocalUseCase(state.passCode,context)
+        val emailResult = validateEmailLocalUseCase(state.email,context)
         val passwordResult = validatePasswordLocalUseCase(state.password, context)
         val passwordRepeatedResult = validatePasswordRepeatedLocalUseCase(state.passwordRenter, state.password, context)
 
@@ -240,17 +234,17 @@ class RegisterViewModel @Inject constructor(
             fullNameResult,
             phoneResult,
             passwordResult,
-            passCode,
+            emailResult,
             passwordRepeatedResult
         ).any {
             it.failure != null
         }
 
         state = state.copy(
-            fullNameError = fullNameResult.failure?.message,
+            userNameError = fullNameResult.failure?.message,
             phoneError = phoneResult.failure?.message,
             passwordError = passwordResult.failure?.message,
-            passCodeError = passCode.failure?.message ?:"",
+            emailError = emailResult.failure?.message ?:"",
             passwordRenterError = passwordRepeatedResult.failure?.message
         )
 

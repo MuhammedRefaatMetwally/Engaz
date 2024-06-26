@@ -51,10 +51,8 @@ fun ResetPasswordNewPasswordScreen(
     navigator: DestinationsNavigator?,
     state: ResetPasswordState = ResetPasswordState(),
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
-
     onNewPasswordChange: (String) -> Unit = {},
     onNewPasswordRpeatedChange: (String) -> Unit = {},
-
     onDoneClick: (DestinationsNavigator, Context) -> Unit = { _, _ -> },
 
     ) {

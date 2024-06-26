@@ -151,12 +151,12 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             CustomTextField(
-                value = state.phoneOrPassCode,
+                value = state.email,
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = {
                     onChangeEmailOrPassCode(it)
                 },
-                placeHolder = stringResource(R.string.please_enter_username_passcode),
+                placeHolder = stringResource(R.string.email_ar),
                 leadingIcon = {
                     Image(
                         modifier = Modifier.padding(end = 0.dp),
@@ -164,9 +164,9 @@ fun LoginScreen(
                         contentDescription = ""
                     )
                 },
-                errorMessage = state.phoneOrPassCodeError ?:"",
-                isError =  state.phoneOrPassCodeError != null,
-                label = stringResource(R.string.account_label)
+                errorMessage = state.emailError ?:"",
+                isError =  state.emailError != null,
+                label = stringResource(R.string.email_ar)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
