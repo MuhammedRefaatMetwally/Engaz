@@ -62,7 +62,7 @@ class EditProfileViewModel @Inject constructor(
     private fun onLogout(navigator: DestinationsNavigator, context: Context) {
         job?.cancel()
         job = viewModelScope.launch(Dispatchers.IO) {
-
+            print("TOKEEEEEEEEEEEEEN"+CoreViewModel.user?.token)
             val response = logoutUseCase(
                 context = context,
             )

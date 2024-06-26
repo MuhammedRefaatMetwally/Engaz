@@ -34,7 +34,7 @@ data class UserLogin(
 	@field:SerializedName("isAdmin")
 	val isAdmin: String? = null,
 
-	@field:SerializedName("email")
+	@field:SerializedName("emailsvg.xml")
 	val email: String? = null,
 
 	@field:SerializedName("username")

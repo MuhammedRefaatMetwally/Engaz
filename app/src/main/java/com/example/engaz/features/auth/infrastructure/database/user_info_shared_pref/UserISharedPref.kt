@@ -68,5 +68,4 @@ class UserInfoSharedPrefImpl : UserInfoSharedPref {
         }
     }
 
-
 }

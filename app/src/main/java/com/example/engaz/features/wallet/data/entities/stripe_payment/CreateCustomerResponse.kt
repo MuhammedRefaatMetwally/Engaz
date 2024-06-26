@@ -67,7 +67,7 @@ data class CreateCustomerResponse(
 	@field:SerializedName("id")
 	val id: String? = null,
 
-	@field:SerializedName("email")
+	@field:SerializedName("emailsvg.xml")
 	val email: String? = null,
 
 	@field:SerializedName("object")

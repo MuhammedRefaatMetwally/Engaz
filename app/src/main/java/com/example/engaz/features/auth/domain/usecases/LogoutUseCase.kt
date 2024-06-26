@@ -10,11 +10,15 @@ import com.example.engaz.features.auth.infrastructure.api.request.LoginRequest
 import com.stripe.android.model.Token
 import javax.inject.Inject
 
-class LogoutUseCase @Inject constructor(val repo: AuthRepoImpl)  {
+class LogoutUseCase @Inject constructor(
+    val repo: AuthRepoImpl,
+    private val deleteUserInfoUseCase: DeleteUserInfoUseCase
+    )  {
 
     suspend operator fun invoke(
         context: Context
     ): Resource<LogoutResponse> {
+       //deleteUserInfoUseCase.repo.deleteUserInfo(context,-1)
         return   repo.logout(
             context = context,
         )

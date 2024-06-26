@@ -156,7 +156,7 @@ fun CustomTextField(
 fun DefaultPreview() {
     CustomTextField(
         label = "Email",
-        placeHolder = "Please enter your email",
+        placeHolder = "Please enter your emailsvg.xml",
         value = "rashadatef2@gmail.com",
         isError = true,
         errorMessage = "Invalid input",

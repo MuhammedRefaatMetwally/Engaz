@@ -423,15 +423,12 @@ fun Navigation(
             composable(ProfilePageDestination) {
                 ProfilePage(navigator = destinationsNavigator, onBackArrowClick = {
                     editProfileViewModel.onEvent(EditProfileEvent.OnBackClick(it))
-                }, onLogOut = { destinationsNavigator, context ->
-                    {
-                        editProfileViewModel.onEvent(
+                }, onLogOut = { destinationsNavigator, context -> editProfileViewModel.onEvent(
                             EditProfileEvent.OnLogOut(
                                 destinationsNavigator,
                                 context = context
                             )
                         )
-                    }
                 })
             }
 

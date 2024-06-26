@@ -244,7 +244,7 @@ class RegisterViewModel @Inject constructor(
             userNameError = fullNameResult.failure?.message,
             phoneError = phoneResult.failure?.message,
             passwordError = passwordResult.failure?.message,
-            emailError = emailResult.failure?.message ?:"",
+            emailError = emailResult.failure?.message,
             passwordRenterError = passwordRepeatedResult.failure?.message
         )
 

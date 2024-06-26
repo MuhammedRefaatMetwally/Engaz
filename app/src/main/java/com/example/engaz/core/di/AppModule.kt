@@ -42,7 +42,7 @@ import com.example.engaz.features.wallet.domain.usecase.GetBalanceUseCase
 import com.example.engaz.features.wallet.infrastructure.api.WalletApi
 import com.example.engaz.R
 import com.example.engaz.core.util.Consts.BASE_URL_STRIPE
-import com.example.engaz.core.viewmodel.CoreViewModel
+import com.example.engaz.features.auth.data.entities.login.UserLogin
 import com.example.engaz.features.auth.infrastructure.api.AuthInterceptor
 import com.example.engaz.features.notification.data.data_source.remote.NotificationRemoteDataSourceImpl
 import com.example.engaz.features.notification.data.repo.NotificationRepoImpl
@@ -56,9 +56,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.net.PlacesClient
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.maps.GeoApiContext
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -79,15 +79,21 @@ object AppModule {
     // Apis
     @Provides
     @Singleton
-    fun provideAuthApi(): AuthApi {
-        val token = CoreViewModel.user?.token
+    fun provideAuthApi(@ApplicationContext context: Context): AuthApi {
+        val sharedPreferences = context.getSharedPreferences("user_info_pref_name", Context.MODE_PRIVATE)
+        val serializedObject = sharedPreferences.getString("user_info_key", null)
+        var user : UserLogin?= null
+        if (serializedObject != null) {
+            val gson = Gson()
+            user = gson.fromJson(serializedObject, UserLogin::class.java)
+        }
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(provideLoggingInterceptor())
             .addInterceptor(
                 AuthInterceptor(
-                    token
-                        ?: "gg"
+                    user?.token
+                        ?: ""
                 )
             )
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -578,8 +584,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLogoutUseCase(repo: AuthRepoImpl): LogoutUseCase {
-        return LogoutUseCase(repo)
+    fun provideLogoutUseCase(repo: AuthRepoImpl,deleteUserInfoUseCase: DeleteUserInfoUseCase): LogoutUseCase {
+        return LogoutUseCase(repo,deleteUserInfoUseCase)
     }
 
     @Provides

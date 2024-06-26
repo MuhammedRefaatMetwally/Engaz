@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -118,8 +119,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             var phoneNumber: String by rememberSaveable { mutableStateOf("") }
-            var fullPhoneNumber: String by rememberSaveable { mutableStateOf("") }
-            var isNumberValid: Boolean by rememberSaveable { mutableStateOf(false) }
+
 
             TogiCountryCodePicker(
                 modifier = Modifier
@@ -127,7 +127,7 @@ fun RegisterScreen(
                     .padding(horizontal = 10.dp),
                 onValueChange = { (code, phone), isValid ->
                     phoneNumber = phone
-                     state.phone = code + phone
+                    state.phone = code + phone
                     state.isPhoneValid = isValid
                 },
                 fallbackCountry = CountryData.Egypt,
@@ -149,6 +149,14 @@ fun RegisterScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 placeHolder = stringResource(R.string.email_ar),
+                leadingIcon = {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(id = R.drawable.emailsvg),
+                        colorFilter = ColorFilter.tint(colorResource(id = R.color.primary_color)),
+                        contentDescription = ""
+                    )
+                },
                 isError = state.emailError != null,
                 errorMessage = state.emailError ?: "",
                 label = stringResource(R.string.email_ar)

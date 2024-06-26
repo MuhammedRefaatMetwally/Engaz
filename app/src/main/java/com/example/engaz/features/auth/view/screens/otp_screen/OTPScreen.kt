@@ -60,6 +60,9 @@ fun OTPScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 248.dp),
                 painter = painterResource(id = R.drawable.otp),
                 contentDescription = null
             )

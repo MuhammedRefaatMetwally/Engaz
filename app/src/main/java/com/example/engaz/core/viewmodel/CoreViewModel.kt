@@ -1,6 +1,7 @@
 package com.example.engaz.core.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.AndroidViewModel
@@ -57,7 +58,7 @@ class CoreViewModel @Inject constructor(
 
     }
 
-    fun getUserInfo(){
+     fun getUserInfo(){
         val result = getUserInfoUseCase(getApplication<Application>().applicationContext,splashScreenId)
         if(result.data != null){
             user = result.data
@@ -67,7 +68,7 @@ class CoreViewModel @Inject constructor(
     suspend fun onSplashScreenLaunch(navigator: DestinationsNavigator?) {
         initApp()
         delay(1000)
-
+        Log.d("USER TOKEN", "onSplashScreenLaunch: ${user?.token}")
         if(user != null) {
             navigator?.navigate(MainScreenDestination())
 

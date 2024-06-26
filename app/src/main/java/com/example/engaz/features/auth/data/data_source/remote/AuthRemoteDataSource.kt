@@ -157,6 +157,7 @@ class AuthRemoteDataSourceImpl @Inject constructor(val api: AuthApi) : AuthRemot
 
     override suspend fun logout(): Response<LogoutResponse> {
         try {
+
             return api.logOut()
 
         } catch (e: Exception) {

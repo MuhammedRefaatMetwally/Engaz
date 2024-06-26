@@ -30,14 +30,14 @@ class LoginUseCase @Inject constructor(
         if(result.failure == null) {
 
             val user = UserLogin(
-                result.data!!.data?.user?.phone,
-                result.data.data?.user?.isAdmin,
-                result.data.data?.user?.imageUrl,
-                result.data.data?.user?.otpCode,
-                result.data.data?.user?.id,
-                result.data.data?.user?.token,
-                result.data.data?.user?.email,
-                result.data.data?.user?.isVerified.toString()
+              phone =   result.data!!.data?.user?.phone,
+               isAdmin =  result.data.data?.user?.isAdmin,
+               imageUrl =  result.data.data?.user?.imageUrl,
+                otpCode = result.data.data?.user?.otpCode,
+                id = result.data.data?.user?.id,
+                token = result.data.data?.user?.token,
+                email = result.data.data?.user?.email,
+               isVerified =  result.data.data?.user?.isVerified.toString()
                 )
 
             val saveResult = saveUserInfoUseCase(user,context,0)
