@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "191206030118",
+    "project_id": "engaz-fda77",
+    "storage_bucket": "engaz-fda77.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:191206030118:android:b63cebe298b7002ada1fe7",
+        "android_client_info": {
+          "package_name": "com.example.engaz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJpODR3Krs06IK_wMez728TvAn5raFAc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

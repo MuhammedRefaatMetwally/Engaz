@@ -4,10 +4,11 @@ import android.content.Context
 import com.example.engaz.core.util.Resource
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
-import com.example.engaz.features.auth.data.entities.login.User
 import com.example.engaz.features.auth.data.entities.login.UserLogin
 import com.example.engaz.features.auth.data.repo.AuthRepoImpl
 import com.example.engaz.features.auth.infrastructure.api.request.LoginRequest
+import com.example.engaz.core.viewmodel.UserManager
+import com.example.engaz.core.viewmodel.UserPreferences
 import javax.inject.Inject
 
 
@@ -35,13 +36,14 @@ class LoginUseCase @Inject constructor(
                imageUrl =  result.data.data?.user?.imageUrl,
                 otpCode = result.data.data?.user?.otpCode,
                 id = result.data.data?.user?.id,
+                username = result.data.data?.user?.username,
                 token = result.data.data?.user?.token,
                 email = result.data.data?.user?.email,
                isVerified =  result.data.data?.user?.isVerified.toString()
                 )
-
+            UserPreferences.saveUser(context, user)
             val saveResult = saveUserInfoUseCase(user,context,0)
-
+            UserManager.user = user
             CoreViewModel.user = user
 
 

@@ -22,7 +22,6 @@ import com.example.engaz.features.home.infrastructure.api.HomeApi
 import com.example.engaz.features.notification.infrastructure.api.NotificationApi
 import com.example.engaz.features.transactions.data.data_source.remote.OrderRemoteDataSourceImpl
 import com.example.engaz.features.transactions.data.repo.OrderRepoImpl
-import com.example.engaz.features.transactions.domain.usecases.*
 import com.example.engaz.features.transactions.domain.usecases.order.*
 import com.example.engaz.features.transactions.domain.usecases.places.GetDirectionsUseCase
 import com.example.engaz.features.transactions.domain.usecases.places.GetPlaceLatLongUseCase
@@ -49,6 +48,7 @@ import com.example.engaz.features.notification.data.repo.NotificationRepoImpl
 import com.example.engaz.features.notification.domain.usecase.GetAllNotificationsUseCase
 import com.example.engaz.features.notification.domain.usecase.GetNotificationUseCase
 import com.example.engaz.features.notification.domain.usecase.GetNotificationsCountUseCase
+import com.example.engaz.core.viewmodel.UserManager
 import com.example.engaz.features.wallet.data.repo.PaymentRepository
 import com.example.engaz.features.wallet.infrastructure.StripeApiService
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -75,18 +75,26 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Provides
+    @Singleton
+    fun provideContext(@ApplicationContext context: Context): Context {
+        return context
+    }
+
 
     // Apis
     @Provides
     @Singleton
     fun provideAuthApi(@ApplicationContext context: Context): AuthApi {
-        val sharedPreferences = context.getSharedPreferences("user_info_pref_name", Context.MODE_PRIVATE)
+        val sharedPreferences =
+            context.getSharedPreferences("user_info_pref_name", Context.MODE_PRIVATE)
         val serializedObject = sharedPreferences.getString("user_info_key", null)
-        var user : UserLogin?= null
+        var user: UserLogin? = null
         if (serializedObject != null) {
             val gson = Gson()
             user = gson.fromJson(serializedObject, UserLogin::class.java)
         }
+        UserManager.user = user
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(provideLoggingInterceptor())
@@ -584,8 +592,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLogoutUseCase(repo: AuthRepoImpl,deleteUserInfoUseCase: DeleteUserInfoUseCase): LogoutUseCase {
-        return LogoutUseCase(repo,deleteUserInfoUseCase)
+    fun provideLogoutUseCase(
+        repo: AuthRepoImpl,
+        deleteUserInfoUseCase: DeleteUserInfoUseCase
+    ): LogoutUseCase {
+        return LogoutUseCase(repo, deleteUserInfoUseCase)
     }
 
     @Provides
@@ -615,5 +626,6 @@ object AppModule {
         return Validator()
     }
 
-
 }
+
+

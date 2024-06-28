@@ -1,22 +1,27 @@
 package com.example.engaz.features.profile.view.viewmodels.edit_profile
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.engaz.core.viewmodel.CoreViewModel
+import com.example.engaz.features.auth.data.entities.login.UserLogin
 import com.example.engaz.features.auth.domain.usecases.LogoutUseCase
 import com.example.engaz.features.auth.domain.usecases.SaveUserInfoUseCase
 import com.example.engaz.features.auth.infrastructure.api.request.LoginRequest
 import com.example.engaz.features.profile.domain.usecase.UpdatePhoneNumberStep2Usecase
 import com.example.engaz.features.profile.domain.usecase.UpdatePhoneNumberUsecase
 import com.example.engaz.features.profile.domain.usecase.UpdateProfileNameAndImageUsecase
+import com.google.gson.Gson
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 import kotlinx.coroutines.Dispatchers
@@ -32,8 +37,9 @@ class EditProfileViewModel @Inject constructor(
     private val logoutUseCase: LogoutUseCase,
     private val updateProfileNameAndImageUsecase: UpdateProfileNameAndImageUsecase,
     private val saveUserInfoUseCase: SaveUserInfoUseCase,
-
+    @ApplicationContext private  val context: Context
     ) : ViewModel() {
+
 
     var state: EditProfileState by mutableStateOf(EditProfileState())
     private var job: Job? = null
@@ -58,6 +64,7 @@ class EditProfileViewModel @Inject constructor(
 
 
     }
+
 
     private fun onLogout(navigator: DestinationsNavigator, context: Context) {
         job?.cancel()

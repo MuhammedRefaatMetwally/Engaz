@@ -5,7 +5,8 @@ import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.lifecycle.AndroidViewModel
-import com.example.engaz.features.auth.data.entities.login.User
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.engaz.features.auth.data.entities.login.UserLogin
 import com.example.engaz.features.auth.domain.usecases.GetUserInfoUseCase
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -13,7 +14,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.OnBoardingScreenDestination
-import io.github.raamcosta.compose_destinations.destinations.SelectLocationScreenDestination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -28,6 +28,28 @@ class CoreViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     var splashScreenId = 0
+    private val _user = MutableLiveData<UserLogin?>()
+    val user2: LiveData<UserLogin?> get() = _user
+    init {
+
+        loadUserData()
+    }
+
+    private fun loadUserData() {
+        _user.value = UserPreferences.getUser(getApplication<Application>().applicationContext)
+        UserManager.user = UserPreferences.getUser(getApplication<Application>().applicationContext)
+        Log.d("WORKED", "WORKEDDDD:${UserManager.user?:"no"} ")
+    }
+
+    fun updateUser(user: UserLogin?) {
+        _user.value = user
+        user?.let {
+            UserPreferences.saveUser(getApplication<Application>().applicationContext, it)
+        } ?: run {
+            UserPreferences.clearUser(getApplication<Application>().applicationContext)
+        }
+    }
+
 
     companion object {
         private var job: Job? = null
@@ -58,10 +80,11 @@ class CoreViewModel @Inject constructor(
 
     }
 
-     fun getUserInfo(){
+     private fun getUserInfo(){
         val result = getUserInfoUseCase(getApplication<Application>().applicationContext,splashScreenId)
         if(result.data != null){
             user = result.data
+            UserManager.user =result.data
         }
     }
 
