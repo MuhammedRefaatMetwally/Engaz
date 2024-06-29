@@ -1,12 +1,15 @@
 package com.example.engaz.core.viewmodel
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.engaz.core.util.biometericAuth.BiometricPromptManager
 import com.example.engaz.features.auth.data.entities.login.UserLogin
 import com.example.engaz.features.auth.domain.usecases.GetUserInfoUseCase
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -27,18 +30,18 @@ class CoreViewModel @Inject constructor(
     application: Application,
 ) : AndroidViewModel(application) {
 
+
+
     var splashScreenId = 0
     private val _user = MutableLiveData<UserLogin?>()
     val user2: LiveData<UserLogin?> get() = _user
-    init {
 
-        loadUserData()
-    }
+    init { loadUserData() }
 
     private fun loadUserData() {
         _user.value = UserPreferences.getUser(getApplication<Application>().applicationContext)
         UserManager.user = UserPreferences.getUser(getApplication<Application>().applicationContext)
-        Log.d("WORKED", "WORKEDDDD:${UserManager.user?:"no"} ")
+
     }
 
     fun updateUser(user: UserLogin?) {
@@ -93,9 +96,12 @@ class CoreViewModel @Inject constructor(
         delay(1000)
         Log.d("USER TOKEN", "onSplashScreenLaunch: ${user?.token}")
         if(user != null) {
-            navigator?.navigate(MainScreenDestination())
+            navigator?.popBackStack()
+            navigator?.navigate(LoginScreenDestination())
+
 
         } else {
+            navigator?.popBackStack()
            navigator?.navigate(OnBoardingScreenDestination())
 
         }

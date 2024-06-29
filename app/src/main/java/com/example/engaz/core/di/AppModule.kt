@@ -95,6 +95,7 @@ object AppModule {
             user = gson.fromJson(serializedObject, UserLogin::class.java)
         }
         UserManager.user = user
+
         val okHttpClient: OkHttpClient = OkHttpClient.Builder()
             .readTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(provideLoggingInterceptor())

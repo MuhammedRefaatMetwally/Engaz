@@ -49,6 +49,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import android.provider.Settings
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.fragment.app.FragmentActivity
 import com.example.engaz.core.ui.theme.*
 import com.example.engaz.core.views.components.*
@@ -56,6 +57,7 @@ import com.example.engaz.features.auth.view.viewmodels.login.LoginState
 import com.example.engaz.R
 import com.example.engaz.core.util.biometericAuth.BiometricPromptManager
 import com.example.engaz.core.util.biometericAuth.BiometricPromptManager.*
+import com.example.engaz.core.viewmodel.CoreViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
@@ -102,6 +104,15 @@ fun LoginScreen(
                 }
                 enrollLauncher.launch(enrollIntent)
             }
+        }
+    }
+
+    if(CoreViewModel.user != null){
+        LaunchedEffect(key1 = Unit) {
+            promptManager.showBiometricPrompt(
+                title = "تسجيل الدخول",
+                description = "استخدم البصمة لتسجيل الدخول"
+            )
         }
     }
 
@@ -187,15 +198,28 @@ fun LoginScreen(
                     )
                 },
                 trailingIcon = {
-                    Image(
-                        modifier = Modifier
-                            .padding(end = 0.dp)
-                            .clickable {
-                                onSecurePasswordClick()
-                            },
-                        painter = painterResource(id = R.drawable.ic_password),
-                        contentDescription = ""
-                    )
+                  if(state.isPasswordSecure){
+                      Image(
+                          modifier = Modifier
+                              .padding(end = 0.dp)
+                              .clickable {
+                                  onSecurePasswordClick()
+                              },
+                          painter = painterResource(id = R.drawable.ic_password),
+                          contentDescription = ""
+                      )
+                  }else{
+                      Image(
+                          modifier = Modifier.size(24.dp)
+                              .padding(end = 0.dp)
+                              .clickable {
+                                  onSecurePasswordClick()
+                              },
+                          painter = painterResource(id = R.drawable.eyeopen),
+                          contentDescription = "",
+                          colorFilter = ColorFilter.tint(Primary)
+                      )
+                  }
                 },
                 isError = state.passwordError != null,
                 errorMessage = state.passwordError ?: "",
@@ -266,7 +290,7 @@ fun LoginScreen(
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
                         navigator?.let {
-                            onLoginClick(navigator,context)
+                            onLoginClick(navigator, context)
                             //navigator.navigate(MainScreenDestination)
                         }
                     },
@@ -293,84 +317,87 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                HorizontalDivider(
-                    modifier = Modifier
-                        .padding(start = 16.dp)
-                        .fillMaxWidth()
-                        .weight(.4f)
-                        .height(1.7.dp),
-                    color = Neutral300
-                )
-
-                Text(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .padding(horizontal = 10.dp),
-                    text = " أو ",
-                    style = TextStyle(
-                        fontFamily = Cairo,
-                        color = Color.Black,
-                        fontSize = 18.sp,
-                    ),
-                    textAlign = TextAlign.End
-                )
-
-                HorizontalDivider(
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                        .fillMaxWidth()
-                        .weight(.4f)
-                        .height(1.7.dp),
-                    color = Neutral300
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            MainButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(64.dp)
-                    .clip(RoundedCornerShape(100.dp))
-                    .clickable {
-                        promptManager.showBiometricPrompt(
-                            title = "تسجيل الدخول",
-                            description = "استخدم البصمة لتسجيل الدخول"
-                        )
-                    },
-                cardColor = Color.White,
-                borderColor = Neutral300
-            ) {
-                if (state.isLoginLoading) {
-                    CustomProgressIndicator(
-                        modifier = Modifier.size(20.dp)
+            if(CoreViewModel.user != null){
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .padding(start = 16.dp)
+                            .fillMaxWidth()
+                            .weight(.4f)
+                            .height(1.7.dp),
+                        color = Neutral300
                     )
-                } else {
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                        Image(
-                            modifier = Modifier.size(48.dp),
-                            painter = painterResource(id = R.drawable.ic_finger),
-                            contentDescription = "finger_print",
-                        )
-                        Text(
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                            text = stringResource(R.string.login_with_fingeprint),
-                            style = TextStyle(
-                                fontFamily = Cairo,
-                                fontWeight = FontWeight.W700,
-                                color = Color.Black,
-                                fontSize = 15.sp,
+
+                    Text(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(horizontal = 10.dp),
+                        text = " أو ",
+                        style = TextStyle(
+                            fontFamily = Cairo,
+                            color = Color.Black,
+                            fontSize = 18.sp,
+                        ),
+                        textAlign = TextAlign.End
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .padding(end = 16.dp)
+                            .fillMaxWidth()
+                            .weight(.4f)
+                            .height(1.7.dp),
+                        color = Neutral300
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                MainButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(64.dp)
+                        .clip(RoundedCornerShape(100.dp))
+                        .clickable {
+                            promptManager.showBiometricPrompt(
+                                title = "تسجيل الدخول",
+                                description = "استخدم البصمة لتسجيل الدخول"
                             )
+                        },
+                    cardColor = Color.White,
+                    borderColor = Neutral300
+                ) {
+                    if (state.isLoginLoading) {
+                        CustomProgressIndicator(
+                            modifier = Modifier.size(20.dp)
                         )
+                    } else {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                            Image(
+                                modifier = Modifier.size(48.dp),
+                                painter = painterResource(id = R.drawable.ic_finger),
+                                contentDescription = "finger_print",
+                            )
+                            Text(
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                                text = stringResource(R.string.login_with_fingeprint),
+                                style = TextStyle(
+                                    fontFamily = Cairo,
+                                    fontWeight = FontWeight.W700,
+                                    color = Color.Black,
+                                    fontSize = 15.sp,
+                                )
+                            )
+                        }
                     }
                 }
             }
+
 
             biometricResult?.let { result ->
                   when(result) {
@@ -384,6 +411,7 @@ fun LoginScreen(
                         "Authentication not set"
                     }
                     BiometricResult.AuthenticationSuccess -> {
+                        navigator?.popBackStack()
                         navigator?.navigate(MainScreenDestination)
                     }
                     BiometricResult.FeatureUnavailable -> {

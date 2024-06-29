@@ -16,5 +16,6 @@ data class EditProfileState(
     var phoneTextField : String = (CoreViewModel.user?.phone?: "").toString(),
 
     var profileIsLoading : Boolean = false,
+    var isLoginOut : Boolean = false,
     var profileError : String? = null,
 )

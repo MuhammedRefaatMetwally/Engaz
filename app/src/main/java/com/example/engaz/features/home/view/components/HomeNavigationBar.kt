@@ -2,6 +2,7 @@ package com.example.engaz.features.home.view.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +15,8 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.engaz.R
@@ -47,25 +51,36 @@ fun HomeNavigationBar(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically) {
                 pages.forEachIndexed { thisIndex, item ->
-                    val iconSize = calculateIconSize(screenWidth) // Implement logic to calculate icon size
-                    Icon(
+                    val iconSize = calculateIconSize(screenWidth)
+                    val spacing = calculateSpacing(screenWidth)
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
                         modifier = Modifier
-                            .size(iconSize)
-                            .clickable {
-                                onChange(thisIndex)
-                            },
-                        painter = painterResource(id = item.icon),
-                        contentDescription = null,
-                        tint = if (thisIndex == index) Primary else Neutral500
-                    )
-                    Spacer(modifier = Modifier.width(24.dp))
+                            .clickable { onChange(thisIndex) }
+                            .weight(1f)  // Ensures even distribution of icons
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(iconSize),
+                            painter = painterResource(id = item.icon),
+                            contentDescription = null,
+                            tint = if (thisIndex == index) Primary else Neutral500
+                        )
+                        Text(
+                            text = stringResource(id = item.label),
+                            color = if (thisIndex == index) Primary else Neutral500,
+                        )
+                    }
+                    if (thisIndex < pages.size - 1) {
+                        Spacer(modifier = Modifier.width(spacing))
+                    }
 
                 }
             }
 
         },
 
-        floatingActionButton = {
+        /*floatingActionButton = {
             val fabSize = calculateFabSize(screenWidth) // Implement logic to calculate FAB size
 
             FloatingActionButton(
@@ -83,7 +98,7 @@ fun HomeNavigationBar(
                     tint = Color.White
                 )
             }
-        },
+        },*/
     )
 }
 
@@ -92,12 +107,10 @@ private fun calculateIconSize(screenWidth: Dp): Dp {
     return screenWidth * 0.1f
 }
 
-
 private fun calculateSpacing(screenWidth: Dp): Dp {
-    // Example: Set spacing to 16dp
-    return 32.dp
+    // Example: Set spacing to 8% of the screen width
+    return screenWidth * 0.08f
 }
-
 
 private fun calculateFabSize(screenWidth: Dp): Dp {
     // Example: Set FAB size to 15% of the screen width

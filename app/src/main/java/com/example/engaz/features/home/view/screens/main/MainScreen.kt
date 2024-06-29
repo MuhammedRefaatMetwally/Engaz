@@ -41,7 +41,6 @@ fun MainScreen(
             HomeNavigationBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
                     .background(if (isSystemInDarkTheme()) Neutral900 else Neutral100)
                     .padding(vertical = 10.dp),
                 index = state.index,

@@ -3,6 +3,7 @@ package com.example.engaz.features.auth.domain.usecases
 import android.content.Context
 import com.example.engaz.core.util.Resource
 import com.example.engaz.core.viewmodel.CoreViewModel
+import com.example.engaz.core.viewmodel.UserPreferences
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
 import com.example.engaz.features.auth.data.entities.logout.LogoutResponse
 import com.example.engaz.features.auth.data.repo.AuthRepoImpl
@@ -18,9 +19,10 @@ class LogoutUseCase @Inject constructor(
     suspend operator fun invoke(
         context: Context
     ): Resource<LogoutResponse> {
-       //deleteUserInfoUseCase.repo.deleteUserInfo(context,-1)
+
         return   repo.logout(
             context = context,
         )
+
     }
 }

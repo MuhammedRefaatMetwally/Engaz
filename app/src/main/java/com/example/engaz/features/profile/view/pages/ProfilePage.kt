@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Colors
 import androidx.compose.material.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -39,6 +40,7 @@ import io.github.raamcosta.compose_destinations.destinations.LanguageScreenDesti
 import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.NotificationsPageDestination
 import com.example.engaz.features.profile.view.components.Header
+import com.example.engaz.features.profile.view.components.LoadingDialog
 import com.example.engaz.features.profile.view.components.LogoutAlertDialog
 import com.example.engaz.features.profile.view.viewmodels.edit_profile.EditProfileState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -56,10 +58,15 @@ fun ProfilePage(
     val context: Context = LocalContext.current
     val scroll = rememberScrollState()
     var showDialog by remember { mutableStateOf(false)}
-    val user by coreViewModel.user2.observeAsState()
+
+
+
     Scaffold(
         containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100
     ) {
+        LoadingDialog(showDialog = profileState.isLoginOut, message = "Logging out") {
+
+        }
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -121,35 +128,8 @@ fun ProfilePage(
                 },
             )
             ProfileItem(
-                icon = R.drawable.ic_payment,
-                leadingLabel = stringResource(R.string.payment_ar),
-                onClick = {
-                    navigator?.let {
-                        navigator.navigate(LanguageScreenDestination)
-                    }
-                },
-            )
-            ProfileItem(
                 icon = R.drawable.ic_dark_mode,
                 leadingLabel = stringResource(R.string.dark_mode_ar),
-                onClick = {
-                    navigator?.let {
-                        navigator.navigate(LanguageScreenDestination)
-                    }
-                },
-            )
-            ProfileItem(
-                icon = R.drawable.lock_inactive,
-                leadingLabel = stringResource(R.string.privacy_ar),
-                onClick = {
-                    navigator?.let {
-                        navigator.navigate(LanguageScreenDestination)
-                    }
-                },
-            )
-            ProfileItem(
-                icon = R.drawable.ic_help,
-                leadingLabel = stringResource(R.string.help_ar),
                 onClick = {
                     navigator?.let {
                         navigator.navigate(LanguageScreenDestination)
@@ -180,6 +160,7 @@ fun ProfilePage(
                 onClick = {
                     showDialog = true
                 },
+                tint = Color.Red
             )
 
             Spacer(modifier = Modifier.height(8.dp))

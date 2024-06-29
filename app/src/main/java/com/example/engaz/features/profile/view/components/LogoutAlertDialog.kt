@@ -11,16 +11,16 @@ import androidx.compose.ui.window.DialogProperties
 fun LogoutAlertDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
-        title = { Text(text = "Logout", fontSize = 20.sp) },
-        text = { Text(text = "Are you sure you want to logout?") },
+        title = { Text(text = "تسجيل الخروج", fontSize = 20.sp) },
+        text = { Text(text = "هل انت متأكد من تسجيل الخروج ؟") },
         confirmButton = {
             TextButton(onClick = { onConfirm() }) {
-                Text("Yes")
+                Text("خروج")
             }
         },
         dismissButton = {
             TextButton(onClick = { onDismiss() }) {
-                Text("No")
+                Text("الغاء")
             }
         },
         properties = DialogProperties(dismissOnClickOutside = false)

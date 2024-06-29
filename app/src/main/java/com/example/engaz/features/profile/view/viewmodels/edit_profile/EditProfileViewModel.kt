@@ -11,7 +11,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.engaz.core.viewmodel.CoreViewModel
+import com.example.engaz.core.viewmodel.UserManager
+import com.example.engaz.core.viewmodel.UserPreferences
 import com.example.engaz.features.auth.data.entities.login.UserLogin
+import com.example.engaz.features.auth.domain.usecases.DeleteUserInfoUseCase
 import com.example.engaz.features.auth.domain.usecases.LogoutUseCase
 import com.example.engaz.features.auth.domain.usecases.SaveUserInfoUseCase
 import com.example.engaz.features.auth.infrastructure.api.request.LoginRequest
@@ -24,6 +27,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.SplashScreenDestination
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -32,11 +36,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditProfileViewModel @Inject constructor(
-    private val updatePhoneNumberUsecase: UpdatePhoneNumberUsecase,
-    private val updatePhoneNumberStep2Usecase: UpdatePhoneNumberStep2Usecase,
     private val logoutUseCase: LogoutUseCase,
     private val updateProfileNameAndImageUsecase: UpdateProfileNameAndImageUsecase,
     private val saveUserInfoUseCase: SaveUserInfoUseCase,
+    private val deleteUserInfoUseCase: DeleteUserInfoUseCase,
     @ApplicationContext private  val context: Context
     ) : ViewModel() {
 
@@ -69,11 +72,14 @@ class EditProfileViewModel @Inject constructor(
     private fun onLogout(navigator: DestinationsNavigator, context: Context) {
         job?.cancel()
         job = viewModelScope.launch(Dispatchers.IO) {
-            print("TOKEEEEEEEEEEEEEN"+CoreViewModel.user?.token)
+            Log.d("T1", "onLogout: ${UserManager.user?.token}")
+            Log.d("T2", "onLogout: ${CoreViewModel.user?.token}")
+
+            state = state.copy(isLoginOut = true)
             val response = logoutUseCase(
                 context = context,
             )
-
+            state = state.copy(isLoginOut = false)
 
             if (response.failure != null) {
                 CoreViewModel.showSnackbar(("Error:" + response.failure.message))
@@ -81,8 +87,11 @@ class EditProfileViewModel @Inject constructor(
                 CoreViewModel.showSnackbar(("Success:" + response.data?.message))
                 viewModelScope.launch(Dispatchers.Main) {
                     navigator.popBackStack()
-                    navigator.navigate(LoginScreenDestination())
+                    navigator.popBackStack()
+                    navigator.navigate(SplashScreenDestination)
                 }
+                deleteUserInfoUseCase.repo.deleteUserInfo(context,-1)
+                UserPreferences.clearUser(context)
 
             }
 

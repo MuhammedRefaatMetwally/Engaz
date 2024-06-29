@@ -1,6 +1,7 @@
 package com.example.engaz.features.auth.domain.usecases
 
 import android.content.Context
+import android.util.Log
 import com.example.engaz.core.util.Resource
 import com.example.engaz.core.viewmodel.CoreViewModel
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
@@ -45,7 +46,8 @@ class LoginUseCase @Inject constructor(
             val saveResult = saveUserInfoUseCase(user,context,0)
             UserManager.user = user
             CoreViewModel.user = user
-
+            Log.d("token3", "invoke: ${ UserManager.user?.token}")
+            Log.d("token4", "invoke: ${ CoreViewModel.user?.token}")
 
             return if(saveResult.failure == null) {
                 result
