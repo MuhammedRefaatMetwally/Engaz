@@ -46,7 +46,7 @@ sealed class BottomNavPage(
     data object InfoAboutCarScreen : BottomNavPage(
         page = {navigator , context ->
             InfoAboutCarScreen(
-                navigator = navigator,
+                navigator = null,
             )
         },
         icon = R.drawable.questionnaire,

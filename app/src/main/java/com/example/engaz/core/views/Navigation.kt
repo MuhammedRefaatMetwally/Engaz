@@ -474,7 +474,7 @@ fun Navigation(
                 var paymentIntentClientSecret by remember { mutableStateOf<String?>(null) }
                 AcceptedRequestDetails(navigator = destinationsNavigator, onBackArrowClick = {
                     transferCarOwnerShipViewModel.onEvent(TransferCarOwnerShipEvent.OnBackClick(it))
-                }, onAcceptRequest = {
+                }, showDialog = transferCarOwnerShipViewModel.showDialog, onAcceptRequest = {
                     transferCarOwnerShipViewModel.onEvent(
                         TransferCarOwnerShipEvent.OnAcceptRequest(
                             destinationsNavigator

@@ -41,21 +41,22 @@ fun InfoAboutCarScreen(
     Column {
         Spacer(modifier = Modifier.height(20.dp))
 
-        Row(Modifier.fillMaxWidth()) {
-            Icon(
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .clickable {
-                        navigator?.let {
+        if(navigator != null){
+            Row(Modifier.fillMaxWidth()) {
+                Icon(
+                    modifier = Modifier
+                        .padding(start = 20.dp)
+                        .clickable {
                             onBackArrowClick(navigator)
-                        }
-                    },
-                painter = painterResource(
-                    id = R.drawable.arrow_left
-                ),
-                contentDescription = null,
-                tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
-            )
+                        },
+                    painter = painterResource(
+                        id = R.drawable.arrow_left
+                    ),
+                    contentDescription = null,
+                    tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
+                )
+        }
+
 
             Text(
                 modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),

@@ -55,16 +55,17 @@ fun AcceptedRequestDetails(
     navigator: DestinationsNavigator?,
     transferCarOwnerShipViewModel: TransferCarOwnerShipViewModel= hiltViewModel(),
     onAcceptRequest :() -> Unit,
+    showDialog: MutableState<Boolean>,
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
 ) {
 
-    if (transferCarOwnerShipViewModel.showDialog.value)
+    if (showDialog.value)
         CustomDialog(
             processText = "تمت عملية الدفع",
             buttonText = "إرسال إيصال",
             navigator = navigator,
             setShowDialog = {
-                transferCarOwnerShipViewModel.showDialog.value = it
+                showDialog.value = it
             })
 
     Column {

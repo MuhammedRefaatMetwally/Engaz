@@ -1,5 +1,6 @@
 package com.example.engaz.features.wallet.view.pages
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -34,6 +35,7 @@ import com.example.engaz.features.wallet.view.components.ChargeBalanceItem
 import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletState
 import com.ramcosta.composedestinations.annotation.Destination
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Destination
 @Composable
 fun ChargeBalanceScreen(
