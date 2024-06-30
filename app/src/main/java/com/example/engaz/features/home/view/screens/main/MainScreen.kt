@@ -31,9 +31,7 @@ fun MainScreen(
     state: MainState = MainState(),
     onIndexChange: (Int) -> Unit = {}
 ) {
-
     val context: Context = LocalContext.current
-
 
     Scaffold(
         containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100,
@@ -50,11 +48,7 @@ fun MainScreen(
                 },
                 onChange = { onIndexChange(it) }
             )
-
-        },
-
-        ) {
-
+        },) {
         AnimatedContent(
             modifier = Modifier.fillMaxSize(),
             targetState = state.index,
@@ -64,10 +58,7 @@ fun MainScreen(
                 state.pages[it].page(navigator, context)
             }
         }
-
-
     }
-
 }
 
 @Preview

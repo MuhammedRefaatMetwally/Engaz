@@ -152,7 +152,8 @@ fun RenewLicenseScreen(
             isError = state.expiryDateError != null,
             onValueChange = {
                 onChangeExpiryDate(it)
-            }
+            },
+            isNumber = true
         )
         CustomTextField(
             Modifier
@@ -200,7 +201,8 @@ fun RenewLicenseScreen(
             isError = state.phoneError != null,
             onValueChange = {
                 onChangePhoneNumber(it)
-            }
+            },
+            isNumber = true
         )
         CustomTextField(
             Modifier

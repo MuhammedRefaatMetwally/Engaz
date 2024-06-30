@@ -61,7 +61,8 @@ fun HomeHeader(
         Card(
             modifier = Modifier
                 .size(32.dp)
-                .clickable { navigator?.navigate(NotificationsPageDestination) },
+                .clickable {
+                    navigator?.navigate(NotificationsPageDestination) },
             shape = CircleShape,
             elevation = CardDefaults.elevatedCardElevation(8.dp),
             border = BorderStroke(
@@ -88,7 +89,9 @@ fun HomeHeader(
         Card(
             modifier = Modifier
                 .size(32.dp)
-                .clickable { navigator?.navigate(ProfilePageDestination) },
+                .clickable {
+
+                    navigator?.navigate(ProfilePageDestination) },
             shape = CircleShape,
             elevation = CardDefaults.elevatedCardElevation(8.dp),
             border = BorderStroke(

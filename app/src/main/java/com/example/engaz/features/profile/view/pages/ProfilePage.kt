@@ -79,6 +79,7 @@ fun ProfilePage(
                     label = "",
                     onClick = {
                         navigator?.let {
+                            navigator.popBackStack()
                             navigator.navigate(MainScreenDestination)
                         }
                     }
@@ -114,7 +115,7 @@ fun ProfilePage(
                 leadingLabel = stringResource(R.string.edit_profile_ar),
                 onClick = {
                     navigator?.let {
-                        navigator.navigate(EditProfileScreenDestination)
+                        //navigator.navigate(EditProfileScreenDestination)
                     }
                 },
             )
@@ -132,7 +133,7 @@ fun ProfilePage(
                 leadingLabel = stringResource(R.string.dark_mode_ar),
                 onClick = {
                     navigator?.let {
-                        navigator.navigate(LanguageScreenDestination)
+                       // navigator.navigate(LanguageScreenDestination)
                     }
                 },
             )
@@ -141,7 +142,7 @@ fun ProfilePage(
                 leadingLabel = stringResource(R.string.settings),
                 onClick = {
                     navigator?.let {
-                        navigator.navigate(LanguageScreenDestination)
+                      //  navigator.navigate(LanguageScreenDestination)
                     }
                 },
             )
@@ -150,7 +151,7 @@ fun ProfilePage(
                 leadingLabel = stringResource(R.string.language_ar),
                 onClick = {
                     navigator?.let {
-                        navigator.navigate(LanguageScreenDestination)
+                      //  navigator.navigate(LanguageScreenDestination)
                     }
                 },
             )

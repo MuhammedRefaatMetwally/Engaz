@@ -6,6 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.engaz.R
 import com.example.engaz.features.home.view.pages.home.HomePage
 import com.example.engaz.features.home.view.screens.main_info_screens.InfoAboutCarScreen
+import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.RequestsScreen
 import com.example.engaz.features.home.view.screens.main_info_screens.transfer_ownership.TransferCarOwnershipScreen
 import com.example.engaz.features.home.view.viewmodels.home.HomeEvent
 import com.example.engaz.features.home.view.viewmodels.home.HomeViewModel
@@ -45,12 +46,12 @@ sealed class BottomNavPage(
 
     data object InfoAboutCarScreen : BottomNavPage(
         page = {navigator , context ->
-            InfoAboutCarScreen(
-                navigator = null,
+            RequestsScreen(
+                navigator = navigator,
             )
         },
         icon = R.drawable.questionnaire,
-        label = R.string.questionnair
+        label = R.string.requests
     )
 
     data object ProfileNavPage : BottomNavPage(

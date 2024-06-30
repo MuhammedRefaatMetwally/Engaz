@@ -243,5 +243,6 @@
     <string name="transfering_ownership_ar">التحويل</string>
     <string name="questionnair">الاستعلام</string>
     <string name="profile_ar">الشخصية</string>
+    <string name="requests">الطلبات</string>
 
 </resources>
