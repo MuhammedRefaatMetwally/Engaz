@@ -115,7 +115,7 @@ fun ProfilePage(
                 leadingLabel = stringResource(R.string.edit_profile_ar),
                 onClick = {
                     navigator?.let {
-                        //navigator.navigate(EditProfileScreenDestination)
+                        navigator.navigate(EditProfileScreenDestination)
                     }
                 },
             )

@@ -70,7 +70,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-
+import io.metamask.androidsdk.*
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -81,6 +81,26 @@ object AppModule {
         return context
     }
 
+
+/*    @Provides
+    fun provideDappMetadata(@ApplicationContext context: Context): DappMetadata {
+        return DappMetadata(
+            name = context.applicationInfo.name,
+            url = "https://${context.applicationInfo.name}.com",
+            iconUrl = "https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png"
+        )
+    }
+
+    @Provides
+    fun provideEthereumFlow(@ApplicationContext context: Context, dappMetadata: DappMetadata): EthereumFlow {
+        return EthereumFlow(
+            Ethereum(
+                context,
+                dappMetadata,
+                SDKOptions(infuraAPIKey = BuildConfig.MY_INFURA_KEY)
+            )
+        )
+    }*/
 
     // Apis
     @Provides

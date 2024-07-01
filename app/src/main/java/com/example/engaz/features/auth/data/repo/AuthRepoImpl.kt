@@ -7,6 +7,7 @@ import com.example.engaz.core.errors.*
 import com.example.engaz.core.infrastructure.services.NetworkServiceImpl
 import com.example.engaz.core.util.Resource
 import com.example.engaz.features.auth.data.data_source.remote.AuthRemoteDataSourceImpl
+import com.example.engaz.features.auth.data.entities.cars.CarsResponse
 import com.example.engaz.features.auth.data.entities.check_code_sent.CheckCodeSentResponse
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
 import com.example.engaz.features.auth.data.entities.login.User
@@ -15,7 +16,9 @@ import com.example.engaz.features.auth.data.entities.logout.LogoutResponse
 import com.example.engaz.features.auth.data.entities.register.RegisterResponse
 import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivationCodeResponse
 import com.example.engaz.features.auth.data.entities.reset_password.ResetPasswordResponse
+import com.example.engaz.features.auth.data.entities.sendTransaction.SendTransactionRequest
 import com.example.engaz.features.auth.data.entities.send_code_to_phone.SendCodeToPhoneResponse
+import com.example.engaz.features.auth.data.entities.transferOwnerShip.TransferOwnerShipRequest
 import com.example.engaz.features.auth.domain.repo.AuthRepo
 import com.example.engaz.features.auth.infrastructure.api.request.*
 import com.example.engaz.features.auth.infrastructure.database.user_info_shared_pref.UserInfoSharedPrefImpl
@@ -1014,6 +1017,476 @@ class AuthRepoImpl @Inject constructor(
                 else -> InternalFailure(
                     e.message.toString(),
                     screenId, customCode = 0
+                )
+            }
+
+            return Resource.FailureData(
+                failure = failure
+            )
+
+        }
+    }
+
+    override suspend fun transferOwnerShip(transferOwnerShipRequest: TransferOwnerShipRequest,context: Context): Resource<CarsResponse> {
+        try {
+
+            if (!networkService.isNetworkConnected(context)) {
+                return Resource.FailureData(
+                    failure = ServiceFailure(
+                        message = context.getString(R.string.internet_connection),
+                        screenId = 0,
+                        customCode = 0,
+                    )
+                )
+            }
+
+            val transferOwnerShipResponse = remoteDataSource.transferOwnerShip(transferOwnerShipRequest)
+
+
+            when {
+
+                !transferOwnerShipResponse.isSuccessful -> {
+                    val errorBody = transferOwnerShipResponse.errorBody()
+                    var errorMessage = ""
+
+                    if (errorBody != null) {
+
+                        val errorJson = errorBody.string()
+                        val jsonObjectError = JSONObject(errorJson)
+
+                        if (jsonObjectError.has("message")) {
+                            errorMessage = jsonObjectError.getString("message")
+                        } else {
+                            errorMessage = context.getString(R.string.unknown_error)
+                        }
+
+                        return Resource.FailureData(
+                            failure = ServiceFailure(
+                                message = errorMessage,
+                                screenId = 0,
+                                customCode = 0,
+                            )
+                        )
+                    }
+                }
+
+                transferOwnerShipResponse.body() == null -> {
+                    return Resource.FailureData(
+                        failure = RemoteDataFailure(
+                            message = context.getString(R.string.the_server_returned_null),
+                            screenId = 0,
+                            customCode = 0,
+                        )
+                    )
+                }
+
+            }
+
+
+            return Resource.SuccessData(
+                data = transferOwnerShipResponse.body()!!,
+            )
+
+        } catch (e: Exception) {
+            val failure = when (e) {
+                is ServiceException -> ServiceFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is RemoteDataException -> RemoteDataFailure(
+                    context.getString(R.string.internet_connection),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is LocalDataException -> LocalDataFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                else -> InternalFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+            }
+
+            return Resource.FailureData(
+                failure = failure
+            )
+
+        }
+    }
+
+    override suspend fun sendTransaction(sendTransactionRequest: SendTransactionRequest,context: Context): Resource<CarsResponse> {
+        try {
+
+            if (!networkService.isNetworkConnected(context)) {
+                return Resource.FailureData(
+                    failure = ServiceFailure(
+                        message = context.getString(R.string.internet_connection),
+                        screenId = 0,
+                        customCode = 0,
+                    )
+                )
+            }
+
+            val sendTransactionResponse = remoteDataSource.sendTransaction(sendTransactionRequest)
+
+
+            when {
+
+                !sendTransactionResponse.isSuccessful -> {
+                    val errorBody = sendTransactionResponse.errorBody()
+                    var errorMessage = ""
+
+                    if (errorBody != null) {
+
+                        val errorJson = errorBody.string()
+                        val jsonObjectError = JSONObject(errorJson)
+
+                        errorMessage = if (jsonObjectError.has("message")) {
+                            jsonObjectError.getString("message")
+                        } else {
+                            context.getString(R.string.unknown_error)
+                        }
+
+                        return Resource.FailureData(
+                            failure = ServiceFailure(
+                                message = errorMessage,
+                                screenId = 0,
+                                customCode = 0,
+                            )
+                        )
+                    }
+                }
+
+                sendTransactionResponse.body() == null -> {
+                    return Resource.FailureData(
+                        failure = RemoteDataFailure(
+                            message = context.getString(R.string.the_server_returned_null),
+                            screenId = 0,
+                            customCode = 0,
+                        )
+                    )
+                }
+
+            }
+
+
+            return Resource.SuccessData(
+                data = sendTransactionResponse.body()!!,
+            )
+
+        } catch (e: Exception) {
+            val failure = when (e) {
+                is ServiceException -> ServiceFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is RemoteDataException -> RemoteDataFailure(
+                    context.getString(R.string.internet_connection),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is LocalDataException -> LocalDataFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                else -> InternalFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+            }
+
+            return Resource.FailureData(
+                failure = failure
+            )
+
+        }
+    }
+
+    override suspend fun getTransaction(address: String,context: Context): Resource<CarsResponse> {
+        try {
+
+            if (!networkService.isNetworkConnected(context)) {
+                return Resource.FailureData(
+                    failure = ServiceFailure(
+                        message = context.getString(R.string.internet_connection),
+                        screenId = 0,
+                        customCode = 0,
+                    )
+                )
+            }
+
+            val getTransactionResponse = remoteDataSource.getTransaction(address)
+
+
+            when {
+
+                !getTransactionResponse.isSuccessful -> {
+                    val errorBody = getTransactionResponse.errorBody()
+                    var errorMessage = ""
+
+                    if (errorBody != null) {
+
+                        val errorJson = errorBody.string()
+                        val jsonObjectError = JSONObject(errorJson)
+
+                        if (jsonObjectError.has("message")) {
+                            errorMessage = jsonObjectError.getString("message")
+                        } else {
+                            errorMessage = context.getString(R.string.unknown_error)
+                        }
+
+                        return Resource.FailureData(
+                            failure = ServiceFailure(
+                                message = errorMessage,
+                                screenId = 0,
+                                customCode = 0,
+                            )
+                        )
+                    }
+                }
+
+                getTransactionResponse.body() == null -> {
+                    return Resource.FailureData(
+                        failure = RemoteDataFailure(
+                            message = context.getString(R.string.the_server_returned_null),
+                            screenId = 0,
+                            customCode = 0,
+                        )
+                    )
+                }
+
+            }
+
+
+            return Resource.SuccessData(
+                data = getTransactionResponse.body()!!,
+            )
+
+        } catch (e: Exception) {
+            val failure = when (e) {
+                is ServiceException -> ServiceFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is RemoteDataException -> RemoteDataFailure(
+                    context.getString(R.string.internet_connection),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is LocalDataException -> LocalDataFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                else -> InternalFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+            }
+
+            return Resource.FailureData(
+                failure = failure
+            )
+
+        }
+    }
+
+    override suspend fun confirmTransaction(address: String,context: Context): Resource<CarsResponse> {
+        try {
+
+            if (!networkService.isNetworkConnected(context)) {
+                return Resource.FailureData(
+                    failure = ServiceFailure(
+                        message = context.getString(R.string.internet_connection),
+                        screenId = 0,
+                        customCode = 0,
+                    )
+                )
+            }
+
+            val confirmTransaction = remoteDataSource.confirmTransaction(address)
+
+
+            when {
+
+                !confirmTransaction.isSuccessful -> {
+                    val errorBody = confirmTransaction.errorBody()
+                    var errorMessage = ""
+
+                    if (errorBody != null) {
+
+                        val errorJson = errorBody.string()
+                        val jsonObjectError = JSONObject(errorJson)
+
+                        if (jsonObjectError.has("message")) {
+                            errorMessage = jsonObjectError.getString("message")
+                        } else {
+                            errorMessage = context.getString(R.string.unknown_error)
+                        }
+
+                        return Resource.FailureData(
+                            failure = ServiceFailure(
+                                message = errorMessage,
+                                screenId = 0,
+                                customCode = 0,
+                            )
+                        )
+                    }
+                }
+
+                confirmTransaction.body() == null -> {
+                    return Resource.FailureData(
+                        failure = RemoteDataFailure(
+                            message = context.getString(R.string.the_server_returned_null),
+                            screenId = 0,
+                            customCode = 0,
+                        )
+                    )
+                }
+
+            }
+
+
+            return Resource.SuccessData(
+                data = confirmTransaction.body()!!,
+            )
+
+        } catch (e: Exception) {
+            val failure = when (e) {
+                is ServiceException -> ServiceFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is RemoteDataException -> RemoteDataFailure(
+                    context.getString(R.string.internet_connection),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is LocalDataException -> LocalDataFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                else -> InternalFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+            }
+
+            return Resource.FailureData(
+                failure = failure
+            )
+
+        }
+    }
+
+    override suspend fun searchAboutCar(number: String,context: Context): Resource<CarsResponse> {
+        try {
+
+            if (!networkService.isNetworkConnected(context)) {
+                return Resource.FailureData(
+                    failure = ServiceFailure(
+                        message = context.getString(R.string.internet_connection),
+                        screenId = 0,
+                        customCode = 0,
+                    )
+                )
+            }
+
+            val searchAboutCarResponse = remoteDataSource.searchAboutCar(number)
+
+
+            when {
+
+                !searchAboutCarResponse.isSuccessful -> {
+                    val errorBody = searchAboutCarResponse.errorBody()
+                    var errorMessage = ""
+
+                    if (errorBody != null) {
+
+                        val errorJson = errorBody.string()
+                        val jsonObjectError = JSONObject(errorJson)
+
+                        if (jsonObjectError.has("message")) {
+                            errorMessage = jsonObjectError.getString("message")
+                        } else {
+                            errorMessage = context.getString(R.string.unknown_error)
+                        }
+
+                        return Resource.FailureData(
+                            failure = ServiceFailure(
+                                message = errorMessage,
+                                screenId = 0,
+                                customCode = 0,
+                            )
+                        )
+                    }
+                }
+
+                searchAboutCarResponse.body() == null -> {
+                    return Resource.FailureData(
+                        failure = RemoteDataFailure(
+                            message = context.getString(R.string.the_server_returned_null),
+                            screenId = 0,
+                            customCode = 0,
+                        )
+                    )
+                }
+
+            }
+
+
+            return Resource.SuccessData(
+                data = searchAboutCarResponse.body()!!,
+            )
+
+        } catch (e: Exception) {
+            val failure = when (e) {
+                is ServiceException -> ServiceFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is RemoteDataException -> RemoteDataFailure(
+                    context.getString(R.string.internet_connection),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is LocalDataException -> LocalDataFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                else -> InternalFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
                 )
             }
 

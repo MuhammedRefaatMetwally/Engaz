@@ -1,22 +1,21 @@
 package com.example.engaz.core.viewmodel
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.engaz.core.util.biometericAuth.BiometricPromptManager
 import com.example.engaz.features.auth.data.entities.login.UserLogin
 import com.example.engaz.features.auth.domain.usecases.GetUserInfoUseCase
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.raamcosta.compose_destinations.destinations.LoginScreenDestination
-import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.OnBoardingScreenDestination
+import io.metamask.androidsdk.Dapp
+import io.metamask.androidsdk.Ethereum
+import io.metamask.androidsdk.RequestError
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -60,7 +59,7 @@ class CoreViewModel @Inject constructor(
 
 
         var user : UserLogin? = null
-
+        var userAddress : String? = null
 
 
         val snackbarHostState = SnackbarHostState()
@@ -85,26 +84,48 @@ class CoreViewModel @Inject constructor(
 
      private fun getUserInfo(){
         val result = getUserInfoUseCase(getApplication<Application>().applicationContext,splashScreenId)
+         val userAddressResult = UserPreferences.getUserPrivateAddress(context = getApplication<Application>().applicationContext)
         if(result.data != null){
             user = result.data
             UserManager.user =result.data
         }
+         userAddress = userAddressResult
+         Log.d("USER_ADDRESS", "getUserInfo: ${userAddressResult}")
     }
 
     suspend fun onSplashScreenLaunch(navigator: DestinationsNavigator?) {
         initApp()
         delay(1000)
         Log.d("USER TOKEN", "onSplashScreenLaunch: ${user?.token}")
-        if(user != null) {
-            navigator?.popBackStack()
-            navigator?.navigate(LoginScreenDestination())
+       if(userAddress != null){
+           if(user != null) {
+               navigator?.popBackStack()
+               navigator?.navigate(LoginScreenDestination())
 
 
-        } else {
-            navigator?.popBackStack()
-           navigator?.navigate(OnBoardingScreenDestination())
+           } else {
+               navigator?.popBackStack()
+               navigator?.navigate(OnBoardingScreenDestination())
 
-        }
+           }
+       }else{
+           val ethereum = Ethereum(getApplication<Application>().applicationContext)
+
+           val dapp = Dapp("Droid Dapp", "https://droiddapp.com")
+
+           // This is the same as calling eth_requestAccounts.
+           val result = ethereum.connect(dapp) { result ->
+               if (result is RequestError) {
+                   Log.e("eth", "Ethereum connection error: ${result.message}")
+               } else {
+                   UserPreferences.saveUserAddress(getApplication<Application>().applicationContext,result.toString())
+                   Log.d("eth2", "Ethereum connection result: $result")
+                   navigator?.navigate(LoginScreenDestination)
+               }
+           }
+           UserPreferences.saveUserAddress(getApplication<Application>().applicationContext,result.toString())
+       }
+
 
 
 

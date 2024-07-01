@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.*
+import com.example.engaz.core.views.components.LeftToRightLayout
 import com.example.engaz.features.notification.data.entities.get_all_notification.Notification
 
 @Composable
@@ -39,11 +40,13 @@ fun NotificationItem(
             .fillMaxWidth()
             .padding(16.dp)) {
 
+        LeftToRightLayout {
             Image(
                 modifier = Modifier.padding(16.dp),
                 painter = painterResource(id = icon),
                 contentDescription = "",
             )
+        }
 
         Spacer(modifier = Modifier.width(8.dp))
         Column {
@@ -74,7 +77,8 @@ fun NotificationItem(
                     Surface(
                         Modifier
                             .width(60.dp)
-                            .height(24.dp).align(Alignment.Bottom), shape = RoundedCornerShape(16.dp),
+                            .height(24.dp)
+                            .align(Alignment.Bottom), shape = RoundedCornerShape(16.dp),
                         color = Primary
                     ) {
                         Text(

@@ -2,16 +2,24 @@ package com.example.engaz.features.auth.data.data_source.remote
 
 import com.example.engaz.R
 import com.example.engaz.core.errors.RemoteDataException
+import com.example.engaz.features.auth.data.entities.cars.CarsResponse
 import com.example.engaz.features.auth.data.entities.check_code_sent.CheckCodeSentResponse
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
 import com.example.engaz.features.auth.data.entities.logout.LogoutResponse
 import com.example.engaz.features.auth.data.entities.register.RegisterResponse
 import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivationCodeResponse
 import com.example.engaz.features.auth.data.entities.reset_password.ResetPasswordResponse
+import com.example.engaz.features.auth.data.entities.sendTransaction.SendTransactionRequest
 import com.example.engaz.features.auth.data.entities.send_code_to_phone.SendCodeToPhoneResponse
+import com.example.engaz.features.auth.data.entities.transferOwnerShip.TransferOwnerShipRequest
 import com.example.engaz.features.auth.infrastructure.api.AuthApi
 import com.example.engaz.features.auth.infrastructure.api.request.*
 import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Headers
+import retrofit2.http.POST
+import retrofit2.http.Path
 import javax.inject.Inject
 
 interface AuthRemoteDataSource {
@@ -45,6 +53,20 @@ interface AuthRemoteDataSource {
 
     suspend fun logout(): Response<LogoutResponse>
 
+    suspend fun getCars(
+         address:String
+    ): Response<CarsResponse>
+
+    suspend fun transferOwnerShip(transferOwnerShipRequest: TransferOwnerShipRequest): Response<CarsResponse>
+
+    suspend fun sendTransaction(sendTransactionRequest: SendTransactionRequest): Response<CarsResponse>
+
+    suspend fun getTransaction( address:String): Response<CarsResponse>
+
+    suspend fun confirmTransaction( address:String): Response<CarsResponse>
+
+
+    suspend fun searchAboutCar( number : String): Response<CarsResponse>
 }
 
 class AuthRemoteDataSourceImpl @Inject constructor(val api: AuthApi) : AuthRemoteDataSource {
@@ -159,6 +181,66 @@ class AuthRemoteDataSourceImpl @Inject constructor(val api: AuthApi) : AuthRemot
         try {
 
             return api.logOut()
+
+        } catch (e: Exception) {
+            throw RemoteDataException(R.string.internet_connection.toString())
+        }
+    }
+
+    override suspend fun getCars(address: String): Response<CarsResponse> {
+         try {
+            return api.getCars(
+                address
+            )
+
+        } catch (e: Exception) {
+            throw RemoteDataException(R.string.internet_connection.toString())
+        }
+    }
+
+    override suspend fun transferOwnerShip(transferOwnerShipRequest: TransferOwnerShipRequest): Response<CarsResponse> {
+         try {
+            return api.transferOwnerShip(
+                transferOwnerShipRequest
+            )
+
+        } catch (e: Exception) {
+            throw RemoteDataException(R.string.internet_connection.toString())
+        }
+    }
+
+    override suspend fun sendTransaction(sendTransactionRequest: SendTransactionRequest): Response<CarsResponse> {
+         try {
+            return api.sendTransaction(
+                sendTransactionRequest
+            )
+
+        } catch (e: Exception) {
+            throw RemoteDataException(R.string.internet_connection.toString())
+        }
+    }
+
+    override suspend fun getTransaction(address: String): Response<CarsResponse> {
+         try {
+            return api.getTransaction(address)
+
+        } catch (e: Exception) {
+            throw RemoteDataException(R.string.internet_connection.toString())
+        }
+    }
+
+    override suspend fun confirmTransaction(address: String): Response<CarsResponse> {
+         try {
+            return api.confirmTransaction(address)
+
+        } catch (e: Exception) {
+            throw RemoteDataException(R.string.internet_connection.toString())
+        }
+    }
+
+    override suspend fun searchAboutCar(number: String): Response<CarsResponse> {
+         try {
+            return api.searchAboutCar(number)
 
         } catch (e: Exception) {
             throw RemoteDataException(R.string.internet_connection.toString())

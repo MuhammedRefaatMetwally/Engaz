@@ -2,6 +2,7 @@ package com.example.engaz.features.auth.domain.repo
 
 import android.content.Context
 import com.example.engaz.core.util.Resource
+import com.example.engaz.features.auth.data.entities.cars.CarsResponse
 import com.example.engaz.features.auth.data.entities.check_code_sent.CheckCodeSentResponse
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
 import com.example.engaz.features.auth.data.entities.login.User
@@ -10,8 +11,11 @@ import com.example.engaz.features.auth.data.entities.logout.LogoutResponse
 import com.example.engaz.features.auth.data.entities.register.RegisterResponse
 import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivationCodeResponse
 import com.example.engaz.features.auth.data.entities.reset_password.ResetPasswordResponse
+import com.example.engaz.features.auth.data.entities.sendTransaction.SendTransactionRequest
 import com.example.engaz.features.auth.data.entities.send_code_to_phone.SendCodeToPhoneResponse
+import com.example.engaz.features.auth.data.entities.transferOwnerShip.TransferOwnerShipRequest
 import com.example.engaz.features.auth.infrastructure.api.request.*
+import retrofit2.Response
 
 interface AuthRepo {
     suspend fun login(
@@ -68,5 +72,14 @@ interface AuthRepo {
         screenId: Int
     ): Resource.FailureData<UserLogin>?
 
+    suspend fun transferOwnerShip(transferOwnerShipRequest: TransferOwnerShipRequest,context: Context,): Resource<CarsResponse>
 
+    suspend fun sendTransaction(sendTransactionRequest: SendTransactionRequest,context: Context): Resource<CarsResponse>
+
+    suspend fun getTransaction( address:String,context: Context): Resource<CarsResponse>
+
+    suspend fun confirmTransaction( address:String,context: Context): Resource<CarsResponse>
+
+
+    suspend fun searchAboutCar( number : String,context: Context): Resource<CarsResponse>
 }

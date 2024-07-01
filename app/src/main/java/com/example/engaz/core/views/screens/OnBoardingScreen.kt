@@ -62,14 +62,9 @@ fun OnBoardingScreen(
                 .fillMaxWidth()
                 .background(Color.Transparent)
             ,
-        ) {
-
-              HorizontalPager(
+        ) { HorizontalPager(
                   state = pagerState,
-                  modifier = Modifier
-                      .fillMaxSize(),
-
-                  ) { page ->
+                  modifier = Modifier.fillMaxSize(),) { page ->
                   when (page) {
                       0 -> OnBoardingPage(
                           image = R.drawable.onboarding_1,

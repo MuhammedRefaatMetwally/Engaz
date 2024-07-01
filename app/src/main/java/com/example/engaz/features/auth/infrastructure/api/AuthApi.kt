@@ -1,18 +1,23 @@
 package com.example.engaz.features.auth.infrastructure.api
 
+import com.example.engaz.features.auth.data.entities.cars.CarsResponse
 import com.example.engaz.features.auth.data.entities.check_code_sent.CheckCodeSentResponse
 import com.example.engaz.features.auth.data.entities.login.LoginResponse
 import com.example.engaz.features.auth.data.entities.logout.LogoutResponse
 import com.example.engaz.features.auth.data.entities.register.RegisterResponse
 import com.example.engaz.features.auth.data.entities.resend_activition_code.ResendActivationCodeResponse
 import com.example.engaz.features.auth.data.entities.reset_password.ResetPasswordResponse
+import com.example.engaz.features.auth.data.entities.sendTransaction.SendTransactionRequest
 import com.example.engaz.features.auth.data.entities.send_code_to_phone.SendCodeToPhoneResponse
+import com.example.engaz.features.auth.data.entities.transferOwnerShip.TransferOwnerShipRequest
 import com.example.engaz.features.auth.infrastructure.api.request.*
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface AuthApi {
 
@@ -63,6 +68,32 @@ interface AuthApi {
 
     @Headers("Content-Type: application/json")
     @POST("api/auth/logout")
-    suspend fun logOut() : Response<LogoutResponse>
+    suspend fun logOut(): Response<LogoutResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("api/car")
+    suspend fun getCars(
+        @Body address:String
+    ): Response<CarsResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("api/car/transfer")
+    suspend fun transferOwnerShip(transferOwnerShipRequest: TransferOwnerShipRequest): Response<CarsResponse>
+
+    @Headers("Content-Type: application/json")
+    @POST("api/transaction")
+    suspend fun sendTransaction(sendTransactionRequest: SendTransactionRequest): Response<CarsResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("api/transaction")
+    suspend fun getTransaction(@Body address:String): Response<CarsResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("api/confirm")
+    suspend fun confirmTransaction(@Body address:String): Response<CarsResponse>
+
+    @Headers("Content-Type: application/json")
+    @GET("api/car/{number}")
+    suspend fun searchAboutCar(@Path("number") number : String): Response<CarsResponse>
 
 }

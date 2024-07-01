@@ -39,7 +39,6 @@ fun NotificationsPage(
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
 
     ) {
-    val context: Context = LocalContext.current
 
     val notificationsMap = mutableMapOf<String, List<Notification>>()
 
@@ -55,8 +54,6 @@ fun NotificationsPage(
         }
     }
 
-
-
     Scaffold(
         containerColor = if (isSystemInDarkTheme()) Neutral900 else Neutral100
     ) {
@@ -66,15 +63,8 @@ fun NotificationsPage(
                 .wrapContentHeight(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            item {
-                Spacer(modifier = Modifier.height(30.dp))
-            }
-
-
-            item {
-
-                Row(Modifier.fillMaxWidth()) {
+            item { Spacer(modifier = Modifier.height(30.dp)) }
+            item { Row(Modifier.fillMaxWidth()) {
                     Icon(
                         modifier = Modifier
                             .padding(start = 8.dp)
@@ -89,8 +79,7 @@ fun NotificationsPage(
                         contentDescription = null,
                         tint = if (isSystemInDarkTheme()) Neutral100 else Neutral900
                     )
-
-                    Box(
+                Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 30.dp)
@@ -115,127 +104,6 @@ fun NotificationsPage(
                 Spacer(modifier = Modifier.height(25.dp))
 
             }
-
-            /*if(notificationState.notificationsIsLoading){
-
-                items(5) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(80.dp)
-                            .padding(horizontal = 30.dp, vertical = 10.dp)
-                            .shadow(
-                                elevation = if (isSystemInDarkTheme()) 10.dp else 10.dp,
-                                shape = RoundedCornerShape(24.dp),
-                                clip = false,
-                                ambientColor = DefaultShadowColor,
-                                spotColor = DefaultShadowColor,
-                            )
-                            .clip(RoundedCornerShape(24.dp))
-                            .shimmerEffect(),
-                    )
-                }
-
-            }else {
-                when {
-                    notificationState.notificationsError != null -> {
-
-                        item {
-
-                            Spacer(modifier = Modifier.height(140.dp))
-
-                            Icon(
-                                modifier = Modifier
-                                    .width(150.dp)
-                                    .height(150.dp),
-                                painter = painterResource(id = R.drawable.warning),
-                                contentDescription = null,
-                                tint = if(isSystemInDarkTheme()) Neutral300 else Neutral700
-                            )
-
-                            Spacer(modifier = Modifier.height(30.dp))
-
-                            Text(
-                                modifier = Modifier.padding(horizontal = 50.dp),
-                                text = notificationState.notificationsError!!.toString(),
-                                style = TextStyle(
-                                    fontFamily = Lato,
-                                    color = if (isSystemInDarkTheme()) Neutral200 else Neutral800,
-                                    fontSize = 18.sp,
-                                ),
-                                textAlign = TextAlign.Center
-                            )
-
-                            Spacer(modifier = Modifier.height(40.dp))
-
-                            MainButton(
-                                modifier = Modifier
-                                    .width(136.dp)
-                                    .height(48.dp)
-                                    .clip(RoundedCornerShape(100.dp))
-                                    .clickable {
-                                        getNotification()
-                                    },
-                                cardColor = Primary,
-                                borderColor = Color.Transparent
-                            ) {
-
-
-                                Text(
-                                    text = context.getString(R.string.try_again),
-                                    style = TextStyle(
-                                        fontFamily = Lato,
-                                        color = Neutral100,
-                                        fontSize = 16.sp
-                                    )
-                                )
-
-                            }
-
-
-
-                        }
-
-                    }
-                    notificationState.notifications.isEmpty() -> {
-
-                        item {
-
-                            Spacer(modifier = Modifier.height(110.dp))
-
-                            Image(
-                                modifier = Modifier
-                                    .width(258.32.dp)
-                                    .height(245.73.dp),
-                                painter = painterResource(id = R.drawable.empty_notification),
-                                contentDescription = null,
-                            )
-
-                            Spacer(modifier = Modifier.height(40.dp))
-
-                            Text(
-                                text = context.getString(R.string.no_notification),
-                                style = TextStyle(
-                                    fontFamily = Lato,
-                                    color = if (isSystemInDarkTheme()) Neutral200 else Neutral800,
-                                    fontSize = 18.sp
-                                )
-                            )
-
-
-
-                        }
-
-                    }
-                    else -> {
-                        notificationsMap.forEach { s, notifications ->
-
-
-
-                    }
-
-                }
-            }*/
 
             item {
                 Spacer(modifier = Modifier.height(16.dp))
