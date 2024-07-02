@@ -18,10 +18,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Neutral900
+import com.example.engaz.features.auth.view.viewmodels.login.LoginViewModel
 import io.github.raamcosta.compose_destinations.destinations.SendTransferingRequestDetailsScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.SendTransferingRequestScreenDestination
 import com.example.engaz.features.home.view.components.InfoAboutCarCard
@@ -33,6 +35,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 fun SendTransferingRequestScreen(
     navigator: DestinationsNavigator?,
+    loginViewModel: LoginViewModel = hiltViewModel(),
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
 ) {
     Column {

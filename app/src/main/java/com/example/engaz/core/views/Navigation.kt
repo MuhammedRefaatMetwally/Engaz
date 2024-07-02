@@ -94,6 +94,7 @@ import com.stripe.android.paymentsheet.rememberPaymentSheet
 import io.github.raamcosta.compose_destinations.NavGraphs
 import io.github.raamcosta.compose_destinations.destinations.AcceptedRequestDetailsDestination
 import io.github.raamcosta.compose_destinations.destinations.ActivationPinScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.CarsScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.ChargeBalanceScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.CompletePaymentScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.CompletedRequestsScreenDestination
@@ -564,7 +565,9 @@ fun Navigation(
             }
 
 
-
+           composable(CarsScreenDestination){
+               CarsScreen(navigator = destinationsNavigator)
+           }
             composable(SelectLocationScreenDestination) {
                 SelectLocationScreen(
                     state = locationViewModel.state,

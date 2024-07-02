@@ -9,7 +9,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.engaz.core.views.components.CustomDialog
+import com.example.engaz.features.auth.view.viewmodels.login.LoginViewModel
 import com.example.engaz.features.home.view.viewmodels.main_info.complete_payment.CompletePaymentState
 import com.example.engaz.features.profile.view.components.BackButton
 import com.example.engaz.features.wallet.view.components.AddPaymentCard
@@ -23,6 +25,7 @@ fun CompletePaymentScreen(
     navigator: DestinationsNavigator?,
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
     onChangeCVC: (String) -> Unit = {},
+    loginViewModel: LoginViewModel = hiltViewModel(),
     state: CompletePaymentState = CompletePaymentState(),
     onSecureCVCClick: () -> Unit = {},
 ) {

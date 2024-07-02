@@ -31,7 +31,9 @@ import androidx.compose.ui.window.Dialog
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Cairo
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.raamcosta.compose_destinations.destinations.HomePageDestination
 import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
+import io.github.raamcosta.compose_destinations.destinations.ProfilePageDestination
 
 @Composable
 fun CustomDialog(
@@ -96,7 +98,7 @@ fun CustomDialog(
                     }
                 )
                 Text(
-                    text = "رقم الطلب : 123456",
+                    text = "رقم الطلب : 15",
                     fontSize = 20.sp,
                     fontFamily = Cairo,
                     fontWeight = FontWeight.W400, color = Color.Gray

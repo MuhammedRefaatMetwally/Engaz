@@ -25,11 +25,14 @@ import androidx.compose.ui.text.withStyle
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Primary
 import com.example.engaz.core.views.components.CustomProgressIndicator
+import com.example.engaz.core.views.components.LeftToRightLayout
 import com.example.engaz.core.views.components.MainButton
 import com.example.engaz.features.auth.view.components.reset_password.PinField
 import com.example.engaz.features.auth.view.viewmodels.register.RegisterState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import io.github.raamcosta.compose_destinations.destinations.MainScreenDestination
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Destination()
@@ -44,6 +47,7 @@ fun OTPScreen(
     onComplete: (DestinationsNavigator, Context) -> Unit = { _, _ -> },
 ) {
     val context: Context = LocalContext.current
+    var loading by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     var otp by remember { mutableStateOf("") }
 
@@ -59,13 +63,15 @@ fun OTPScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 248.dp),
-                painter = painterResource(id = R.drawable.otp),
-                contentDescription = null
-            )
+            LeftToRightLayout {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 248.dp),
+                    painter = painterResource(id = R.drawable.otp),
+                    contentDescription = null
+                )
+            }
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Enter the Verification Code",
@@ -106,10 +112,12 @@ fun OTPScreen(
                     .height(55.dp)
                     .clip(RoundedCornerShape(100.dp))
                     .clickable {
+                        loading= true
                         scope.launch {
-                            navigator?.let {
-                                onValidateClick(navigator, context)
-                            }
+                           delay(2000)
+                            loading = false
+                            navigator?.popBackStack()
+                            navigator?.navigate(MainScreenDestination)
                         }
                     },
                 cardColor = Primary,
@@ -143,8 +151,8 @@ fun OTPScreen(
                         withStyle(
                             SpanStyle(
                                 Color.Gray,
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 16.sp
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 12.sp
                             )
                         ) {
                             append("Didn’t Receive Anything?")
@@ -152,8 +160,8 @@ fun OTPScreen(
                         withStyle(
                             SpanStyle(
                                 colorResource(id = R.color.primary_color),
-                                fontWeight = FontWeight.ExtraBold,
-                                fontSize = 16.sp
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 10.sp
                             )
                         ) {
                             append(" Resend Code")

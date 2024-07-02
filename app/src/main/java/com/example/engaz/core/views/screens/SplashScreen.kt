@@ -25,11 +25,9 @@ import com.example.engaz.core.ui.theme.MarketAppTheme
 import com.example.engaz.core.ui.theme.Neutral100
 import com.example.engaz.core.ui.theme.Neutral900
 import com.example.engaz.core.views.components.LeftToRightLayout
-import com.example.engaz.features.wallet.view.viewmodel.EthereumViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Destination(start = true)
@@ -37,16 +35,10 @@ import kotlinx.coroutines.launch
 fun SplashScreen(
     onScreenLaunch: (DestinationsNavigator) -> Unit = {},
     navigator: DestinationsNavigator?,
-    ethereumViewModel: EthereumViewModel = hiltViewModel(),
 ) {
     var visible by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        scope.launch {
-            ethereumViewModel.connectMetaMask()
-        }
-    }
     LaunchedEffect(key1 = true) {
         delay(500)
         visible = true

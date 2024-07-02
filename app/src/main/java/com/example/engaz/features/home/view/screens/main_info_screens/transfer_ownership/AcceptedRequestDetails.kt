@@ -20,8 +20,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +40,7 @@ import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.views.components.CustomDialog
 import com.example.engaz.core.views.components.MainButton
+import com.example.engaz.features.auth.view.viewmodels.login.LoginViewModel
 import io.github.raamcosta.compose_destinations.destinations.CompletePaymentScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.RequestsScreenDestination
 import io.github.raamcosta.compose_destinations.destinations.WalletPageDestination
@@ -48,6 +52,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.stripe.android.paymentsheet.PaymentSheetResult
 import io.grpc.Context
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 @Destination
@@ -56,8 +62,11 @@ fun AcceptedRequestDetails(
     transferCarOwnerShipViewModel: TransferCarOwnerShipViewModel= hiltViewModel(),
     onAcceptRequest :() -> Unit,
     showDialog: MutableState<Boolean>,
+    loginViewModel: LoginViewModel = hiltViewModel(),
     onBackArrowClick: (DestinationsNavigator) -> Unit = {},
 ) {
+    var loading by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
 
     if (showDialog.value)
         CustomDialog(
@@ -92,7 +101,12 @@ fun AcceptedRequestDetails(
                 .padding(horizontal = 16.dp)
                 .height(64.dp)
                 .clickable {
-                    onAcceptRequest()
+                    loading = true
+                    scope.launch {
+                        delay(2000)
+                        loading = false
+                        onAcceptRequest()
+                    }
                 },
             cardColor = colorResource(id = R.color.primary_color)
         ) {

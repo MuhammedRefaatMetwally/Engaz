@@ -244,5 +244,7 @@
     <string name="questionnair">الاستعلام</string>
     <string name="profile_ar">الشخصية</string>
     <string name="requests">الطلبات</string>
+    <string name="avaliable_cars">المركبات المتاحة لنقل الملكية</string>
+    <string name="cars_ar">المركبات</string>
 
 </resources>

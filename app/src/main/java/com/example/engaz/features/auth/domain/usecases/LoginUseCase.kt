@@ -10,6 +10,10 @@ import com.example.engaz.features.auth.data.repo.AuthRepoImpl
 import com.example.engaz.features.auth.infrastructure.api.request.LoginRequest
 import com.example.engaz.core.viewmodel.UserManager
 import com.example.engaz.core.viewmodel.UserPreferences
+import com.example.engaz.features.auth.data.entities.cars.CarsResponse
+import com.example.engaz.features.auth.data.entities.sendTransaction.SendTransactionRequest
+import com.example.engaz.features.auth.data.entities.transferOwnerShip.TransferOwnerShipRequest
+import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -61,3 +65,10 @@ class LoginUseCase @Inject constructor(
     }
 
 }
+
+
+
+
+
+
+

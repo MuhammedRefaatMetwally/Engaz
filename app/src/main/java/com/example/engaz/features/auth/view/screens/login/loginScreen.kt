@@ -247,7 +247,8 @@ fun LoginScreen(
                         SpanStyle(
                             fontFamily = Cairo,
                             fontWeight = FontWeight.W700,
-                            fontSize = 16.sp
+                            fontSize = 16.sp,
+                            color = Color.Black,
                         )
                     ) {
                         append(stringResource(R.string.have_an_account_ar))

@@ -90,7 +90,6 @@ class CoreViewModel @Inject constructor(
             UserManager.user =result.data
         }
          userAddress = userAddressResult
-         Log.d("USER_ADDRESS", "getUserInfo: ${userAddressResult}")
     }
 
     suspend fun onSplashScreenLaunch(navigator: DestinationsNavigator?) {
@@ -101,7 +100,8 @@ class CoreViewModel @Inject constructor(
            if(user != null) {
                navigator?.popBackStack()
                navigator?.navigate(LoginScreenDestination())
-
+               Log.d("PublicKey",
+                   "onSplashScreenLaunch: ${UserPreferences.getUserPublicAddress(getApplication<Application>().applicationContext)}")
 
            } else {
                navigator?.popBackStack()

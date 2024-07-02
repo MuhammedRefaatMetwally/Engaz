@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -31,6 +32,7 @@ import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Cairo
 import com.example.engaz.core.ui.theme.Lato
 import com.example.engaz.core.ui.theme.Neutral100
+import com.example.engaz.core.ui.theme.Neutral900
 import com.example.engaz.core.ui.theme.Primary
 import com.example.engaz.core.ui.theme.Secondary
 import com.example.engaz.core.views.components.shimmerEffect
@@ -83,6 +85,7 @@ fun HomeHeader(
             text = stringResource(R.string.main_ar),
             fontFamily = Cairo,
             fontSize = 20.sp,
+           color =  if (isSystemInDarkTheme()) Neutral100 else Neutral900,
             fontWeight = FontWeight.W700
         )
 

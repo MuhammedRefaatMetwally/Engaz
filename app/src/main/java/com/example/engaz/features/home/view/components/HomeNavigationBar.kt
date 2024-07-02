@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.engaz.R
 import com.example.engaz.core.ui.theme.Neutral500
 import com.example.engaz.core.ui.theme.Primary
@@ -61,13 +62,14 @@ fun HomeNavigationBar(
                             .weight(1f)  // Ensures even distribution of icons
                     ) {
                         Icon(
-                            modifier = Modifier.size(iconSize),
+                            modifier = Modifier.size(32.dp),
                             painter = painterResource(id = item.icon),
                             contentDescription = null,
                             tint = if (thisIndex == index) Primary else Neutral500
                         )
                         Text(
                             text = stringResource(id = item.label),
+                            fontSize = 14.sp,
                             color = if (thisIndex == index) Primary else Neutral500,
                         )
                     }

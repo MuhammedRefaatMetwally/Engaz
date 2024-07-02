@@ -6,7 +6,9 @@ import com.example.engaz.core.errors.LocalDataException
 import com.example.engaz.features.auth.data.entities.login.UserLogin
 import com.google.gson.Gson
 import org.web3j.crypto.Credentials
+import org.web3j.crypto.ECKeyPair
 import org.web3j.utils.Numeric
+import java.math.BigInteger
 
 object UserPreferences {
     private const val PREFS_NAME = "user_prefs"
@@ -56,22 +58,16 @@ object UserPreferences {
     fun getUserPrivateAddress(context: Context): String? {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val userAddress = prefs.getString("address", null)
-        return if (userAddress != null) {
-            Gson().fromJson(userAddress, String::class.java) // Using Gson to convert JSON to user object
-        } else {
-            null
-        }
+        return userAddress
+
     }
+
     fun getUserPublicAddress(context: Context): String? {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val userAddress = prefs.getString("address", null)
-        val publicAddress =  privateKeyToPublicKey(userAddress ?:"")
 
-        return if (userAddress != null) {
-            Gson().fromJson(publicAddress, String::class.java) // Using Gson to convert JSON to user object
-        } else {
-            null
-        }
+
+        return userAddress
     }
 
     fun clearUser(context: Context) {
@@ -80,21 +76,18 @@ object UserPreferences {
         editor.remove(KEY_USER)
         editor.apply()
     }
+    fun clearUserAddress(context: Context) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.remove("address")
+        editor.apply()
+    }
 
-    private fun privateKeyToPublicKey(privateKey: String): String {
-        // Remove the '0x' prefix if it's present
-        val cleanedPrivateKey = privateKey.removePrefix("0x")
 
-        // Convert the private key string to a BigInteger
-        val privateKeyBigInt = Numeric.toBigInt(cleanedPrivateKey)
-
-        // Generate the credentials using the private key
-        val credentials = Credentials.create(privateKeyBigInt.toString(16))
-
-        // Get the public key from the credentials
-        val publicKey = credentials.ecKeyPair.publicKey
-
-        // Return the public key as a hexadecimal string
-        return Numeric.toHexStringWithPrefix(publicKey)
+    private fun getPublicKeyFromPrivateKey(privateKey: String): String {
+        val privateKeyInBigInteger = BigInteger(privateKey.substring(2), 16) // Remove "0x" prefix
+        val keyPair = ECKeyPair.create(privateKeyInBigInteger)
+        val publicKeyInBigInteger = keyPair.publicKey
+        return publicKeyInBigInteger.toString(16)
     }
 }

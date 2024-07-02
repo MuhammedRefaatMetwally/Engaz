@@ -92,6 +92,7 @@ class EditProfileViewModel @Inject constructor(
                 }
                 deleteUserInfoUseCase.repo.deleteUserInfo(context,-1)
                 UserPreferences.clearUser(context)
+                UserPreferences.clearUserAddress(context)
 
             }
 

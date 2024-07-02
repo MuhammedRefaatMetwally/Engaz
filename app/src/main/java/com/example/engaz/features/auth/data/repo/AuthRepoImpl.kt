@@ -1027,6 +1027,59 @@ class AuthRepoImpl @Inject constructor(
         }
     }
 
+    override suspend fun getCars(address: String,context: Context): Resource<CarsResponse> {
+        try {
+
+            if (!networkService.isNetworkConnected(context)) {
+                return Resource.FailureData(
+                    failure = ServiceFailure(
+                        message = context.getString(R.string.internet_connection),
+                        screenId = 0,
+                        customCode = 0,
+                    )
+                )
+            }
+
+            val getCarsResponse = remoteDataSource.getCars(address)
+
+            return Resource.SuccessData(
+                data = getCarsResponse.body()!!,
+            )
+
+        } catch (e: Exception) {
+            val failure = when (e) {
+                is ServiceException -> ServiceFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is RemoteDataException -> RemoteDataFailure(
+                    context.getString(R.string.internet_connection),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                is LocalDataException -> LocalDataFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+
+                else -> InternalFailure(
+                    e.message.toString(),
+                    screenId = 0,
+                    customCode = 0
+                )
+            }
+
+            return Resource.FailureData(
+                failure = failure
+            )
+
+        }
+    }
+
     override suspend fun transferOwnerShip(transferOwnerShipRequest: TransferOwnerShipRequest,context: Context): Resource<CarsResponse> {
         try {
 

@@ -228,6 +228,7 @@ fun RegisterScreen(
                         SpanStyle(
                             fontFamily = Cairo,
                             fontWeight = FontWeight.W700,
+                            color = Color.Black,
                             fontSize = 16.sp
                         )
                     ) {
@@ -248,6 +249,7 @@ fun RegisterScreen(
                 fontFamily = Cairo,
                 fontWeight = FontWeight.W700,
                 fontSize = 16.sp,
+                color = Color.Black,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .clickable {

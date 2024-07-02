@@ -72,6 +72,11 @@ interface AuthRepo {
         screenId: Int
     ): Resource.FailureData<UserLogin>?
 
+    suspend fun getCars(
+        address:String,
+        context: Context
+    ): Resource<CarsResponse>
+
     suspend fun transferOwnerShip(transferOwnerShipRequest: TransferOwnerShipRequest,context: Context,): Resource<CarsResponse>
 
     suspend fun sendTransaction(sendTransactionRequest: SendTransactionRequest,context: Context): Resource<CarsResponse>

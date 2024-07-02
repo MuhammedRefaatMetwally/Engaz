@@ -4,6 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class RegisterRequest(
     @SerializedName("username") val userName: String,
-    @SerializedName("emailsvg.xml") val email: String,
+    @SerializedName("email") val email: String,
     @SerializedName("password") val password: String,
 )

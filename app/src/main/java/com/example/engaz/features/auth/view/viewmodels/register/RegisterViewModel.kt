@@ -123,7 +123,7 @@ class RegisterViewModel @Inject constructor(
             state = state.copy(isRegisterLoading = false)
 
             if(response.failure != null) {
-                CoreViewModel.showSnackbar(("Error:" + response.failure.message.trim()))
+
             } else {
                 CoreViewModel.showSnackbar(("Success:" + (response.data?.message ?: "")))
                 viewModelScope.launch(Dispatchers.Main) {
@@ -186,7 +186,7 @@ class RegisterViewModel @Inject constructor(
             state = state.copy(isResendingPinCode = false)
 
             if(response.failure != null) {
-                CoreViewModel.showSnackbar(("Error:" + response.failure.message.trim()))
+
             } else {
                 CoreViewModel.showSnackbar(("Success:" + (response.data?.message ?: "")))
             }
@@ -209,7 +209,7 @@ class RegisterViewModel @Inject constructor(
             state = state.copy(isValidatingPinCode = false)
 
             if(response.failure != null) {
-                CoreViewModel.showSnackbar(("Error:" + response.failure.message.trim()))
+
             } else {
                 CoreViewModel.showSnackbar(("Success:" + (response.data?.message ?: "")))
                 viewModelScope.launch(Dispatchers.Main) {

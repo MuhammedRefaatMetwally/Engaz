@@ -11,6 +11,7 @@ import com.example.engaz.features.home.view.screens.main_info_screens.transfer_o
 import com.example.engaz.features.home.view.viewmodels.home.HomeEvent
 import com.example.engaz.features.home.view.viewmodels.home.HomeViewModel
 import com.example.engaz.features.profile.view.pages.ProfilePage
+import com.example.engaz.features.transactions.view.screens.CarsScreen
 import com.example.engaz.features.wallet.view.pages.WalletPage
 import com.example.engaz.features.wallet.view.viewmodel.wallet.WalletViewModel
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -36,22 +37,22 @@ sealed class BottomNavPage(
 
     data object TransferOwnership : BottomNavPage(
         page = {navigator , context ->
-            TransferCarOwnershipScreen(
-                navigator = navigator,
-            )
-        },
-        icon = R.drawable.ic_ownership,
-        label = R.string.transfering_ownership_ar
-    )
-
-    data object InfoAboutCarScreen : BottomNavPage(
-        page = {navigator , context ->
             RequestsScreen(
                 navigator = navigator,
             )
         },
         icon = R.drawable.questionnaire,
-        label = R.string.requests
+        label = R.string.questionnair
+    )
+
+    data object InfoAboutCarScreen : BottomNavPage(
+        page = {navigator , context ->
+            CarsScreen(
+                navigator = navigator,
+            )
+        },
+        icon = R.drawable.carsssss,
+        label = R.string.cars_ar
     )
 
     data object ProfileNavPage : BottomNavPage(

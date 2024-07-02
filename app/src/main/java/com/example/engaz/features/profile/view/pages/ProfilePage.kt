@@ -100,6 +100,7 @@ fun ProfilePage(
                 text = CoreViewModel.user?.username?:"",
                 fontFamily = Cairo,
                 fontSize = 32.sp,
+                color = Color.Black,
                 fontWeight = FontWeight.W700,
             )
 
@@ -107,6 +108,7 @@ fun ProfilePage(
                 text = CoreViewModel.user?.email?:"",
                 fontSize = 16.sp,
                 fontFamily = Cairo,
+                color = Color.Black,
                 fontWeight = FontWeight.W400
             )
             Divider(Modifier.padding(horizontal = 16.dp, vertical = 4.dp))
