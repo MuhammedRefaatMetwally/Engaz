@@ -2,6 +2,7 @@ package com.example.engaz.features.home.view.screens.main_info_screens.transfer_
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -70,7 +71,10 @@ fun RequestsScreen(
             CircularProgressIndicator(color = colorResource(id = R.color.primary_color))
         }
     } else {
-        Column {
+        Column(
+            Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Spacer(modifier = Modifier.height(24.dp))
             Row(Modifier.fillMaxWidth()) {
                 Header(label = stringResource(R.string.sent_requests_ar)) {
@@ -82,7 +86,7 @@ fun RequestsScreen(
             }
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (user?.username != "muhammedrefaat") {
+            if (user?.username != "rashadblock") {
                 InfoAboutCarCard(
                     isRequest = false,
                     pendingRequest = true,
